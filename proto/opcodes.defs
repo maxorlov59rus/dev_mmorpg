@@ -313,3 +313,43 @@
     u32 spell_id                         ; классовая авто-способность (class_spells)
     u8  source                           ; 0 class_default 1 level_up 2 racial 3 quest
 }
+
+; ---------- QUESTS 6-10: SPEC SELECTION + LFG (v1.5, промпт «Квестовая система 6–10») ----------
+; Квесты цепочки 6–10: диапазон ID 1101..1105 (контракт sql/upgrades/Insert_Quests_6_to_10.sql
+; и enum StarterQuestId6to10 в QuestSystem_Level10.h). q_1104 «Путь избранного» —
+; автовыдача на 10 уровне (SpecQuestMgr::OnLevelChanged), выбор спеки ТОЛЬКО через
+; CMSG_CHOOSE_SPEC с серверным guard (PlayerClassMgr::SpecBelongsToClass).
+; Роли LFG: биты 1=tank 2=healer 4=dps (LfgRoleFlags); RequiredRolesMask данжа = 7.
+@opcode CMSG_JOIN_LFG          0x2020 chan=world dir=c2s { u16 dungeon_id u8 role_flags }
+@opcode SMSG_LFG_QUEUE_STATE   0x2021 chan=world dir=s2c {
+    u8 state                                 ; 0 none/rejected 1 queued 2 proposal 3 in_instance
+    u16 dungeon_id
+    u32 est_wait_ms                          ; EWMA-оценка (M1 — эвристика размера очереди)
+}
+@opcode SMSG_LFG_ROLE_CHECK    0x2022 chan=world dir=s2c {
+    u16 dungeon_id
+    u8 required_roles                        ; маска ролей данжа (lfg_dungeons.RequiredRolesMask)
+    u8 ok                                    ; 1 = роль игрока принимаетcя очередью
+}
+@opcode SMSG_SPEC_SELECTION_OPEN 0x2023 chan=world dir=s2c {
+    u8 class_id                              ; CLASS_* (клиент фильтрует DataTable DT_SpecPanel)
+    u8 spec_count                            ; <= 4
+    arr<u32>{4} spec_ids                     ; доступные SpecID (class_specs.spec_id)
+}
+@opcode CMSG_CHOOSE_SPEC       0x2024 chan=world dir=c2s { u8 spec_id }
+@opcode SMSG_SPEC_CHOSEN       0x2025 chan=world dir=s2c {
+    u8 spec_id                               ; подтверждение сервера (источник истины для UI)
+    u8 lfg_role_mask                         ; роль для LFGQueueWidget (Танк/Хил/ДД)
+}
+@opcode SMSG_LEARNED_SPELLS_BATCH 0x2026 chan=world dir=s2c {
+    u8 count                                 ; <= 16
+    arr<u32>{16} spell_ids                   ; способности спеки (playercreateinfo_specs)
+    u8 source                                ; 3 = spec (клиент: золотая подсветка action bar 10с)
+}
+@opcode CMSG_LFG_LEAVE         0x2027 chan=world dir=c2s { }
+@opcode CMSG_LFG_PROPOSAL_ACCEPT 0x2028 chan=world dir=c2s { u8 accept } ; 0 = decline (вся группа расходится)
+@opcode SMSG_LFG_PROPOSAL      0x2029 chan=world dir=s2c {
+    u16 dungeon_id
+    u32 map_id                               ; предпросмотр инстанса («Пещеры Испытаний» = 901)
+    u64 leader_guid                          ; M1: первый по FIFO
+}
