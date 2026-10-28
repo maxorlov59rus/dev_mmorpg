@@ -45,7 +45,7 @@
       ]
     },
     "server_linux": {
-      "source_dir": "server",
+      "source_dir": "dm-server",
       "build_dir": "server/build-linux",
       "generator": "Ninja",
       "cxx_compiler": "g++-12",
@@ -58,8 +58,8 @@
       ]
     },
     "server_windows": {
-      "source_dir": "server",
-      "build_dir": "server/build-win",
+      "source_dir": "dm-server",
+      "build_dir": "dm-server/build-win",
       "generator": "Visual Studio 17 2022",
       "use_clcache": true,
       "solution": "server/BlackMatterServer.sln",

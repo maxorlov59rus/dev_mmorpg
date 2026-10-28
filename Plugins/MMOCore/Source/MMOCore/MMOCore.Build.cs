@@ -28,6 +28,7 @@ public class MMOCore : ModuleRules
 			"Engine",
 			"NetCommon",       // EAcceptConnection и сетевые enum'ы
 			"Sockets",         // FIPv4Endpoint и утилиты адресов
+			"Niagara",         // UEquipmentManagerComponent: NS_Enchant_* подложки (VFX)
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[]
