@@ -2,7 +2,6 @@
 Binaries/
 Intermediate/
 Saved/
-Build/
 DerivedDataCache/
 .vs/
 .idea/
@@ -15,3 +14,12 @@ Config/HoloLens/
 *.apk
 *.aab
 *.obb
+
+# CI/CD рабочие артефакты (папка build/ с скриптами — В гите, игнорируем только вывод)
+build/logs/
+artifacts/
+.cache/
+Packaged/
+server/build-*/
+__pycache__/
+*.pyc

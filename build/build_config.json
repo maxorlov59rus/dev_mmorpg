@@ -1,0 +1,86 @@
+{
+  "project": {
+    "name": "BlackMatter",
+    "uproject": "DMClient.uproject",
+    "repository": "/workspace",
+    "branch_client": "master",
+    "branch_server": "master"
+  },
+  "engines": {
+    "ue_root": "C:/Program Files/Epic Games/UE_5.8",
+    "runuat": "C:/Program Files/Epic Games/UE_5.8/Engine/Build/BatchFiles/RunUAT.bat",
+    "cmake": "cmake",
+    "python": "python3"
+  },
+  "agents": {
+    "client": {
+      "host": "build-agent-win-01",
+      "os": "windows",
+      "workdir": "D:/ci/blackmatter/client"
+    },
+    "server_linux": {
+      "host": "build-agent-linux-01",
+      "os": "linux",
+      "workdir": "/ci/blackmatter/server"
+    },
+    "server_windows": {
+      "host": "build-agent-win-02",
+      "os": "windows",
+      "workdir": "D:/ci/blackmatter/server"
+    }
+  },
+  "targets": {
+    "client": {
+      "platforms": ["Win64", "Android"],
+      "configs": {
+        "Win64": "Development",
+        "Android": "Development_ASTC"
+      },
+      "mappack": false,
+      "archive_dir": "D:/artifacts/client",
+      "extra_uat_args": [
+        "-nocompressedincookedsizes",
+        "-utf8output",
+        "-NoP4"
+      ]
+    },
+    "server_linux": {
+      "source_dir": "server",
+      "build_dir": "server/build-linux",
+      "generator": "Ninja",
+      "cxx_compiler": "g++-12",
+      "cc_compiler": "gcc-12",
+      "use_ccache": true,
+      "cmake_flags": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DDM_BUILD_TESTS=ON",
+        "-DDM_SCRIPTING_LUA=ON"
+      ]
+    },
+    "server_windows": {
+      "source_dir": "server",
+      "build_dir": "server/build-win",
+      "generator": "Visual Studio 17 2022",
+      "use_clcache": true,
+      "solution": "server/BlackMatterServer.sln",
+      "msbuild_flags": [
+        "/p:Configuration=Release",
+        "/p:Platform=x64",
+        "/m",
+        "/nologo"
+      ]
+    }
+  },
+  "pipeline": {
+    "fail_fast": true,
+    "task_timeout_seconds": 5400,
+    "log_dir": "build/logs",
+    "max_parallel_jobs": 3
+  },
+  "packaging": {
+    "enabled": true,
+    "output_dir": "artifacts",
+    "include_symbols": true,
+    "manifest_name": "release_manifest.json"
+  }
+}

@@ -26,6 +26,7 @@
 | `docs/04-Клиент-UE5.8.md` | структура UE-проекта, пайплайн контента, Android-оптимизация |
 | `docs/05-GDD-системы.md` | прогрессия, бой, PvE/PvP, экономика, LiveOps |
 | `docs/06-DevOps-и-инфраструктура.md` | K8s, CI/CD, мониторинг, DR, стоимость |
+| `docs/07-CI-параллельная-сборка.md` | BuildOrchestrator.py, .gitlab-ci.yml, UAT/CMake wrappers |
 | `sql/create/0X_*.sql` | DDL: dm_auth / dm_characters / dm_world (аналог TRC sql/create) |
 | `proto/opcodes.defs` | единый источник истины протокола |
 
@@ -46,6 +47,7 @@ CI-задача `uproject-drift` (добавляется на M0): парсит 
 - [x] Концепт-документация v0.1 (этот набор)
 - [x] Файл проекта `DMClient.uproject` (v0.1.0, protocol v1) + Targets/модули `Source/` + `Config/`
 - [x] Плагин `Plugins/MMOCore` scaffold (Build.cs, NetworkClient, Protocol, AuthPackets)
+- [x] CI/CD v0.1: параллельная сборка (`build/BuildOrchestrator.py`, `.gitlab-ci.yml`, `build_config.json`, wrappers BuildClient.bat / ServerBuild.sh / ServerBuild.bat) — docs/07
 - [ ] `dm-server` scaffold (CMake + common/network) — цель M0
 - [ ] `proto-gen` tool + golden packet fixtures
 - [ ] Content-папка `Content/Maps/Login` (нужен хотя бы пустой уровень перед открытием в редакторе)

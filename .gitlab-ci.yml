@@ -1,0 +1,264 @@
+# =============================================================================
+#  «Чёрная Материя» — единый CI/CD оркестратор (GitLab CI).
+#
+#  Параллельная сборка:
+#    build:client        (Windows runner + UE5.8, Win64/Android)
+#    build:server:linux  (Linux runner, GCC/Clang + CMake + ccache)
+#    build:server:win    (Windows runner, MSVC 2022 + clcache)
+#  deploy ждёт УСПЕХ всех трёх (needs: [client, server-linux, server-win]).
+#
+#  Требования к раннерам (tags):
+#    - ue58-windows : Windows Server Core/10, UE_5.8, Visual Studio 2022, Android NDK r26
+#    - linux-gcc12  : ubuntu:22.04+, cmake>=3.24, ninja, gcc-12, libboost-all-dev,
+#                     libssl-dev, libmysqlclient-dev, ccache, python3
+#    - msvc2022     : windows-2022 с vcvars64 в PATH
+# =============================================================================
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH =~ /^(master|main|develop|release\/.+)$/
+    - if: $CI_COMMIT_TAG
+
+stages:
+  - lint
+  - build
+  - test
+  - package
+  - deploy
+
+variables:
+  UE_ROOT_WIN: "C:\\Program Files\\Epic Games\\UE_5.8"
+  UPROJECT: "DMClient.uproject"
+  SERVER_CMAKE_FLAGS: "-DCMAKE_BUILD_TYPE=Release -DDM_BUILD_TESTS=ON -DDM_SCRIPTING_LUA=ON"
+  CCACHE_DIR: "${CI_PROJECT_DIR}/.cache/ccache"
+  # Единый источник конфигурации сборки для локального BuildOrchestrator.py
+  BUILD_CONFIG: "build/build_config.json"
+
+# ---------------------------------------------------------------------------
+#  Кэш нативных зависимостей сервера (ccache между пайплайнами)
+# ---------------------------------------------------------------------------
+.linux_cache_template: &linux_cache
+  cache:
+    key: "ccache-${CI_COMMIT_REF_SLUG}"
+    paths:
+      - .cache/ccache
+    policy: pull-push
+
+.windows_cache_template: &windows_cache
+  cache:
+    key: "clcache-${CI_COMMIT_REF_SLUG}"
+    paths:
+      - .cache/clcache
+    policy: pull-push
+
+# ---------------------------------------------------------------------------
+#  STAGE: lint — быстрые проверки до тяжёлых сборок
+# ---------------------------------------------------------------------------
+lint:cpp-format:
+  stage: lint
+  image: ubuntu:22.04
+  tags: [linux-gcc12]
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq clang-format-15
+  script:
+    - find server Plugins Source -name '*.h' -o -name '*.hpp' -o -name '*.cpp' \
+        | grep -v ThirdParty || true
+    - clang-format-15 --dry-run --Werror $(find server Plugins/MMOCore/Source Source
+        -name '*.h' -o -name '*.cpp' ! -path '*/ThirdParty/*')
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+lint:proto-drift:
+  stage: lint
+  image: python:3.11-slim
+  tags: [linux-gcc12]
+  script:
+    # Оpcodes в коде клиента/сервера не должны расходиться с proto/opcodes.defs
+    - pip install -q pyyaml
+    - python tools/proto_gen/proto_gen.py --check
+      --defs proto/opcodes.defs
+      --cpp-out server/common/Network/Opcodes.h
+      --ue-out Plugins/MMOCore/Source/MMOCore/Public/MMOOpcodeDefinitions.h
+      --mode verify
+  artifacts:
+    when: always
+    paths: [build/logs/]
+
+lint:python:
+  stage: lint
+  image: python:3.11-slim
+  tags: [linux-gcc12]
+  script:
+    - pip install -q ruff mypy
+    - ruff check build/ tools/
+    - mypy build/BuildOrchestrator.py --ignore-missing-imports
+
+# ---------------------------------------------------------------------------
+#  STAGE: build — ПАРАЛЛЕЛЬНЫЕ джобы (одна сцена, different runners)
+# ---------------------------------------------------------------------------
+build:client:
+  stage: build
+  tags: [ue58-windows]
+  interruptible: true
+  timeout: 2h
+  script:
+    - chcp 65001 > nul
+    # Унифицированный вызов UAT (Артефакт 3) — очистка, компиляция C++, cook только нужных платформ
+    - call build\\scripts\\BuildClient.bat
+        --platforms=Win64+Android
+        --config=Development
+        --architectures=Win64:x64_17;Android:arm64
+        %BUILD_EXTRA_ARGS%
+  after_script:
+    # UAT пишет логи в Engine/Programs/AutomationLog — собираем в артефакты
+    - if exist "%TMP%\\UBA*" xcopy /Y /I "%TMP%\\UBA*" artifacts\logs\ || ver >nul
+  artifacts:
+    name: "client-%CI_COMMIT_SHORT_SHA%"
+    expire_in: 7 days
+    paths:
+      - Packaged/
+      - artifacts/
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(master|release\/.+)$/ || $FORCE_CLIENT_BUILD == "true"'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: [Plugins/**/*, Source/**/*, Config/**/*, DMClient.uproject, proto/opcodes.defs]
+
+build:server:linux:
+  stage: build
+  tags: [linux-gcc12]
+  <<: *linux_cache
+  interruptible: true
+  timeout: 45m
+  before_script:
+    - apt-get update -qq
+    - apt-get install -y -qq cmake ninja-build gcc-12 g++-12 libboost-all-dev
+        libssl-dev libmysqlclient-dev ccache lua5.4 liblua5.4-dev
+    - export CXX=g++-12 CC=gcc-12
+    - ccache --max-size=4G -s
+  script:
+    # Артефакт 4: единая точка входа с проверкой зависимостей и ccache
+    - bash build/ServerBuild.sh --config=Release --ccache --jobs=$(nproc)
+    - ccache -s
+  artifacts:
+    name: "server-linux-%CI_COMMIT_SHORT_SHA%"
+    expire_in: 7 days
+    paths:
+      - server/build-linux/bin/
+      - server/build-linux/compile_commands.json
+
+build:server:win:
+  stage: build
+  tags: [msvc2022]
+  <<: *windows_cache
+  interruptible: true
+  timeout: 45m
+  script:
+    - chcp 65001 > nul
+    - set CLCACHE_DIR=%CI_PROJECT_DIR%\.cache\clcache
+    - call build\scripts\ServerBuild.bat --config=Release --clcache
+  artifacts:
+    name: "server-win-%CI_COMMIT_SHORT_SHA%"
+    expire_in: 7 days
+    paths:
+      - server/build-win/Release/
+
+# ---------------------------------------------------------------------------
+#  STAGE: test — зависит от обеих серверных сборок (unit/golden-packet тесты)
+# ---------------------------------------------------------------------------
+test:server-unit:
+  stage: test
+  tags: [linux-gcc12]
+  needs:
+    - job: build:server:linux
+      artifacts: true
+  script:
+    - cd server/build-linux
+    - ctest --output-on-failure -j$(nproc) -R "dm_(network|protocol|auth|faction)_.*"
+  coverage: '/lines\.{9} (\d+\.\d+)%/'
+  artifacts:
+    when: always
+    reports:
+      junit: server/build-linux/test-results.xml
+
+test:proto-golden:
+  stage: test
+  image: python:3.11-slim
+  tags: [linux-gcc12]
+  needs:
+    - job: build:server:linux
+      artifacts: true
+    - job: build:client
+      artifacts: true
+      optional: true
+  script:
+    # Золотые дампы пакетов AuthRequest/AuthResponse: клиентские байты == серверные
+    - python tests/network/golden_packets_test.py
+        --binaries server/build-linux/bin
+        --vectors tests/network/vectors/
+
+# ---------------------------------------------------------------------------
+#  STAGE: package — единый релизный бандл (клиент + сервер вместе)
+# ---------------------------------------------------------------------------
+package:release-bundle:
+  stage: package
+  tags: [linux-gcc12]
+  # needs гарантирует: сюда попадаем ТОЛЬКО если клиент И оба сервера собрались
+  needs:
+    - job: build:client
+      artifacts: true
+    - job: build:server:linux
+      artifacts: true
+    - job: build:server:win
+      artifacts: true
+      optional: true
+    - job: test:server-unit
+      artifacts: false
+    - job: test:proto-golden
+      artifacts: false
+  script:
+    - mkdir -p bundle/client bundle/server
+    - cp -r Packaged/* bundle/client/ || true
+    - cp -r server/build-linux/bin bundle/server/linux
+    - cp -r server/build-win/Release bundle/server/windows || true
+    - cp sql/create/*.sql bundle/server/sql/
+    - python build/BuildOrchestrator.py --config ${BUILD_CONFIG} --targets client
+        --skip-package --dry-run   # валидация конфига без реального запуска агентов
+    - sha256sum bundle/server/linux/* > bundle/server/checksums.txt
+    - tar -czf blackmatter-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.tar.gz -C bundle .
+  artifacts:
+    name: "bundle-${CI_COMMIT_SHORT_SHA}"
+    expire_in: 30 days
+    paths:
+      - blackmatter-*.tar.gz
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+
+# ---------------------------------------------------------------------------
+#  STAGE: deploy — канареечный шард dev, только master/tag
+# ---------------------------------------------------------------------------
+deploy:dev-shard:
+  stage: deploy
+  tags: [linux-gcc12]
+  environment:
+    name: dev/shard-canary
+    url: https://dev.blackmatter.example
+  needs:
+    - job: package:release-bundle
+      artifacts: true
+  script:
+    - echo "Раскатка на dm-auth/dm-login/dm-world/dm-map (K8s canary, docs/06)"
+    # ansible-playbook ops/deploy.yml -e bundle=blackmatter-*.tar.gz -l dev_canary
+  when: manual
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master" || $CI_COMMIT_TAG'
+
+deploy:staging:
+  extends: deploy:dev-shard
+  environment:
+    name: staging/shard-01
+  needs:
+    - job: package:release-bundle
+      artifacts: true
+    - job: deploy:dev-shard
+      optional: true
