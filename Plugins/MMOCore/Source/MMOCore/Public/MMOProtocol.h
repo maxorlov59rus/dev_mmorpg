@@ -372,6 +372,8 @@ struct FMMOPacket {
         int32 Pos = 0;
         FReader(const TArray<uint8> &InPayload) : P(InPayload.GetData()), N(InPayload.Num()) {}
 
+        int32 Remaining() const { return N - Pos; }
+
         bool ReadU8(uint8 &Out) {
             if (N - Pos < 1)
                 return false;
@@ -577,10 +579,11 @@ enum class EMMOPowerType : uint8 {
 /** Причина изучения спелла (поле source в SMSG_LEARN_SPELL). */
 UENUM(BlueprintType)
 enum class EMMOSpellSource : uint8 {
-    ClassDefault = 0 UMETA(DisplayName = "ClassDefault"),
-    LevelUp = 1 UMETA(DisplayName = "LevelUp"),
-    Racial = 2 UMETA(DisplayName = "Racial"),
-    Quest = 3 UMETA(DisplayName = "Quest"),
+    ClassDefault = 0 UMETA(DisplayName = "ClassDefault"), // wire 0x0093 source=0
+    LevelUp = 1 UMETA(DisplayName = "LevelUp"),           // wire 0x0093 source=1
+    Racial = 2 UMETA(DisplayName = "Racial"),             // wire 0x0093 source=2
+    Quest = 3 UMETA(DisplayName = "Quest"),               // wire 0x0093 source=3
+    Spec = 4 UMETA(DisplayName = "Spec"),                 // wire 0x2026 source=4 (золотая подсветка)
 };
 
 /** Запрос таблицы Race×Class для экрана создания (CMSG_CLASS_INFO_QUERY). */
@@ -838,5 +841,75 @@ struct FMMOLfgProposalPacket {
     static bool FromPacket(const FMMOPacket &P, FMMOLfgProposalPacket &Out) {
         FMMOPacket::FReader R(P.Payload);
         return R.ReadU16(Out.DungeonId) && R.ReadU32(Out.MapId) && R.ReadU64(Out.LeaderGuid);
+    }
+};
+
+// ---------------------------------------------------------------------------
+// Quests 6-10 (proto/opcodes.defs 0x2000..0x2007): кэш журнала для UI.
+// ---------------------------------------------------------------------------
+
+/** Состояние квеста (QuestState.state в defs). */
+UENUM(BlueprintType)
+enum class EMMOQuestState : uint8 {
+    Available = 0 UMETA(DisplayName = "Доступен"),
+    Active = 1 UMETA(DisplayName = "Активен"),
+    Completable = 2 UMETA(DisplayName = "Готов к сдаче"),
+    Done = 3 UMETA(DisplayName = "Завершён"),
+};
+
+/** SMSG_QUEST_LIST (wire 0x2001): arr<QuestState>{64}. */
+struct FMMOQuestStateEntry {
+    uint32 QuestId = 0;
+    EMMOQuestState State = EMMOQuestState::Available;
+    uint8 Progress = 0;
+};
+
+struct FMMOQuestListPacket {
+    TArray<FMMOQuestStateEntry> Quests; // <=64
+
+    static constexpr uint16 WIRE_OPCODE = 0x2001;
+    static constexpr int32 MAX_ENTRIES = 64;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOQuestListPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        Out.Quests.Reset();
+        while (R.Remaining() >= 6 && Out.Quests.Num() < MAX_ENTRIES) {
+            FMMOQuestStateEntry E;
+            uint8 St = 0;
+            if (!R.ReadU32(E.QuestId) || !R.ReadU8(St) || !R.ReadU8(E.Progress))
+                return false;
+            E.State = static_cast<EMMOQuestState>(St);
+            Out.Quests.Add(E);
+        }
+        return true;
+    }
+};
+
+/** SMSG_QUEST_ACCEPTED (wire 0x2004): id + title + objectives + flags. */
+struct FMMOQuestAcceptedPacket {
+    uint32 QuestId = 0;
+    FString Title;
+    FString Objectives;
+    uint8 QuestFlags = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2004;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOQuestAcceptedPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.QuestId) && R.ReadString(Out.Title) && R.ReadString(Out.Objectives) &&
+               R.ReadU8(Out.QuestFlags);
+    }
+};
+
+/** SMSG_QUEST_PROGRESS (wire 0x2005). */
+struct FMMOQuestProgressPacket {
+    uint32 QuestId = 0;
+    uint8 Progress = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2005;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOQuestProgressPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.QuestId) && R.ReadU8(Out.Progress);
     }
 };

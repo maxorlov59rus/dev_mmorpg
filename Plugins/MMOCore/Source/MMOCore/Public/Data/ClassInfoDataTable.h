@@ -92,6 +92,25 @@ struct FDFSpecRow : public FTableRowBase {
     TSoftObjectPtr<UNiagaraSystem> SignatureVFX;
 };
 
+/** Строка панели выбора спеки (DT_SpecPanel) — модалка UI_SpecSelectionWidget.
+    Расширяет FDFSpecRow: превью-оружие + стартовые способности спеки. */
+USTRUCT(BlueprintType)
+struct FDFSpecPanelRow : public FDFSpecRow {
+    GENERATED_BODY()
+
+    /** 3 ключевые способности (playercreateinfo_specs.SpellID_1..3). */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpecPanel")
+    TArray<uint32> StarterAbilities;
+
+    /** Превью экипировки: основная рука (щит/двуручник/клинки). */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpecPanel")
+    FSoftObjectPath WeaponMesh;
+
+    /** Превью экипировки: вторая рука (пусто = нет). */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "SpecPanel")
+    FSoftObjectPath OffhandMesh;
+};
+
 /** Утилиты доступа (thin wrapper над UDataTable::FindRow, без кэша состояний). */
 namespace DMClassData {
 template <typename TRow> const TRow *FindRowById(const UDataTable *Table, uint8 Id) {

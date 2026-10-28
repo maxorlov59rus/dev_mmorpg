@@ -77,6 +77,11 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "MMO|Events")
     FMMOOnSpecConfirmed OnSpecConfirmed;
 
+    /** BP-контракт: смена превью-оружия на фоне окна (щит+меч <-> двуручник/парные). */
+    UFUNCTION(BlueprintImplementableEvent, Category = "MMO|Spec")
+    void K2_OnPreviewEquipChanged(bool bTankPreview, const FSoftObjectPath &WeaponMesh,
+                                  const FSoftObjectPath &OffhandMesh);
+
 protected:
     virtual void NativeConstruct() override;
     virtual void NativeTick(const FGeometry &MyGeometry, float InDeltaTime) override;
@@ -97,8 +102,8 @@ protected:
     TObjectPtr<UDataTable> SpellTooltipTable;
 
 private:
-    /** Построить одну карточку: иконка, название, big text, 3 способности. */
-    TSharedRef<SWidget> BuildSpecCard(const FMMOSpecPanelView &View, int32 Index);
+    /** Построить карточки панелей (BP-заглушки до готовности W_SpecCard). */
+    void RebuildPanels();
 
     /** Смена превью-экипировки на фоне окна (щит+меч <-> двуручник/парные). */
     void UpdateEquipmentPreview(const FMMOSpecPanelView &View);
@@ -108,8 +113,13 @@ private:
 
     void SetConfirmEnabled(bool bEnabled);
 
+    uint8 ActiveClassId = 0;
     TArray<FMMOSpecPanelView> Panels;
     int32 SelectedIndex = INDEX_NONE;   // -1 => Confirm неактивна
     bool bAwaitingServer = false;       // CMSG отправлен, ждём SMSG_SPEC_CHOSEN
     float ConfirmBlockUntil = 0.f;      // анти-спам (double click)
+    float GoldGlowRemaining = 0.f;      // таймер золотого свечения (10с)
+
+    /** Оверлей свечения (BindWidgetOpt: виджет работает и без него). */
+    UPROPERTY(meta = (BindWidgetOptional)) TObjectPtr<UImage> GlowOverlay;
 };
