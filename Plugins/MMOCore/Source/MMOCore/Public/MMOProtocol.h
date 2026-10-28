@@ -107,6 +107,18 @@ enum class EMMOOpcode : uint16 {
     SrvInitializeStats = 0x0803 UMETA(DisplayName = "InitializeStats"),         // wire 0x0092
     SrvLearnSpell = 0x0804 UMETA(DisplayName = "LearnSpell"),                   // wire 0x0093
 
+    // Quests 6-10: Spec selection + LFG (v1.5, defs 0x2020..0x2029)
+    CmdJoinLfg = 0x0901 UMETA(DisplayName = "JoinLFG"),               // wire 0x2020
+    SrvLfgQueueState = 0x0902 UMETA(DisplayName = "LfgQueueState"),   // wire 0x2021
+    SrvLfgRoleCheck = 0x0903 UMETA(DisplayName = "LfgRoleCheck"),     // wire 0x2022
+    SrvSpecSelectionOpen = 0x0904 UMETA(DisplayName = "SpecSelectionOpen"), // wire 0x2023
+    CmdChooseSpec = 0x0905 UMETA(DisplayName = "ChooseSpec"),         // wire 0x2024
+    SrvSpecChosen = 0x0906 UMETA(DisplayName = "SpecChosen"),         // wire 0x2025
+    SrvLearnedSpellsBatch = 0x0907 UMETA(DisplayName = "LearnedSpellsBatch"),  // wire 0x2026
+    CmdLfgLeave = 0x0908 UMETA(DisplayName = "LfgLeave"),             // wire 0x2027
+    CmdLfgProposalAccept = 0x0909 UMETA(DisplayName = "LfgProposalAccept"),    // wire 0x2028
+    SrvLfgProposal = 0x090A UMETA(DisplayName = "LfgProposal"),       // wire 0x2029
+
     Max = 0xFFFF UMETA(Hidden),
 };
 
@@ -154,6 +166,27 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
         return 0x0092;
     case EMMOOpcode::SrvLearnSpell:
         return 0x0093;
+    // Quests 6-10: Spec selection + LFG (defs 0x2020..0x2029)
+    case EMMOOpcode::CmdJoinLfg:
+        return 0x2020;
+    case EMMOOpcode::SrvLfgQueueState:
+        return 0x2021;
+    case EMMOOpcode::SrvLfgRoleCheck:
+        return 0x2022;
+    case EMMOOpcode::SrvSpecSelectionOpen:
+        return 0x2023;
+    case EMMOOpcode::CmdChooseSpec:
+        return 0x2024;
+    case EMMOOpcode::SrvSpecChosen:
+        return 0x2025;
+    case EMMOOpcode::SrvLearnedSpellsBatch:
+        return 0x2026;
+    case EMMOOpcode::CmdLfgLeave:
+        return 0x2027;
+    case EMMOOpcode::CmdLfgProposalAccept:
+        return 0x2028;
+    case EMMOOpcode::SrvLfgProposal:
+        return 0x2029;
     default:
         return static_cast<uint16>(Op);
     }
@@ -195,6 +228,27 @@ inline constexpr EMMOOpcode FromWire(uint16 Wire) {
         return EMMOOpcode::SrvInitializeStats;
     case 0x0093:
         return EMMOOpcode::SrvLearnSpell;
+    // Quests 6-10: Spec selection + LFG (defs 0x2020..0x2029)
+    case 0x2020:
+        return EMMOOpcode::CmdJoinLfg;
+    case 0x2021:
+        return EMMOOpcode::SrvLfgQueueState;
+    case 0x2022:
+        return EMMOOpcode::SrvLfgRoleCheck;
+    case 0x2023:
+        return EMMOOpcode::SrvSpecSelectionOpen;
+    case 0x2024:
+        return EMMOOpcode::CmdChooseSpec;
+    case 0x2025:
+        return EMMOOpcode::SrvSpecChosen;
+    case 0x2026:
+        return EMMOOpcode::SrvLearnedSpellsBatch;
+    case 0x2027:
+        return EMMOOpcode::CmdLfgLeave;
+    case 0x2028:
+        return EMMOOpcode::CmdLfgProposalAccept;
+    case 0x2029:
+        return EMMOOpcode::SrvLfgProposal;
     default:
         return static_cast<EMMOOpcode>(Wire);
     }
@@ -622,5 +676,167 @@ struct FMMOLearnSpellPacket {
             return false;
         Out.Source = static_cast<EMMOSpellSource>(Src);
         return true;
+    }
+};
+
+// =============================================================================
+// Spec selection + LFG packets (v1.5) — зеркало /proto/opcodes.defs 0x2020..0x2029.
+// Контракт: sql/upgrades/Insert_Quests_6_to_10.sql, QuestSystem_Level10.h,
+// UI_SpecSelectionWidget / LFGQueueWidget.
+// =============================================================================
+
+/** Роли LFG (биты = wire-маски RequiredRolesMask; серверный enum LfgRoleFlags). */
+UENUM(BlueprintType)
+enum class EMMOLfgRole : uint8 {
+    None = 0 UMETA(DisplayName = "Нет роли"),
+    Tank = 1 UMETA(DisplayName = "Танк"),
+    Healer = 2 UMETA(DisplayName = "Целитель"),
+    Dps = 4 UMETA(DisplayName = "Урон"),
+};
+
+/** Состояние очереди LFG (SMSG_LFG_QUEUE_STATE.state). */
+UENUM(BlueprintType)
+enum class EMMOLfgQueueState : uint8 {
+    None = 0 UMETA(DisplayName = "Вне очереди"),
+    Queued = 1 UMETA(DisplayName = "В поиске"),
+    Proposal = 2 UMETA(DisplayName = "Предложение группы"),
+    InInstance = 3 UMETA(DisplayName = "В подземелье"),
+};
+
+/** SMSG_SPEC_SELECTION_OPEN — «открой окно выбора специализации». */
+struct FMMOSpecSelectionOpenPacket {
+    uint8 ClassId = 0;                  // CLASS_* (фильтр DT_SpecPanel)
+    TArray<uint8> SpecIds;              // доступные спеки (<=4)
+
+    static constexpr uint16 WIRE_OPCODE = 0x2023;
+    static constexpr int32 MAX_SPECS = 4;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOSpecSelectionOpenPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint8 Count = 0;
+        if (!R.ReadU8(Out.ClassId))
+            return false;
+        if (!R.ReadU8(Count) || Count > MAX_SPECS)
+            return false;
+        Out.SpecIds.Reset();
+        for (uint8 i = 0; i < Count; ++i) {
+            uint32 Id = 0;
+            if (!R.ReadU32(Id))
+                return false;
+            Out.SpecIds.Add(static_cast<uint8>(Id));
+        }
+        return true;
+    }
+};
+
+/** CMSG_CHOOSE_SPEC — клиент отправляет выбранный SpecID (wire 0x2024). */
+struct FMMOChooseSpecPacket {
+    uint8 SpecId = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2024;
+
+    FMMOPacket ToPacket() const {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdChooseSpec);
+        P.WriteU8(SpecId);
+        return P;
+    }
+};
+
+/** SMSG_SPEC_CHOSEN — подтверждение сервера + роль для LFG (wire 0x2025). */
+struct FMMOSpecChosenPacket {
+    uint8 SpecId = 0;
+    uint8 LfgRoleMask = 0;              // биты EMMOLfgRole (Танк/Хил/ДД в LFGQueueWidget)
+
+    static constexpr uint16 WIRE_OPCODE = 0x2025;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOSpecChosenPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU8(Out.SpecId) && R.ReadU8(Out.LfgRoleMask);
+    }
+};
+
+/** SMSG_LEARNED_SPELLS_BATCH — батч новых заклинаний спеки (wire 0x2026). */
+struct FMMOLearnedSpellsBatchPacket {
+    TArray<uint32> SpellIds;            // <=16
+    uint8 Source = 0;                   // 3 = spec -> золотая подсветка action bar 10с
+
+    static constexpr uint16 WIRE_OPCODE = 0x2026;
+    static constexpr int32 MAX_SPELLS = 16;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOLearnedSpellsBatchPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint8 Count = 0;
+        if (!R.ReadU8(Count) || Count > MAX_SPELLS)
+            return false;
+        Out.SpellIds.Reset();
+        for (uint8 i = 0; i < Count; ++i) {
+            uint32 Id = 0;
+            if (!R.ReadU32(Id))
+                return false;
+            Out.SpellIds.Add(Id);
+        }
+        return R.ReadU8(Out.Source);
+    }
+};
+
+/** CMSG_JOIN_LFG (wire 0x2020) / SMSG_LFG_QUEUE_STATE (0x2021). */
+struct FMMOJoinLfgPacket {
+    uint16 DungeonId = 0;
+    uint8 RoleFlags = 0;                // маска EMMOLfgRole игрока
+
+    static constexpr uint16 WIRE_OPCODE = 0x2020;
+
+    FMMOPacket ToPacket() const {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdJoinLfg);
+        P.WriteU16(DungeonId);
+        P.WriteU8(RoleFlags);
+        return P;
+    }
+};
+
+struct FMMOLfgQueueStatePacket {
+    EMMOLfgQueueState State = EMMOLfgQueueState::None;
+    uint16 DungeonId = 0;
+    uint32 EstWaitMs = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2021;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOLfgQueueStatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint8 St = 0;
+        if (!R.ReadU8(St))
+            return false;
+        Out.State = static_cast<EMMOLfgQueueState>(St);
+        return R.ReadU16(Out.DungeonId) && R.ReadU32(Out.EstWaitMs);
+    }
+};
+
+/** SMSG_LFG_ROLE_CHECK — проверка роли перед входом в данж (wire 0x2022). */
+struct FMMOLfgRoleCheckPacket {
+    uint16 DungeonId = 0;
+    uint8 RequiredRoles = 0;            // маска данжа (lfg_dungeons.RequiredRolesMask)
+    uint8 Ok = 0;                       // 1 = роль игрока принимается очередью
+
+    static constexpr uint16 WIRE_OPCODE = 0x2022;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOLfgRoleCheckPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU16(Out.DungeonId) && R.ReadU8(Out.RequiredRoles) && R.ReadU8(Out.Ok);
+    }
+};
+
+/** SMSG_LFG_PROPOSAL — группа собрана, ждём акцепта (wire 0x2029). */
+struct FMMOLfgProposalPacket {
+    uint16 DungeonId = 0;
+    uint32 MapId = 0;
+    uint64 LeaderGuid = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2029;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOLfgProposalPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU16(Out.DungeonId) && R.ReadU32(Out.MapId) && R.ReadU64(Out.LeaderGuid);
     }
 };
