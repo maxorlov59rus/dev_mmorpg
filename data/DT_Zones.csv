@@ -1,0 +1,49 @@
+ZoneID,MapID,Name,Category,MinLevel,MaxLevel,FactionID,Ruleset,HonorMultQ16,GraveyardMap,UEAssetPath
+1,0,Dawnhold - City of the Order of the Dawn,1,1,95,1,1,65536,0,/Game/Maps/L_World_Cartos
+2,0,Ashen Reach - Citadel of the Ember Order,1,1,95,2,1,65536,0,/Game/Maps/L_World_Cartos
+3,0,Threshold Gate - Neutral Trade Hub,1,1,95,0,1,65536,0,/Game/Maps/L_World_Cartos
+4,0,Meadows of Awakening,2,1,5,1,1,65536,0,/Game/Maps/L_World_Cartos
+5,0,Scorched Hills,2,1,5,2,1,65536,0,/Game/Maps/L_World_Cartos
+6,0,Quiet Vale Camp,1,5,15,0,1,65536,0,/Game/Maps/L_World_Cartos
+7,0,Silverleaf Forest,2,6,15,0,0,65536,0,/Game/Maps/L_World_Cartos
+8,0,Mossy Mires,2,10,20,0,0,65536,0,/Game/Maps/L_World_Cartos
+9,0,Eternium Quarries,7,20,30,0,3,65536,0,/Game/Maps/L_World_Cartos
+10,0,Foothills of Chill,2,25,35,0,0,65536,0,/Game/Maps/L_World_Cartos
+11,0,Ruins of Valdaren,7,35,45,0,3,65536,0,/Game/Maps/L_World_Cartos
+12,0,Ashen Wildwood,2,40,50,2,0,65536,0,/Game/Maps/L_World_Cartos
+13,0,Steppes of the Dawn Banner,2,45,55,1,0,65536,0,/Game/Maps/L_World_Cartos
+14,0,Flooded Catacombs Surface,7,50,60,0,3,65536,0,/Game/Maps/L_World_Cartos
+15,0,Warlocks Upland,7,55,65,0,3,65536,0,/Game/Maps/L_World_Cartos
+16,0,Glacier of Silence,2,60,70,0,0,65536,0,/Game/Maps/L_World_Cartos
+17,0,Seepage Front,7,70,80,0,3,98304,0,/Game/Maps/L_World_Cartos
+18,0,Scorched Coast,7,75,85,0,3,98304,0,/Game/Maps/L_World_Cartos
+19,0,Threshold Citadel,3,85,95,0,3,131072,0,/Game/Maps/L_World_Cartos
+20,0,Everwatch Sanctuary,1,85,95,0,1,65536,0,/Game/Maps/L_World_Cartos
+101,1,Dawn Patrol Fortress,1,10,95,1,1,65536,1,/Game/Maps/L_Front_Dawn
+111,1,Dawn Marches Fields,2,10,30,1,0,65536,1,/Game/Maps/L_Front_Dawn
+112,1,Towers of First Light,7,30,45,1,3,98304,0,/Game/Maps/L_Front_Dawn
+113,1,Seepage Al-Tair,2,40,55,1,0,65536,1,/Game/Maps/L_Front_Dawn
+201,2,Rust Wastes Market,3,10,25,0,3,98304,2,/Game/Maps/L_RustWastes
+202,2,Leviathan Junkyard,3,15,30,0,3,98304,2,/Game/Maps/L_RustWastes
+203,2,Red Canyons,3,25,40,0,3,98304,2,/Game/Maps/L_RustWastes
+204,2,Outcast Camp,3,10,95,0,3,98304,0,/Game/Maps/L_RustWastes
+205,2,Gladiator Pit,3,30,50,0,3,131072,0,/Game/Maps/L_RustWastes
+301,3,Ash Bastion,1,10,95,2,1,65536,3,/Game/Maps/L_Front_Ash
+311,3,Ashen Millworks,2,10,30,2,0,65536,3,/Game/Maps/L_Front_Ash
+312,3,Bone Ranks,7,30,45,2,3,98304,0,/Game/Maps/L_Front_Ash
+313,3,Forge of Devouring,2,40,55,2,0,65536,3,/Game/Maps/L_Front_Ash
+411,4,Broken Pillars,3,50,65,0,3,98304,4,/Game/Maps/L_NoMansLand
+412,4,Field of Last Strife,3,60,75,0,3,131072,4,/Game/Maps/L_NoMansLand
+413,4,Black Market,1,50,95,0,1,65536,0,/Game/Maps/L_NoMansLand
+401,400,Ring of First Light 3v3,4,10,95,0,2,131072,65535,/Game/Maps/Inst/L_Arena_RingFirstLight
+402,401,Void Pit Duel Ground,4,10,95,0,2,131072,65535,/Game/Maps/Inst/L_Arena_VoidPit
+403,402,Threshold Gate Rated Arena,4,20,95,0,2,131072,65535,/Game/Maps/Inst/L_Arena_ThresholdGate
+501,500,Trial Caves LFG Tutorial,5,10,15,0,0,65536,65535,/Game/Maps/Inst/L_Dun_TrialCaves
+511,501,Seepage Rift Normal,5,38,45,0,0,65536,65535,/Game/Maps/Inst/L_Dun_SeepageRift
+512,501,Seepage Rift Legendary,5,40,46,0,0,65536,65535,/Game/Maps/Inst/L_Dun_SeepageRift
+521,502,Devour Keep,5,58,65,0,0,65536,65535,/Game/Maps/Inst/L_Dun_DevourKeep
+522,502,Devour Keep Mythic,5,60,66,0,0,65536,65535,/Game/Maps/Inst/L_Dun_DevourKeep
+601,600,Black Star Prologue,6,78,82,0,0,65536,65535,/Game/Maps/Raid/L_Raid_BlackStar
+602,600,Black Star Core,6,80,85,0,0,65536,65535,/Game/Maps/Raid/L_Raid_BlackStar
+611,601,Heart of Matter Outer Halls,6,92,95,0,0,65536,65535,/Game/Maps/Raid/L_Raid_CoreOfMatter
+612,601,Throne of Seepage,6,95,95,0,0,65536,65535,/Game/Maps/Raid/L_Raid_CoreOfMatter

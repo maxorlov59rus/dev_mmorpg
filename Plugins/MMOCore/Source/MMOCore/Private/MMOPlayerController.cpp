@@ -185,8 +185,50 @@ void AMMOPlayerController::HandleServerPacket(EMMOOpcode Opcode, const FMMOPacke
         break;
     }
 
+    case EMMOOpcode::SrvZoneUpdate: {
+        FMMOZoneUpdatePacket Z;
+        if (FMMOZoneUpdatePacket::FromPacket(Packet, Z)) {
+            CurrentMapId = Z.MapId;
+            CurrentZoneId = Z.AreaId;
+            CurrentZoneCategory = Z.Category;
+            UE_LOG(LogPlayerCtl, Log, TEXT("Zone update: map=%u area=%u cat=%u lvl=%u-%u faction=%u"), Z.MapId,
+                   Z.AreaId, uint8(Z.Category), Z.LevelMin, Z.LevelMax, Z.FactionId);
+            OnZoneChanged.Broadcast(Z.MapId, Z.AreaId, Z.Category);
+        }
+        break;
+    }
+    case EMMOOpcode::SrvZoneMap: {
+        FMMOZoneMapPacket M;
+        if (FMMOZoneMapPacket::FromPacket(Packet, M)) {
+            ZoneCache = MoveTemp(M.Zones);
+            UE_LOG(LogPlayerCtl, Log, TEXT("Zone map snapshot: %d zones"), ZoneCache.Num());
+            OnZoneMapReceived.Broadcast(ZoneCache.Num());
+        }
+        break;
+    }
+
     default:
         break;
+    }
+}
+
+bool AMMOPlayerController::TryGetZoneInfo(uint16 MapId, uint16 AreaId, FMMOZoneMapEntry &Out) const {
+    for (const FMMOZoneMapEntry &E : ZoneCache)
+        if (E.MapId == MapId && E.AreaId == AreaId) {
+            Out = E;
+            return true;
+        }
+    return false;
+}
+
+void AMMOPlayerController::RequestZoneMap() {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdZoneMapRequest);
+        Client->SendMessage(P);
     }
 }
 

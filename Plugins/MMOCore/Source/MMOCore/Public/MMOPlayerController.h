@@ -38,6 +38,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMMOOnQuestLogUpdated, const TArray<
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FMMOOnLevelUp, uint8, NewLevel, uint64, XpToNext, uint16,
                                               TalentPointsTotal, uint16, TalentPointsSpent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnTalentResult, uint32, TalentId, EMMOTalentResult, Result);
+// Карта локаций v1.8: смена зоны (SMSG_ZONE_UPDATE) и полный снимок (SMSG_ZONE_MAP).
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FMMOOnZoneChangedD, uint16, MapId, uint16, AreaId,
+                                               EMMOZoneCategory, Category);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMMOOnZoneMapReceivedD, int32, ZoneCount);
 
 UCLASS(Blueprintable, Config = MMOCore)
 class MMOCORE_API AMMOPlayerController : public APlayerController {
@@ -139,6 +143,26 @@ public:
 
     /** GUID локального игрока (ставится из SMSG_LOGIN/enter-world; до этого 0). */
     UPROPERTY(BlueprintReadOnly, Category = "MMO|PvP") uint64 LocalPlayerGuid = 0;
+    // ---- Карта локаций v1.8 (UI_MapWidget / миникарта) ----
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Zone")
+    FMMOOnZoneChangedD OnZoneChanged;
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Zone")
+    FMMOOnZoneMapReceivedD OnZoneMapReceived;
+
+    /** Текущая зона (источник — сервер: SMSG_ZONE_UPDATE 0x204C). */
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") uint16 CurrentMapId = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") uint16 CurrentZoneId = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") EMMOZoneCategory CurrentZoneCategory = EMMOZoneCategory::Unknown;
+    /** Кэш полного снимка SMSG_ZONE_MAP (миникарта/большая карта). */
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") TArray<FMMOZoneMapEntry> ZoneCache;
+
+    /** CMSG_ZONE_MAP_REQUEST 0x204A — запросить снимок карты (вызывается GameInstance при enter-world). */
+    UFUNCTION(BlueprintCallable, Category = "MMO|Zone")
+    void RequestZoneMap();
+
+    /** Поиск записи кэша по map/area (UI_MapWidget: цвет рамки/название зоны). */
+    UFUNCTION(BlueprintPure, Category = "MMO|Zone")
+    bool TryGetZoneInfo(uint16 MapId, uint16 AreaId, FMMOZoneMapEntry &Out) const;
     /** Кэш последнего собственного SMSG_PVP_FLAG_UPDATE (WarMode иконка/рамка). */
     FMMOPvpFlagUpdatePacket LastSelfPvpFlags;
 

@@ -407,3 +407,21 @@
     u8  durability_loss_pct                ; штраф PvP (0..100)
     u32 sickness_spell_id                  ; Resurrection Sickness (-50% статов, 10 мин) = 80100
 }
+
+# ---------------------------------------------------------------------
+# v1.8 — Карта локаций и зоны (sql/create/06_world_map.sql, ZoneManager)
+# areatable.category: 1 City 2 PvE-Zone 3 FFA 4 Arena 5 Dungeon 6 Raid 7 Wilderness
+# ruleset/graveyard — join v_zone_map_export; источник истины — MySQL, клиент кэширует.
+# ---------------------------------------------------------------------
+@opcode CMSG_ZONE_MAP_REQUEST  0x204A chan=world dir=c2s { } ; полный снимок карты при входе в мир
+@opcode SMSG_ZONE_MAP          0x204B chan=world dir=s2c {
+    u16 zone_count
+    u16 map_id
+    u16 area_id
+    u8  category
+    u8  level_min
+    u8  level_max
+    u16 faction_id
+    u8  ruleset
+} ; повторяющиеся поля = элемент массива (count записей), снимок v_zone_map_export
+@opcode SMSG_ZONE_UPDATE       0x204C chan=map dir=s2c { u16 map_id u16 area_id u8 category u8 level_min u8 level_max u16 faction_id } ; смена зоны (ZoneManager::OnEnterZone)

@@ -175,6 +175,9 @@ enum class EMMOOpcode : uint16 {
     SrvPvpKillNotify = 0x0B08 UMETA(DisplayName = "PvpKillNotify"), // wire 0x2047
     SrvCombatState = 0x0B09 UMETA(DisplayName = "CombatState"),     // wire 0x2048
     SrvCorpsePolicy = 0x0B0A UMETA(DisplayName = "CorpsePolicy"),   // wire 0x2049
+    CmdZoneMapRequest = 0x0B0B UMETA(DisplayName = "ZoneMapRequest"), // wire 0x204A
+    SrvZoneMap = 0x0B0C UMETA(DisplayName = "ZoneMap"),               // wire 0x204B
+    SrvZoneUpdate = 0x0B0D UMETA(DisplayName = "ZoneUpdate"),         // wire 0x204C
 
     Max = 0xFFFF UMETA(Hidden),
 };
@@ -326,6 +329,12 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
         return 0x2048;
     case EMMOOpcode::SrvCorpsePolicy:
         return 0x2049;
+    case EMMOOpcode::CmdZoneMapRequest:
+        return 0x204A;
+    case EMMOOpcode::SrvZoneMap:
+        return 0x204B;
+    case EMMOOpcode::SrvZoneUpdate:
+        return 0x204C;
     default:
         return static_cast<uint16>(Op);
     }
@@ -470,6 +479,12 @@ inline constexpr EMMOOpcode FromWire(uint16 Wire) {
         return EMMOOpcode::SrvCombatState;
     case 0x2049:
         return EMMOOpcode::SrvCorpsePolicy;
+    case 0x204A:
+        return EMMOOpcode::CmdZoneMapRequest;
+    case 0x204B:
+        return EMMOOpcode::SrvZoneMap;
+    case 0x204C:
+        return EMMOOpcode::SrvZoneUpdate;
     default:
         return static_cast<EMMOOpcode>(Wire);
     }
@@ -1325,6 +1340,85 @@ struct FMMOPvpZoneInfoPacket {
         FMMOPacket::FReader R(P.Payload);
         return R.ReadU16(Out.MapId) && R.ReadU16(Out.AreaId) && R.ReadU8(Out.Ruleset) &&
                R.ReadU8(Out.ForcedFlag);
+    }
+};
+
+/** Карта локаций v1.8: категория зоны == areatable.category (ZoneManager.h). */
+UENUM(BlueprintType)
+enum class EMMOZoneCategory : uint8 {
+    Unknown = 0,
+    City = 1 UMETA(DisplayName = "Sanctuary City"),
+    PveZone = 2 UMETA(DisplayName = "PvE Zone"),
+    Ffa = 3 UMETA(DisplayName = "FFA"),
+    Arena = 4 UMETA(DisplayName = "Arena"),
+    Dungeon = 5 UMETA(DisplayName = "Dungeon"),
+    Raid = 6 UMETA(DisplayName = "Raid"),
+    Wilderness = 7 UMETA(DisplayName = "Wilderness"),
+};
+
+/** Одна запись снимка SMSG_ZONE_MAP 0x204B (строка v_zone_map_export). */
+struct FMMOZoneMapEntry {
+    uint16 MapId = 0;
+    uint16 AreaId = 0;
+    EMMOZoneCategory Category = EMMOZoneCategory::Unknown;
+    uint8 LevelMin = 1;
+    uint8 LevelMax = 95;
+    uint16 FactionId = 0;
+    uint8 Ruleset = 0; // 1 Sanctuary / 2 Arena / 3 FFA (pvp_zones.ruleset)
+
+    bool IsDangerous() const {
+        return Category == EMMOZoneCategory::Ffa || Category == EMMOZoneCategory::Arena ||
+               Category == EMMOZoneCategory::Wilderness || Ruleset == 3;
+    }
+    bool IsSanctuary() const { return Ruleset == 1 || Category == EMMOZoneCategory::City; }
+};
+
+/** SMSG_ZONE_MAP 0x204B: полный снимок карты при входе в мир (после
+ *  CMSG_ZONE_MAP_REQUEST 0x204A). Payload: u16 count, затем count записей по
+ *  10 байт (u16 map,u16 area,u8 cat,u8 lmin,u8 lmax,u16 faction,u8 ruleset). */
+struct FMMOZoneMapPacket {
+    static constexpr uint16 WIRE_OPCODE = 0x204B;
+    static constexpr int32 ENTRY_SIZE = 10;
+    TArray<FMMOZoneMapEntry> Zones;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOZoneMapPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint16 Count = 0;
+        if (!R.ReadU16(Count))
+            return false;
+        Out.Zones.Reset(Count);
+        for (uint16 i = 0; i < Count; ++i) {
+            FMMOZoneMapEntry E;
+            uint8 Cat = 0;
+            if (!R.ReadU16(E.MapId) || !R.ReadU16(E.AreaId) || !R.ReadU8(Cat) ||
+                !R.ReadU8(E.LevelMin) || !R.ReadU8(E.LevelMax) || !R.ReadU16(E.FactionId) ||
+                !R.ReadU8(E.Ruleset))
+                return false;
+            E.Category = static_cast<EMMOZoneCategory>(Cat);
+            Out.Zones.Add(E);
+        }
+        return true;
+    }
+};
+
+/** SMSG_ZONE_UPDATE 0x204C: смена текущей зоны игрока (ZoneManager::OnPlayerEnterZone). */
+struct FMMOZoneUpdatePacket {
+    uint16 MapId = 0;
+    uint16 AreaId = 0;
+    EMMOZoneCategory Category = EMMOZoneCategory::Unknown;
+    uint8 LevelMin = 1;
+    uint8 LevelMax = 95;
+    uint16 FactionId = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x204C;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOZoneUpdatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint8 Cat = 0;
+        if (!R.ReadU16(Out.MapId) || !R.ReadU16(Out.AreaId) || !R.ReadU8(Cat) ||
+            !R.ReadU8(Out.LevelMin) || !R.ReadU8(Out.LevelMax) || !R.ReadU16(Out.FactionId))
+            return false;
+        Out.Category = static_cast<EMMOZoneCategory>(Cat);
+        return true;
     }
 };
 
