@@ -16,7 +16,7 @@ for %%I in ("%SCRIPT_DIR%..") do set "REPO_ROOT=%%~fI"
 set "CONFIG=Release"
 set "USE_CLCACHE=0"
 set "DO_CLEAN=0"
-set "SOURCE_DIR=%REPO_ROOT%\server"
+set "SOURCE_DIR=%REPO_ROOT%\dm-server"
 set "BUILD_DIR=%SOURCE_DIR%\build-win"
 set "GENERATOR=Visual Studio 17 2022"
 
