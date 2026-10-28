@@ -40,8 +40,18 @@ enum class EMMOOpcode : uint16 {
     SrvAuthSessionResult = 0x0106 UMETA(DisplayName = "AuthSessionResult"),
 
     // ---- Login / realm block (0x02xx) — loginserver: список шардов ----
-    CmdCharListRequest = 0x0201 UMETA(DisplayName = "CharListRequest"),
-    SrvCharList = 0x0202 UMETA(DisplayName = "CharList"),
+    // NOTE: world-session handshake (defs 0x0010/0x0011/0x0014/0x0015) is carried by these
+    // enum entries; MMOWire::ToWire maps them to the wire numbers below.
+    CmdWorldHello = 0x0201 UMETA(
+        DisplayName = "WorldHello"), // wire: CMSG_WORLD_HELLO (defs 0x0010) ticket+build
+    CmdCharListRequest = 0x0211 UMETA(
+        DisplayName =
+            "CharListRequest"), // wire: SMSG_CHAR_LIST request side (see also 0x0011 resp)
+    SrvCharList = 0x0202 UMETA(DisplayName = "CharList"), // wire: SMSG_CHAR_LIST (defs 0x0011)
+    CmdCharSelect =
+        0x0214 UMETA(DisplayName = "CharSelect"), // wire: CMSG_CHAR_SELECT (defs 0x0014) guid
+    SrvMapAssign = 0x0215 UMETA(
+        DisplayName = "MapAssign"), // wire: SMSG_MAP_ASSIGN (defs 0x0015) ip/port/key/token
     CmdCharCreate =
         0x0203 UMETA(DisplayName = "CharCreate"), // wire: CMSG_CHAR_CREATE (defs 0x0012)
     CmdCharDelete = 0x0204 UMETA(DisplayName = "CharDelete"),
@@ -59,10 +69,19 @@ enum class EMMOOpcode : uint16 {
     CmdSetActiveObject = 0x0304 UMETA(DisplayName = "SetActiveObject"),
     SrvTutorialFlags = 0x0305 UMETA(DisplayName = "TutorialFlags"),
 
-    // ---- Movement / sync (0x04xx) ----
-    CmdPlayerMove = 0x0401 UMETA(DisplayName = "PlayerMove"),
-    SrvObjectsUpdate = 0x0402 UMETA(DisplayName = "ObjectsUpdate"),
+    // ---- Movement / sync (0x04xx) — map channel (UDP/KCP), defs 0x1xxx ----
+    CmdPlayerMove = 0x0401 UMETA(
+        DisplayName = "PlayerMove"), // wire: CMSG_MOVE_TICK (defs 0x1001) sub-tick deltas
+    SrvObjectsUpdate =
+        0x0402 UMETA(DisplayName = "ObjectsUpdate"), // wire: SMSG_DELTA (defs 0x1011) AOI delta
     SrvValuesUpdate = 0x0403 UMETA(DisplayName = "ValuesUpdate"),
+    SrvMapSnapshot = 0x0404 UMETA(
+        DisplayName = "MapSnapshot"), // wire: SMSG_SNAPSHOT (defs 0x1010) full AOI snapshot
+    CmdAoiAck = 0x0405 UMETA(DisplayName = "AoiAck"), // wire: CMSG_AOI_ACK (defs 0x1012)
+    CmdSetInterest = 0x0406 UMETA(
+        DisplayName = "SetInterest"), // wire: CMSG_SET_INTEREST (defs 0x1013) camera pos/radius
+    CmdMapPing = 0x0407 UMETA(DisplayName = "MapPing"), // wire: CMSG_PING (defs 0x10FF)
+    SrvMapPong = 0x0408 UMETA(DisplayName = "MapPong"), // wire: SMSG_PONG (defs 0x1100)
 
     // ---- Combat / factions (0x05xx) ----
     CmdAttack = 0x0501 UMETA(DisplayName = "Attack"),
@@ -70,6 +89,13 @@ enum class EMMOOpcode : uint16 {
     SrvReputationUpdate =
         0x0503 UMETA(DisplayName = "ReputationUpdate"), // wire: SMSG_REP_UPDATE (defs 0x0075): u8
                                                         // faction, i32 standing(Q16), u8 rank
+    CmdCastSpell =
+        0x0510 UMETA(DisplayName = "CastSpell"), // wire: CMSG_CAST (defs 0x1020) spellid+targets
+    SrvCastResult =
+        0x0511 UMETA(DisplayName = "CastResult"),   // wire: SMSG_CAST_RESULT (defs 0x1022)
+    SrvSpawn = 0x0512 UMETA(DisplayName = "Spawn"), // wire: SMSG_SPAWN (defs 0x1040) EntityFull
+    SrvDespawn =
+        0x0513 UMETA(DisplayName = "Despawn"), // wire: SMSG_DESPAWN (defs 0x1041) guid + reason
 
     // ---- Faction / Renegade system v1.2 (ReputationMgr.h, sql/upgrades/*) ----
     SrvRenegadeState = 0x0504 UMETA(
@@ -81,10 +107,19 @@ enum class EMMOOpcode : uint16 {
     SrvCreatureAggro =
         0x0506 UMETA(DisplayName = "CreatureAggro"), // wire: SMSG_CREATURE_AGGRO (defs 0x0078, map
                                                      // chan): guid creature, guid target
+    SrvFactionState = 0x0507 UMETA(
+        DisplayName = "FactionState"), // wire: SMSG_FACTION_STATE (defs 0x0070): season + frontline
+    CmdCorruptionQuery = 0x0508 UMETA(
+        DisplayName = "CorruptionQuery"), // wire: CMSG_CORRUPTION_QUERY (defs 0x0071) empty payload
+    SrvCorruptionState =
+        0x0509 UMETA(DisplayName = "CorruptionState"), // wire: SMSG_CORRUPTION_STATE (defs 0x0074):
+                                                       // u16 x100, u8 altered
+    SrvSeepageList = 0x050A UMETA(
+        DisplayName = "SeepageList"), // wire: SMSG_SEEPAGE_LIST (defs 0x0073): active seepages
 
     // ---- Chat (0x06xx) — отдельный chat-сервер принимает тот же фрейминг ----
-    CmdChatMessage = 0x0601 UMETA(DisplayName = "ChatMessage"),
-    SrvChatMessage = 0x0602 UMETA(DisplayName = "ChatMessageSrv"),
+    CmdChatSend = 0x0601 UMETA(DisplayName = "ChatSend"), // wire: CMSG_CHAT_SEND (defs 0x0020)
+    SrvChatRecv = 0x0602 UMETA(DisplayName = "ChatRecv"), // wire: SMSG_CHAT_RECV (defs 0x0021)
 
     // ---- Quests / Gossip v1.3 (proto/opcodes.defs 0x2000..0x2014) ----
     CmdQuestQuery = 0x0701 UMETA(DisplayName = "QuestQuery"),                   // wire 0x2000
@@ -139,6 +174,50 @@ enum class EMMOOpcode : uint16 {
 namespace MMOWire {
 inline constexpr uint16 ToWire(EMMOOpcode Op) {
     switch (Op) {
+    // World-session handshake (legacy block, defs 0x00xx)
+    case EMMOOpcode::CmdWorldHello:
+        return 0x0010; // CMSG_WORLD_HELLO
+    case EMMOOpcode::SrvCharList:
+        return 0x0011; // SMSG_CHAR_LIST
+    case EMMOOpcode::CmdCharSelect:
+        return 0x0014; // CMSG_CHAR_SELECT
+    case EMMOOpcode::SrvMapAssign:
+        return 0x0015; // SMSG_MAP_ASSIGN
+    case EMMOOpcode::CmdChatSend:
+        return 0x0020; // CMSG_CHAT_SEND
+    case EMMOOpcode::SrvChatRecv:
+        return 0x0021; // SMSG_CHAT_RECV
+    case EMMOOpcode::SrvFactionState:
+        return 0x0070; // SMSG_FACTION_STATE
+    case EMMOOpcode::CmdCorruptionQuery:
+        return 0x0071; // CMSG_CORRUPTION_QUERY
+    case EMMOOpcode::SrvSeepageList:
+        return 0x0073; // SMSG_SEEPAGE_LIST
+    case EMMOOpcode::SrvCorruptionState:
+        return 0x0074; // SMSG_CORRUPTION_STATE
+    // Map channel (UDP/KCP, defs 0x1xxx)
+    case EMMOOpcode::CmdPlayerMove:
+        return 0x1001; // CMSG_MOVE_TICK
+    case EMMOOpcode::SrvMapSnapshot:
+        return 0x1010; // SMSG_SNAPSHOT
+    case EMMOOpcode::SrvObjectsUpdate:
+        return 0x1011; // SMSG_DELTA
+    case EMMOOpcode::CmdAoiAck:
+        return 0x1012; // CMSG_AOI_ACK
+    case EMMOOpcode::CmdSetInterest:
+        return 0x1013; // CMSG_SET_INTEREST
+    case EMMOOpcode::CmdCastSpell:
+        return 0x1020; // CMSG_CAST
+    case EMMOOpcode::SrvCastResult:
+        return 0x1022; // SMSG_CAST_RESULT
+    case EMMOOpcode::SrvSpawn:
+        return 0x1040; // SMSG_SPAWN
+    case EMMOOpcode::SrvDespawn:
+        return 0x1041; // SMSG_DESPAWN
+    case EMMOOpcode::CmdMapPing:
+        return 0x10FF; // CMSG_PING
+    case EMMOOpcode::SrvMapPong:
+        return 0x1100; // SMSG_PONG
     // Quests (defs 0x2000..0x2007)
     case EMMOOpcode::CmdQuestQuery:
         return 0x2000;
@@ -221,6 +300,50 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
 
 inline constexpr EMMOOpcode FromWire(uint16 Wire) {
     switch (Wire) {
+    // World-session handshake (legacy block, defs 0x00xx)
+    case 0x0010:
+        return EMMOOpcode::CmdWorldHello;
+    case 0x0011:
+        return EMMOOpcode::SrvCharList;
+    case 0x0014:
+        return EMMOOpcode::CmdCharSelect;
+    case 0x0015:
+        return EMMOOpcode::SrvMapAssign;
+    case 0x0020:
+        return EMMOOpcode::CmdChatSend;
+    case 0x0021:
+        return EMMOOpcode::SrvChatRecv;
+    case 0x0070:
+        return EMMOOpcode::SrvFactionState;
+    case 0x0071:
+        return EMMOOpcode::CmdCorruptionQuery;
+    case 0x0073:
+        return EMMOOpcode::SrvSeepageList;
+    case 0x0074:
+        return EMMOOpcode::SrvCorruptionState;
+    // Map channel (UDP/KCP, defs 0x1xxx)
+    case 0x1001:
+        return EMMOOpcode::CmdPlayerMove;
+    case 0x1010:
+        return EMMOOpcode::SrvMapSnapshot;
+    case 0x1011:
+        return EMMOOpcode::SrvObjectsUpdate;
+    case 0x1012:
+        return EMMOOpcode::CmdAoiAck;
+    case 0x1013:
+        return EMMOOpcode::CmdSetInterest;
+    case 0x1020:
+        return EMMOOpcode::CmdCastSpell;
+    case 0x1022:
+        return EMMOOpcode::SrvCastResult;
+    case 0x1040:
+        return EMMOOpcode::SrvSpawn;
+    case 0x1041:
+        return EMMOOpcode::SrvDespawn;
+    case 0x10FF:
+        return EMMOOpcode::CmdMapPing;
+    case 0x1100:
+        return EMMOOpcode::SrvMapPong;
     case 0x2000:
         return EMMOOpcode::CmdQuestQuery;
     case 0x2001:
@@ -1004,10 +1127,10 @@ struct FMMOXpGainedPacket {
 struct FMMOTalentNode {
     uint32 TalentId = 0;
     uint16 TreeId = 0;
-    uint8 Row = 0;   // 1..7 (Row7 = prestige, cost 3)
+    uint8 Row = 0; // 1..7 (Row7 = prestige, cost 3)
     uint8 Column = 0;
     uint8 MaxRank = 1;
-    uint8 Type = 0;  // 0=passive 1=active 2=mechanic
+    uint8 Type = 0; // 0=passive 1=active 2=mechanic
     uint8 ReqPoints = 0;
     uint8 ReqLevel = 10;
     uint8 Prestige = 0;
@@ -1042,9 +1165,10 @@ struct FMMOTalentDataPacket {
             return false;
         for (uint16 i = 0; i < NodeCount; ++i) {
             FMMOTalentNode N;
-            if (!R.ReadU32(N.TalentId) || !R.ReadU16(N.TreeId) || !R.ReadU8(N.Row) || !R.ReadU8(N.Column) ||
-                !R.ReadU8(N.MaxRank) || !R.ReadU8(N.Type) || !R.ReadU8(N.ReqPoints) || !R.ReadU8(N.ReqLevel) ||
-                !R.ReadU8(N.Prestige) || !R.ReadU32(N.AuraSpell) || !R.ReadU32(N.ActiveSpell))
+            if (!R.ReadU32(N.TalentId) || !R.ReadU16(N.TreeId) || !R.ReadU8(N.Row) ||
+                !R.ReadU8(N.Column) || !R.ReadU8(N.MaxRank) || !R.ReadU8(N.Type) ||
+                !R.ReadU8(N.ReqPoints) || !R.ReadU8(N.ReqLevel) || !R.ReadU8(N.Prestige) ||
+                !R.ReadU32(N.AuraSpell) || !R.ReadU32(N.ActiveSpell))
                 return false;
             Out.Nodes.Add(N);
         }
@@ -1097,7 +1221,7 @@ struct FMMOTalentResultPacket {
 /** SMSG_ITEM_EQUIP_UPDATE 0x2037: смена экипировки (тиры/илвл — ItemTierMatrix). */
 struct FMMOItemEquipUpdatePacket {
     uint32 UnitGuid = 0;
-    uint8 Slot = 0;      // CONTRACT equipSlot: 1=head 2=shoulders 3=chest ...
+    uint8 Slot = 0; // CONTRACT equipSlot: 1=head 2=shoulders 3=chest ...
     uint32 ItemId = 0;
     uint16 Ilvl = 0;
     uint8 Tier = 0;      // ItemTier enum серверного ProgressionCore.h
