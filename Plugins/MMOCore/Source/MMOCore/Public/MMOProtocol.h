@@ -65,7 +65,12 @@ enum class EMMOOpcode : uint16
 	// ---- Combat / factions (0x05xx) ----
 	CmdAttack           = 0x0501 UMETA(DisplayName = "Attack"),
 	SrvAttackResult     = 0x0502 UMETA(DisplayName = "AttackResult"),
-	SrvReputationUpdate = 0x0503 UMETA(DisplayName = "ReputationUpdate"),
+	SrvReputationUpdate = 0x0503 UMETA(DisplayName = "ReputationUpdate"),   // wire: SMSG_REP_UPDATE (defs 0x0075): u8 faction, i32 standing(Q16), u8 rank
+
+	// ---- Faction / Renegade system v1.2 (ReputationMgr.h, sql/upgrades/*) ----
+	SrvRenegadeState    = 0x0504 UMETA(DisplayName = "RenegadeState"),      // wire: SMSG_RENEGADE_STATE (defs 0x0076): u8 is_renegade, u8 at_war_with_all, u16 black_market_unlocked
+	SrvFactionVisual    = 0x0505 UMETA(DisplayName = "FactionVisual"),      // wire: SMSG_FACTION_VISUAL (defs 0x0077, map chan) -> FactionFXManager::ApplyToUnit
+	SrvCreatureAggro    = 0x0506 UMETA(DisplayName = "CreatureAggro"),      // wire: SMSG_CREATURE_AGGRO (defs 0x0078, map chan): guid creature, guid target
 
 	// ---- Chat (0x06xx) — отдельный chat-сервер принимает тот же фрейминг ----
 	CmdChatMessage      = 0x0601 UMETA(DisplayName = "ChatMessage"),

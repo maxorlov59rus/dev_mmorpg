@@ -1,115 +1,111 @@
 {
-	"FileVersion": 3,
-	"EngineAssociation": "5.8",
-	"Category": "Games",
-	"Description": "Чёрная Материя (Black Matter) — кроссплатформенная фракционная MMORPG в тёмном фэнтези. Клиент UE5.8 (Win64 / Android ARM64). Сервер — собственный кластер в стиле TrinityCore (dm-auth/dm-login/dm-world/dm-map), кастомный бинарный TCP-протокол. Единый источник истины протокола: proto/opcodes.defs.",
-
-	"Modules": [
-		{
-			"Name": "DMClient",
-			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"Engine",
-				"MMOCore"
-			]
-		},
-		{
-			"Name": "DMClientEditor",
-			"Type": "Editor",
-			"LoadingPhase": "PreDefault"
-		}
-	],
-
-	"Plugins": [
-		{
-			"Name": "MMOCore",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64",
-				"Android",
-				"Linux"
-			],
-			"Comment": "Локальный плагин Plugins/MMOCore: сетевой стек (TCP, бинарный протокол, SRP-auth), AMMOGameInstance, FMMONetworkClient (Runnable)."
-		},
-		{
-			"Name": "WorldPartition",
-			"Enabled": true
-		},
-		{
-			"Name": "MassEntity",
-			"Enabled": true
-		},
-		{
-			"Name": "SmartObjects",
-			"Enabled": true
-		},
-		{
-			"Name": "StateTree",
-			"Enabled": true
-		},
-		{
-			"Name": "GameplayBehaviors",
-			"Enabled": true
-		},
-		{
-			"Name": "CommonUI",
-			"Enabled": true
-		},
-		{
-			"Name": "ModularGameplay",
-			"Enabled": true
-		},
-		{
-			"Name": "DataRegistry",
-			"Enabled": true
-		},
-		{
-			"Name": "LuaRuntime",
-			"Enabled": false,
-			"Comment": "Серверный Lua (SmartAI-аналог) живёт в dm-server; клиенту не нужен. Включить только если появится hotfix-скриптинг UI."
-		},
-		{
-			"Name": "EnhancedInput",
-			"Enabled": true
-		},
-		{
-			"Name": "Niagara",
-			"Enabled": true
-		},
-		{
-			"Name": "PCG",
-			"Enabled": true
-		},
-		{
-			"Name": "MetaHuman",
-			"Enabled": false
-		},
-		{
-			"Name": "PixelStreaming2",
-			"Enabled": false
-		},
-		{
-			"Name": "OnlineSubsystemGooglePlay",
-			"Enabled": false,
-			"Comment": "Auth — собственный SRP-слой dm-authserver (см. docs/03). OnlineSubsystem включим позже только для достижений/Purchase на Android."
-		},
-		{
-			"Name": "PlatformCryptoOpenSSL",
-			"Enabled": false,
-			"Comment": "Крипто ведёт MMOCore/OpenSSL-стек плагина; дублирование движкового слоя отключено, чтобы не тянуть два OpenSSL в билд."
-		}
-	],
-
-	"BuildConfigurationOptions": {
-		"bUseUnity": false,
-		"Comment": "ADR-004: фиксированный детерминизм и чистые include-графы важнее скорости сборки; unity-билды маскируют порядок заголовков в сетевом коде."
-	},
-
-	"TargetPlatforms": [
-		"Win64",
-		"Android_ASTC",
-		"Android_ETC2",
-		"Android_Multi"
-	]
+        "FileVersion": 3,
+        "EngineAssociation": "5.8",
+        "Category": "Games",
+        "Description": "Чёрная Материя (Black Matter) — кроссплатформенная фракционная MMORPG в тёмном фэнтези. Клиент UE5.8 (Win64 / Android ARM64). Сервер — собственный кластер в стиле TrinityCore (dm-auth/dm-login/dm-world/dm-map), кастомный бинарный TCP-протокол. Единый источник истины протокола: proto/opcodes.defs. Protocol v2 (additive): репутация/ренегаты — SMSG_REP_UPDATE 0x0075, SMSG_RENEGADE_STATE 0x0076, SMSG_FACTION_VISUAL 0x0077, SMSG_CREATURE_AGGRO 0x0078.",
+        "Modules": [
+                {
+                        "Name": "DMClient",
+                        "Type": "Runtime",
+                        "LoadingPhase": "Default",
+                        "AdditionalDependencies": [
+                                "Engine",
+                                "MMOCore"
+                        ]
+                },
+                {
+                        "Name": "DMClientEditor",
+                        "Type": "Editor",
+                        "LoadingPhase": "PreDefault"
+                }
+        ],
+        "Plugins": [
+                {
+                        "Name": "MMOCore",
+                        "Enabled": true,
+                        "SupportedTargetPlatforms": [
+                                "Win64",
+                                "Android",
+                                "Linux"
+                        ],
+                        "Comment": "Локальный плагин Plugins/MMOCore: сетевой стек (TCP, бинарный протокол, SRP-auth), AMMOGameInstance, FMMONetworkClient (Runnable)."
+                },
+                {
+                        "Name": "WorldPartition",
+                        "Enabled": true
+                },
+                {
+                        "Name": "MassEntity",
+                        "Enabled": true
+                },
+                {
+                        "Name": "SmartObjects",
+                        "Enabled": true
+                },
+                {
+                        "Name": "StateTree",
+                        "Enabled": true
+                },
+                {
+                        "Name": "GameplayBehaviors",
+                        "Enabled": true
+                },
+                {
+                        "Name": "CommonUI",
+                        "Enabled": true
+                },
+                {
+                        "Name": "ModularGameplay",
+                        "Enabled": true
+                },
+                {
+                        "Name": "DataRegistry",
+                        "Enabled": true
+                },
+                {
+                        "Name": "LuaRuntime",
+                        "Enabled": false,
+                        "Comment": "Серверный Lua (SmartAI-аналог) живёт в dm-server; клиенту не нужен. Включить только если появится hotfix-скриптинг UI."
+                },
+                {
+                        "Name": "EnhancedInput",
+                        "Enabled": true
+                },
+                {
+                        "Name": "Niagara",
+                        "Enabled": true
+                },
+                {
+                        "Name": "PCG",
+                        "Enabled": true
+                },
+                {
+                        "Name": "MetaHuman",
+                        "Enabled": false
+                },
+                {
+                        "Name": "PixelStreaming2",
+                        "Enabled": false
+                },
+                {
+                        "Name": "OnlineSubsystemGooglePlay",
+                        "Enabled": false,
+                        "Comment": "Auth — собственный SRP-слой dm-authserver (см. docs/03). OnlineSubsystem включим позже только для достижений/Purchase на Android."
+                },
+                {
+                        "Name": "PlatformCryptoOpenSSL",
+                        "Enabled": false,
+                        "Comment": "Крипто ведёт MMOCore/OpenSSL-стек плагина; дублирование движкового слоя отключено, чтобы не тянуть два OpenSSL в билд."
+                }
+        ],
+        "BuildConfigurationOptions": {
+                "bUseUnity": false,
+                "Comment": "ADR-004: фиксированный детерминизм и чистые include-графы важнее скорости сборки; unity-билды маскируют порядок заголовков в сетевом коде."
+        },
+        "TargetPlatforms": [
+                "Win64",
+                "Android_ASTC",
+                "Android_ETC2",
+                "Android_Multi"
+        ]
 }

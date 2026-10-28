@@ -8,7 +8,7 @@
 ; Порядок полей = wire order. Новые поля — только в конец (additive rule, docs/03 §7).
 ; =====================================================================
 
-@version 1
+@version 2
 
 ; ---------- AUTH (TCP :8091) ----------
 @opcode CMSG_AUTH_CHALLENGE 0x0001 chan=auth dir=c2s {
@@ -105,6 +105,33 @@
     u16 point_id
     u8  owner_faction                  ; 0=ничейно 1..3 фракции
     u16 hold_progress_pct_x10          ; 0..1000
+}
+; ---- Reputation / Renegade (v1.2: система фракций, см. ReputationMgr.h) ----
+; faction: 1=Стражи Света(Орден Рассвета) 2=Падшие(Круг Поглощения)
+;          3=Гильдия Порога 4=служебная фракция ИЗГОЕВ (renegades)
+; standing = Q16 fixed int32 (1 очко репутации = 16 ед; пороги рангов в Faction.dbc)
+; rank:    0=Hated 1=Hostile 2=Unfriendly 3=Neutral 4=Friendly 5=Honored 6=Revered 7=Exalted
+@opcode SMSG_REP_UPDATE 0x0075 chan=world dir=s2c {
+    u8   faction
+    i32  standing
+    u8   rank
+}
+; Инвариант ренегата на сервере: repA < -5000 И repB < 0 (ReputationMgr::CrossedRenegadeState).
+; При переходе: авто-выдача скрытого квеста q_1003 «Изгой», atWarWithAll=true,
+; включение vein-шейдера ЧМ на модели (SMSG_FACTION_VISUAL -> FactionFXManager.cpp).
+@opcode SMSG_RENEGADE_STATE 0x0076 chan=world dir=s2c {
+    u8   is_renegade                   ; 0/1 — флаг изгоя (PvP red nameplate, города закрыты)
+    u8   at_war_with_all
+    u16  black_market_unlocked         ; 1 = q_1003 сдан, доступен VENDOR_BLACK_MARKET
+}
+@opcode SMSG_FACTION_VISUAL 0x0077 chan=map dir=s2c {
+    guid unit_guid                     ; юнит, которому применяется FX (в т.ч. self)
+    u8   faction                       ; целевая фракция для материала/палитры
+    u8   apply_black_matter_fx         ; 1 = включить пульсирующие вены (WPO+Emissive)
+}
+@opcode SMSG_CREATURE_AGGRO 0x0078 chan=map dir=s2c {
+    guid creature_guid
+    guid target_guid                   ; для анимации «страж заметил изгоя» в AOI
 }
 @opcode SMSG_FACTION_STATE 0x0070 chan=world dir=s2c {
     u8   season_active

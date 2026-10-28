@@ -12,6 +12,6 @@ DECLARE_LOG_CATEGORY_EXTERN(LogDMClient, Log, All);
  */
 namespace DMClientBuild
 {
-	inline constexpr int32 ProtocolVersion = 1;   // синхронно с `@version 1` в proto/opcodes.defs (единый источник истины)
+	inline constexpr int32 ProtocolVersion = 2;   // синхронно с `@version 2` в proto/opcodes.defs (additive: репутация/ренегаты v1.2)
 	inline constexpr const TCHAR* ProjectVersion = TEXT("0.1.0");
 }
