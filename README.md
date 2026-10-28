@@ -28,6 +28,10 @@
 | `docs/06-DevOps-и-инфраструктура.md` | K8s, CI/CD, мониторинг, DR, стоимость |
 | `docs/07-CI-параллельная-сборка.md` | BuildOrchestrator.py, .gitlab-ci.yml, UAT/CMake wrappers |
 | `sql/create/0X_*.sql` | DDL: dm_auth / dm_characters / dm_world (аналог TRC sql/create) |
+| `sql/upgrades/*.sql` | Миграции v2: DB_Schema.sql (ренегаты/gossip/item/лут), StarterQuests.sql (q_1001–q_1003), NPC_Config.sql (госсипы, мобы faction 1650, Этерниум) |
+| `dm-server/src/game/Reputation/` | ReputationMgr.h/cpp — ядро репутации + state-machine «Ренегат» (repA<-5000 && repB<0) |
+| `dm-server/src/game/AI/SmartAI.cpp` | Реакция NPC: агрессия стражей к изгоям на входе в город, taunt по Hated, gossip-conditions, kill-credit |
+| `dm-server/scripts/lua/smartai/` | Lua-хуки репутации за убийства мобов (kill_reputation.lua) |
 | `proto/opcodes.defs` | единый источник истины протокола |
 
 ## Правило: актуальность DMClient.uproject
@@ -48,6 +52,7 @@ CI-задача `uproject-drift` (добавляется на M0): парсит 
 - [x] Файл проекта `DMClient.uproject` (v0.1.0, protocol v1) + Targets/модули `Source/` + `Config/`
 - [x] Плагин `Plugins/MMOCore` scaffold (Build.cs, NetworkClient, Protocol, AuthPackets)
 - [x] CI/CD v0.1: параллельная сборка (`build/BuildOrchestrator.py`, `.gitlab-ci.yml`, `build_config.json`, wrappers BuildClient.bat / ServerBuild.sh / ServerBuild.bat) — docs/07
+- [x] Фракционная система v1.2: сервер (ReputationMgr, SmartAI, Lua-хук) + SQL (схема, стартовые квесты, конфиг NPC) + новые опкоды SMSG_REP_UPDATE/RENEGADE_STATE/FACTION_VISUAL/CREATURE_AGGRO
 - [ ] `dm-server` scaffold (CMake + common/network) — цель M0
 - [ ] `proto-gen` tool + golden packet fixtures
 - [ ] Content-папка `Content/Maps/Login` (нужен хотя бы пустой уровень перед открытием в редакторе)
