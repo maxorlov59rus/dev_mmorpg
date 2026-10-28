@@ -34,6 +34,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnSpellsBatch, const TArray<uin
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FMMOOnLfgProposalD, uint16, DungeonId, uint32, MapId,
                                               uint64, LeaderGuid, int32, TimeoutSec);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMMOOnQuestLogUpdated, const TArray<FQuestTrackerView> &, Trackers);
+// Прогрессия 1-95 (v1.6): level-up и результат вложения таланта.
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FMMOOnLevelUp, uint8, NewLevel, uint64, XpToNext, uint16,
+                                              TalentPointsTotal, uint16, TalentPointsSpent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnTalentResult, uint32, TalentId, EMMOTalentResult, Result);
 
 UCLASS(Blueprintable, Config = MMOCore)
 class MMOCORE_API AMMOPlayerController : public APlayerController {
@@ -87,9 +91,30 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "MMO|Events")
     FMMOOnQuestLogUpdated OnQuestLogUpdated;
 
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Progression")
+    FMMOOnLevelUp OnLevelUp;
+
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Progression")
+    FMMOOnTalentResult OnTalentLearnResult;
+
     UPROPERTY(BlueprintReadOnly, Category = "MMO|State") uint8 ActiveClass = 0;
     UPROPERTY(BlueprintReadOnly, Category = "MMO|State") uint8 ActiveSpec = 0;
     UPROPERTY(BlueprintReadOnly, Category = "MMO|State") uint8 PowerTypeRaw = 0;
+
+    // ---- Прогрессия 1-95 (кэш SMSG_LEVEL_UPDATE для XP-панели) ----
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Progression") uint8 CurrentLevel = 1;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Progression") uint64 XpCumulative = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Progression") uint64 XpToNext = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Progression") uint16 TalentPointsTotal = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Progression") uint16 TalentPointsSpent = 0;
+
+    /** Отправить CMSG_TALENT_LEARN (клик по ноде UI_TalentTreeWidget). */
+    UFUNCTION(BlueprintCallable, Category = "MMO|Talent")
+    void RequestTalentLearn(uint32 TalentId, uint8 Rank);
+
+    /** Отправить CMSG_TALENT_QUERY (открытие древа). */
+    UFUNCTION(BlueprintCallable, Category = "MMO|Talent")
+    void RequestTalentData();
 
 protected:
     UFUNCTION()
@@ -113,5 +138,6 @@ private:
     TMap<uint32, FMMOQuestAcceptedPacket> QuestMeta;
     TArray<FQuestTrackerView> QuestTrackers;
     TArray<uint8> LastSpecIds;              // whitelist из SMSG_SPEC_SELECTION_OPEN
+    FMMOTalentDataPacket CachedTalentData;  // снимок SMSG_TALENT_DATA для дерева
     TObjectPtr<UUI_SpecSelectionWidget> ActiveSpecModal = nullptr;
 };

@@ -311,7 +311,7 @@
 }
 @opcode SMSG_LEARN_SPELL 0x0093 chan=world dir=s2c {
     u32 spell_id                         ; классовая авто-способность (class_spells)
-    u8  source                           ; 0 class_default 1 level_up 2 racial 3 quest
+    u8  source                           ; 0 class_default 1 level_up 2 racial 3 spec (квест-награды — отдельный канал SMSG_QUEST_COMPLETE)
 }
 
 ; ---------- QUESTS 6-10: SPEC SELECTION + LFG (v1.5, промпт «Квестовая система 6–10») ----------
@@ -353,3 +353,16 @@
     u32 map_id                               ; предпросмотр инстанса («Пещеры Испытаний» = 901)
     u64 leader_guid                          ; M1: первый по FIFO
 }
+
+# ---------------------------------------------------------------------
+# v1.6 — Прогрессия 1–95 (docs/09, ProgressionCore.h/.cpp)
+# Level-up/XP-синхронизация + древо талантов.
+# ---------------------------------------------------------------------
+@opcode SMSG_LEVEL_UPDATE 0x2030 chan=world dir=s2c { guid u8 new_level u64 xp_cumulative u64 xp_to_next u16 talent_points_total u16 talent_points_spent }
+@opcode SMSG_XP_GAINED     0x2031 chan=map dir=s2c { guid u32 xp_amount u8 source } ; source: 0=mob 1=quest 2=script
+@opcode CMSG_TALENT_QUERY  0x2032 chan=world dir=c2s { }
+@opcode SMSG_TALENT_DATA   0x2033 chan=world dir=s2c { u16 tree_count [ tree_id u8 class u8 spec_id ] u16 node_count [ talent_id u16 tree u8 row u8 col u8 max_rank u8 type u8 req_points u8 req_level u8 prestige u32 aura_spell u32 active_spell ] }
+@opcode CMSG_TALENT_LEARN  0x2034 chan=world dir=c2s { u32 talent_id u8 rank }
+@opcode SMSG_TALENT_RESULT 0x2035 chan=world dir=s2c { u32 talent_id u8 rank u8 result } ; result: 0=ok 1=no_points 2=prereq 3=level 4=prestige_gate
+@opcode CMSG_TALENT_RESET  0x2036 chan=world dir=c2s { }
+@opcode SMSG_ITEM_EQUIP_UPDATE 0x2037 chan=map dir=s2c { guid u8 slot u32 item_id u16 ilvl u8 tier u8 armor_type }
