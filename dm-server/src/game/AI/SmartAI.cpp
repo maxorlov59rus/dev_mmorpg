@@ -161,7 +161,7 @@ void SmartAI::OnGossipSelect(Creature *me, Player *player, uint32 menuId, uint32
 }
 
 // -----------------------------------------------------------------
-// KILL_CREDIT event: начисление репутации за убийство моба.
+// KILL_CREDIT event: начисление репутации за убийство моба + прогресс квестов.
 // Числа (amount/rank) приходят из SmartAIMain таблицы (DBC-like config),
 // аналог TRC smart_scripts params[1..2]; дробные значения умножены на 16.
 // -----------------------------------------------------------------
@@ -180,9 +180,57 @@ void SmartAI::OnKillCredit(Creature *killed, Player *killer, const SmartEventPar
     if (params.repFactionB != 0 && params.repAmountB != 0)
         GetReputationMgr().ModifyReputation(killer, params.repFactionB, params.repAmountB, ctx);
 
+    // Квесты lvl 1-5: kill-goal прогресс (q_1002 x5 Слизень, q_1004 x6 Жук,
+    // q_1006 Полый, q_1007 Тень). QuestMgr сверяет RequiredCreatureKill1 у
+    // активных квестов и шлёт SMSG_QUEST_PROGRESS / SMSG_QUEST_TURN_IN_HINT.
+    killer->GetQuestMgr()->KilledCreature(killed->GetEntry(), /*count*/ 1);
+
     // Lua-overridable хук (scripts/lua/smartai/*): даёт контент-команде
     // менять логику без рекомпиляции ядра — прямой аналог Eluna Scripts.
     HookMgr::Instance().CallVoid("smartai.on_kill_credit", killer, killed);
+}
+
+// -----------------------------------------------------------------
+// ДИАЛОГИ МОБОВ LVL 1-5 (StarterContent_L1_5.sql §1): реплики аггро/ранения/
+// смерти. TextID'ы лежат в creature_template.{Aggro,Wound,Death}TextID
+// (broadcast_text 910xx), доставка — SMSG_CREATURE_TEXT (defs 0x2014) через
+// MonsterTextEmote -> Map::SendToArea (AOI). Кулдауны держим в AiTimer, чтобы
+// не спамить трафик на массовых киллах фарм-зон.
+// -----------------------------------------------------------------
+void SmartAI::OnEnterCombat(Creature *me, Unit *victim) {
+    if (!me || !victim)
+        return;
+    const uint32 textId = me->GetTemplate()->AggroTextID;
+    if (textId == 0)
+        return;
+    // однократно за боевой цикл (сбрасывается в OnCombatStop)
+    if (me->GetAiTimer(AI_TIMER_AGGRO_TEXT) != 0)
+        return;
+    me->SetAiTimer(AI_TIMER_AGGRO_TEXT, 1); // mark: shown this combat
+    me->MonsterTextEmote(textId, victim->GetPlayer(), /*isLanguage*/ true);
+}
+
+void SmartAI::OnCombatStop(Creature *me) {
+    if (me)
+        me->SetAiTimer(AI_TIMER_AGGRO_TEXT, 0); // разрешить реплику при следующем аггро
+}
+
+void SmartAI::OnHealthPercent(Creature *me, uint8 pctHp) {
+    if (!me || pctHp > 30)
+        return; // «ранен» — ниже 30%
+    const uint32 textId = me->GetTemplate()->WoundTextID;
+    if (textId == 0 || me->GetAiTimer(AI_TIMER_WOUND_TEXT) != 0)
+        return;
+    me->SetAiTimer(AI_TIMER_WOUND_TEXT, 1);
+    me->MonsterTextEmote(textId, me->GetVictim() ? me->GetVictim()->GetPlayer() : nullptr, true);
+}
+
+void SmartAI::OnJustDied(Creature *me) {
+    if (!me)
+        return;
+    const uint32 textId = me->GetTemplate()->DeathTextID;
+    if (textId != 0)
+        me->MonsterTextEmote(textId, me->GetVictim() ? me->GetVictim()->GetPlayer() : nullptr, true);
 }
 
 // -----------------------------------------------------------------

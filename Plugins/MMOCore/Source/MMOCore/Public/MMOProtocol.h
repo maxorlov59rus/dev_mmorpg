@@ -86,8 +86,97 @@ enum class EMMOOpcode : uint16 {
     CmdChatMessage = 0x0601 UMETA(DisplayName = "ChatMessage"),
     SrvChatMessage = 0x0602 UMETA(DisplayName = "ChatMessageSrv"),
 
+    // ---- Quests / Gossip v1.3 (proto/opcodes.defs 0x2000..0x2014) ----
+    CmdQuestQuery = 0x0701 UMETA(DisplayName = "QuestQuery"),                   // wire 0x2000
+    SrvQuestList = 0x0702 UMETA(DisplayName = "QuestList"),                     // wire 0x2001
+    CmdQuestAccept = 0x0703 UMETA(DisplayName = "QuestAccept"),                 // wire 0x2002
+    CmdQuestComplete = 0x0704 UMETA(DisplayName = "QuestComplete"),             // wire 0x2003
+    SrvQuestAccepted = 0x0705 UMETA(DisplayName = "QuestAccepted"),             // wire 0x2004
+    SrvQuestProgress = 0x0706 UMETA(DisplayName = "QuestProgress"),             // wire 0x2005
+    SrvQuestCompleteResult = 0x0707 UMETA(DisplayName = "QuestCompleteResult"), // wire 0x2006
+    SrvQuestTurnInHint = 0x0708 UMETA(DisplayName = "QuestTurnInHint"),         // wire 0x2007
+    CmdGossipHello = 0x0709 UMETA(DisplayName = "GossipHello"),                 // wire 0x2010
+    SrvGossipShow = 0x070A UMETA(DisplayName = "GossipShow"),                   // wire 0x2011
+    CmdGossipSelect = 0x070B UMETA(DisplayName = "GossipSelect"),               // wire 0x2012
+    SrvGossipReply = 0x070C UMETA(DisplayName = "GossipReply"),                 // wire 0x2013
+    SrvCreatureText = 0x070D UMETA(DisplayName = "CreatureText"),               // wire 0x2014
+
     Max = 0xFFFF UMETA(Hidden),
 };
+
+/**
+ * Маппинг клиентского блока-enum (EMMOOpcode) -> wire-номер из proto/opcodes.defs.
+ * Единая точка правды для всех новых блоков (quests/gossip v1.3 и далее).
+ */
+namespace MMOWire {
+inline constexpr uint16 ToWire(EMMOOpcode Op) {
+    switch (Op) {
+    // Quests (defs 0x2000..0x2007)
+    case EMMOOpcode::CmdQuestQuery:
+        return 0x2000;
+    case EMMOOpcode::SrvQuestList:
+        return 0x2001;
+    case EMMOOpcode::CmdQuestAccept:
+        return 0x2002;
+    case EMMOOpcode::CmdQuestComplete:
+        return 0x2003;
+    case EMMOOpcode::SrvQuestAccepted:
+        return 0x2004;
+    case EMMOOpcode::SrvQuestProgress:
+        return 0x2005;
+    case EMMOOpcode::SrvQuestCompleteResult:
+        return 0x2006;
+    case EMMOOpcode::SrvQuestTurnInHint:
+        return 0x2007;
+    // Gossip (defs 0x2010..0x2014)
+    case EMMOOpcode::CmdGossipHello:
+        return 0x2010;
+    case EMMOOpcode::SrvGossipShow:
+        return 0x2011;
+    case EMMOOpcode::CmdGossipSelect:
+        return 0x2012;
+    case EMMOOpcode::SrvGossipReply:
+        return 0x2013;
+    case EMMOOpcode::SrvCreatureText:
+        return 0x2014;
+    default:
+        return static_cast<uint16>(Op);
+    }
+}
+
+inline constexpr EMMOOpcode FromWire(uint16 Wire) {
+    switch (Wire) {
+    case 0x2000:
+        return EMMOOpcode::CmdQuestQuery;
+    case 0x2001:
+        return EMMOOpcode::SrvQuestList;
+    case 0x2002:
+        return EMMOOpcode::CmdQuestAccept;
+    case 0x2003:
+        return EMMOOpcode::CmdQuestComplete;
+    case 0x2004:
+        return EMMOOpcode::SrvQuestAccepted;
+    case 0x2005:
+        return EMMOOpcode::SrvQuestProgress;
+    case 0x2006:
+        return EMMOOpcode::SrvQuestCompleteResult;
+    case 0x2007:
+        return EMMOOpcode::SrvQuestTurnInHint;
+    case 0x2010:
+        return EMMOOpcode::CmdGossipHello;
+    case 0x2011:
+        return EMMOOpcode::SrvGossipShow;
+    case 0x2012:
+        return EMMOOpcode::CmdGossipSelect;
+    case 0x2013:
+        return EMMOOpcode::SrvGossipReply;
+    case 0x2014:
+        return EMMOOpcode::SrvCreatureText;
+    default:
+        return static_cast<EMMOOpcode>(Wire);
+    }
+}
+} // namespace MMOWire
 
 /** Статусы авторизации (зеркало AuthResults из TRC). */
 UENUM(BlueprintType)

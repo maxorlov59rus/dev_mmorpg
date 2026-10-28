@@ -129,7 +129,7 @@ void FMMONetworkClient::TickGame() {
     FMMOPacket Pkt;
     while (Budget-- > 0 && InQueue.Dequeue(Pkt)) {
         HandleIncomingFrame(Pkt);
-        OnPacketReceived.Broadcast(static_cast<EMMOOpcode>(Pkt.Opcode), Pkt);
+        OnPacketReceived.Broadcast(MMOWire::FromWire(Pkt.Opcode), Pkt);
     }
 
     // 2. Keepalive ping по таймеру
