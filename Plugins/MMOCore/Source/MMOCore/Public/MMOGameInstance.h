@@ -11,8 +11,10 @@
 
 class UWorld;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnConnectionChanged, EMMONetConnectionState, Prev, EMMONetConnectionState, Now);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnAuthResult, EMMOAuthStatus, Status, const FString&, Message);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnConnectionChanged, EMMONetConnectionState, Prev,
+                                             EMMONetConnectionState, Now);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnAuthResult, EMMOAuthStatus, Status,
+                                             const FString &, Message);
 
 /**
  * Игровой инстанс «Чёрной Материи».
@@ -26,78 +28,79 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnAuthResult, EMMOAuthStatus, S
  *   Shutdown -> Disconnect + сброс shared_ptr (деструктор join'ит поток).
  */
 UCLASS(BlueprintType, Blueprintable)
-class AMMOGameInstance : public UGameInstance
-{
-	GENERATED_BODY()
+class AMMOGameInstance : public UGameInstance {
+    GENERATED_BODY()
 
 public:
-	AMMOGameInstance();
+    AMMOGameInstance();
 
-	// --- UObject ---
-	virtual void Init() override;
-	virtual void Shutdown() override;
+    // --- UObject ---
+    virtual void Init() override;
+    virtual void Shutdown() override;
 
-	// --- Blueprint API ---
-	UFUNCTION(BlueprintCallable, Category = "MMO|Net", DisplayName = "Connect to MMO Server")
-	bool ConnectTo(const FString& Host, int32 Port);
+    // --- Blueprint API ---
+    UFUNCTION(BlueprintCallable, Category = "MMO|Net", DisplayName = "Connect to MMO Server")
+    bool ConnectTo(const FString &Host, int32 Port);
 
-	UFUNCTION(BlueprintCallable, Category = "MMO|Net")
-	void BeginLogin(const FString& Username, const FString& Password);
+    UFUNCTION(BlueprintCallable, Category = "MMO|Net")
+    void BeginLogin(const FString &Username, const FString &Password);
 
-	UFUNCTION(BlueprintCallable, Category = "MMO|Net")
-	void DisconnectFromServer(const FString& Reason);
+    UFUNCTION(BlueprintCallable, Category = "MMO|Net")
+    void DisconnectFromServer(const FString &Reason);
 
-	UFUNCTION(BlueprintPure, Category = "MMO|Net")
-	EMMONetConnectionState GetConnectionState() const;
+    UFUNCTION(BlueprintPure, Category = "MMO|Net")
+    EMMONetConnectionState GetConnectionState() const;
 
-	UFUNCTION(BlueprintPure, Category = "MMO|Net")
-	float GetPingMs() const;
+    UFUNCTION(BlueprintPure, Category = "MMO|Net")
+    float GetPingMs() const;
 
-	/** Отправка произвольного пакета из BP (через helper-структуру payload). */
-	UFUNCTION(BlueprintCallable, Category = "MMO|Net")
-	void SendPacketByOpcode(EMMOOpcode Opcode, const TArray<uint8>& Payload);
+    /** Отправка произвольного пакета из BP (через helper-структуру payload). */
+    UFUNCTION(BlueprintCallable, Category = "MMO|Net")
+    void SendPacketByOpcode(EMMOOpcode Opcode, const TArray<uint8> &Payload);
 
-	UPROPERTY(BlueprintAssignable, Category = "MMO|Events")
-	FMMOOnConnectionChanged OnConnectionChangedBP;
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Events")
+    FMMOOnConnectionChanged OnConnectionChangedBP;
 
-	UPROPERTY(BlueprintAssignable, Category = "MMO|Events")
-	FMMOOnAuthResult OnAuthResultBP;
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Events")
+    FMMOOnAuthResult OnAuthResultBP;
 
-	/** Доступ к клиенту для C++-систем (AuthFlow, ChatBridge...). Null-safe. */
-	TSharedPtr<FMMONetworkClient> GetNetworkClient() const { return NetworkClient; }
+    /** Доступ к клиенту для C++-систем (AuthFlow, ChatBridge...). Null-safe. */
+    TSharedPtr<FMMONetworkClient> GetNetworkClient() const {
+        return NetworkClient;
+    }
 
 protected:
-	// Endpoints из конфига (DefaultEngine.ini): см. Config/DefaultEngine.ini плагина
-	UPROPERTY(Config, EditAnywhere, Category = "MMO|Endpoints")
-	FMMOServerEndpoint AuthServer;
+    // Endpoints из конфига (DefaultEngine.ini): см. Config/DefaultEngine.ini плагина
+    UPROPERTY(Config, EditAnywhere, Category = "MMO|Endpoints")
+    FMMOServerEndpoint AuthServer;
 
-	UPROPERTY(Config, EditAnywhere, Category = "MMO|Endpoints")
-	FMMOServerEndpoint LoginServer;
+    UPROPERTY(Config, EditAnywhere, Category = "MMO|Endpoints")
+    FMMOServerEndpoint LoginServer;
 
-	UPROPERTY(Config, EditAnywhere, Category = "MMO|Endpoints")
-	FMMOServerEndpoint ChatServer;
-
-private:
-	/** Тикер game-thread: выгружает входящие пакеты и гоняет keepalive. */
-	bool OnNetTick(float DeltaTime);
-
-	// ---- packet handlers (game thread) ----
-	void HandlePacket(EMMOOpcode Opcode, const FMMOPacket& Pkt);
-	void HandleAuthChallenge(const FMMOPacket& Pkt);
-	void HandleAuthResponse(const FMMOPacket& Pkt);
-	void HandleWorldInfo(const FMMOPacket& Pkt); // переход на mapserver (следующий коннект)
-
-	void BroadcastState(EMMONetConnectionState Prev, EMMONetConnectionState Now);
+    UPROPERTY(Config, EditAnywhere, Category = "MMO|Endpoints")
+    FMMOServerEndpoint ChatServer;
 
 private:
-	TSharedPtr<FMMONetworkClient> NetworkClient;
-	FTSTicker::FDelegateHandle NetTickerHandle;
+    /** Тикер game-thread: выгружает входящие пакеты и гоняет keepalive. */
+    bool OnNetTick(float DeltaTime);
 
-	// Текущий auth-flow (живёт между Challenge и Confirm)
-	FMMOAuthRequest PendingAuth;
-	bool bAuthInFlight = false;
+    // ---- packet handlers (game thread) ----
+    void HandlePacket(EMMOOpcode Opcode, const FMMOPacket &Pkt);
+    void HandleAuthChallenge(const FMMOPacket &Pkt);
+    void HandleAuthResponse(const FMMOPacket &Pkt);
+    void HandleWorldInfo(const FMMOPacket &Pkt); // переход на mapserver (следующий коннект)
 
-	// Храны нативных делегатов, подписанных на NetworkClient (для RemoveAll в Shutdown)
-	FDelegateHandle OnPktHandle;
-	FDelegateHandle OnStateHandle;
+    void BroadcastState(EMMONetConnectionState Prev, EMMONetConnectionState Now);
+
+private:
+    TSharedPtr<FMMONetworkClient> NetworkClient;
+    FTSTicker::FDelegateHandle NetTickerHandle;
+
+    // Текущий auth-flow (живёт между Challenge и Confirm)
+    FMMOAuthRequest PendingAuth;
+    bool bAuthInFlight = false;
+
+    // Храны нативных делегатов, подписанных на NetworkClient (для RemoveAll в Shutdown)
+    FDelegateHandle OnPktHandle;
+    FDelegateHandle OnStateHandle;
 };
