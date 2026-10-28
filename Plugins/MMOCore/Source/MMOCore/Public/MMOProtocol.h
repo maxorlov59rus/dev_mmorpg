@@ -164,6 +164,18 @@ enum class EMMOOpcode : uint16 {
     CmdTalentReset = 0x0A07 UMETA(DisplayName = "TalentReset"),         // wire 0x2036
     SrvItemEquipUpdate = 0x0A08 UMETA(DisplayName = "ItemEquipUpdate"), // wire 0x2037
 
+    // PvE/PvP (v1.7, defs 0x2040..0x2049): флаги/зоны/дуэли/combat/corpse
+    CmdPvpToggle = 0x0B01 UMETA(DisplayName = "PvpToggle"),         // wire 0x2040
+    SrvPvpFlagUpdate = 0x0B02 UMETA(DisplayName = "PvpFlagUpdate"), // wire 0x2041
+    SrvPvpZoneInfo = 0x0B03 UMETA(DisplayName = "PvpZoneInfo"),     // wire 0x2042
+    CmdDuelRequest = 0x0B04 UMETA(DisplayName = "DuelRequest"),     // wire 0x2043
+    SrvDuelStarted = 0x0B05 UMETA(DisplayName = "DuelStarted"),     // wire 0x2044
+    CmdDuelAccept = 0x0B06 UMETA(DisplayName = "DuelAccept"),       // wire 0x2045
+    SrvDuelComplete = 0x0B07 UMETA(DisplayName = "DuelComplete"),   // wire 0x2046
+    SrvPvpKillNotify = 0x0B08 UMETA(DisplayName = "PvpKillNotify"), // wire 0x2047
+    SrvCombatState = 0x0B09 UMETA(DisplayName = "CombatState"),     // wire 0x2048
+    SrvCorpsePolicy = 0x0B0A UMETA(DisplayName = "CorpsePolicy"),   // wire 0x2049
+
     Max = 0xFFFF UMETA(Hidden),
 };
 
@@ -293,6 +305,27 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
         return 0x2036;
     case EMMOOpcode::SrvItemEquipUpdate:
         return 0x2037;
+    // PvE/PvP (defs 0x2040..0x2049)
+    case EMMOOpcode::CmdPvpToggle:
+        return 0x2040;
+    case EMMOOpcode::SrvPvpFlagUpdate:
+        return 0x2041;
+    case EMMOOpcode::SrvPvpZoneInfo:
+        return 0x2042;
+    case EMMOOpcode::CmdDuelRequest:
+        return 0x2043;
+    case EMMOOpcode::SrvDuelStarted:
+        return 0x2044;
+    case EMMOOpcode::CmdDuelAccept:
+        return 0x2045;
+    case EMMOOpcode::SrvDuelComplete:
+        return 0x2046;
+    case EMMOOpcode::SrvPvpKillNotify:
+        return 0x2047;
+    case EMMOOpcode::SrvCombatState:
+        return 0x2048;
+    case EMMOOpcode::SrvCorpsePolicy:
+        return 0x2049;
     default:
         return static_cast<uint16>(Op);
     }
@@ -416,6 +449,27 @@ inline constexpr EMMOOpcode FromWire(uint16 Wire) {
         return EMMOOpcode::CmdTalentReset;
     case 0x2037:
         return EMMOOpcode::SrvItemEquipUpdate;
+    // PvE/PvP (defs 0x2040..0x2049)
+    case 0x2040:
+        return EMMOOpcode::CmdPvpToggle;
+    case 0x2041:
+        return EMMOOpcode::SrvPvpFlagUpdate;
+    case 0x2042:
+        return EMMOOpcode::SrvPvpZoneInfo;
+    case 0x2043:
+        return EMMOOpcode::CmdDuelRequest;
+    case 0x2044:
+        return EMMOOpcode::SrvDuelStarted;
+    case 0x2045:
+        return EMMOOpcode::CmdDuelAccept;
+    case 0x2046:
+        return EMMOOpcode::SrvDuelComplete;
+    case 0x2047:
+        return EMMOOpcode::SrvPvpKillNotify;
+    case 0x2048:
+        return EMMOOpcode::SrvCombatState;
+    case 0x2049:
+        return EMMOOpcode::SrvCorpsePolicy;
     default:
         return static_cast<EMMOOpcode>(Wire);
     }
@@ -559,6 +613,13 @@ struct FMMOPacket {
             if (N - Pos < 4)
                 return false;
             Out = ReadLE<uint32>();
+            return true;
+        }
+        bool ReadI32(int32 &Out) {
+            uint32 U;
+            if (!ReadU32(U))
+                return false;
+            Out = static_cast<int32>(U); // LE two's complement
             return true;
         }
         bool ReadU64(uint64 &Out) {
@@ -1215,6 +1276,145 @@ struct FMMOTalentResultPacket {
             return false;
         Out.Result = static_cast<EMMOTalentResult>(Res);
         return true;
+    }
+};
+
+/**
+ * EPvPFlag — зеркало серверного enum PvpFlags (dm-server/src/game/PvP/PvPSystem.h)
+ * и character_flags.pvp_flags (sql/upgrades/PvE_PvP_Core.sql). НЕ МЕНЯТЬ биты
+ * без синхронизации всех трёх мест (defs v1.7 — контракт).
+ */
+UENUM(BlueprintType)
+enum class EMMOPvPFlag : uint8 {
+    None = 0,
+    Flagged = 1 UMETA(DisplayName = "PvP Flagged"),
+    Ffa = 2 UMETA(DisplayName = "FFA Zone"),
+    InSanctuary = 4 UMETA(DisplayName = "Sanctuary"),
+    Dueling = 8 UMETA(DisplayName = "Dueling"),
+    Wanted = 16 UMETA(DisplayName = "Wanted"),
+    Dishonored = 32 UMETA(DisplayName = "Dishonored"),
+};
+
+/** SMSG_PVP_FLAG_UPDATE 0x2041: bitmask флагов + таймер + wanted level. */
+struct FMMOPvpFlagUpdatePacket {
+    uint64 Guid = 0;
+    uint16 PvpFlags = 0; // EMMOPvPFlag bitmask
+    uint16 FlagTimerSec = 0;
+    uint8 WantedLevel = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2041;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOPvpFlagUpdatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.Guid) && R.ReadU16(Out.PvpFlags) && R.ReadU16(Out.FlagTimerSec) &&
+               R.ReadU8(Out.WantedLevel);
+    }
+    bool Has(EMMOPvPFlag F) const { return (PvpFlags & uint16(F)) != 0; }
+};
+
+/** SMSG_PVP_ZONE_INFO 0x2042: правила зоны при входе (источник — pvp_zones). */
+struct FMMOPvpZoneInfoPacket {
+    uint16 MapId = 0;
+    uint16 AreaId = 0;
+    uint8 Ruleset = 0; // 1 Sanctuary / 2 Arena / 3 FFA
+    uint8 ForcedFlag = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2042;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOPvpZoneInfoPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU16(Out.MapId) && R.ReadU16(Out.AreaId) && R.ReadU8(Out.Ruleset) &&
+               R.ReadU8(Out.ForcedFlag);
+    }
+};
+
+/** CMSG_DUEL_REQUEST 0x2043 / CMSG_DUEL_ACCEPT 0x2045 (клиент -> сервер). */
+struct FMMODuelRequestPacket {
+    uint64 TargetGuid = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2043;
+    FMMOPacket ToPacket() const {
+        FMMOPacket P;
+        P.Opcode = WIRE_OPCODE;
+        P.WriteU64(TargetGuid);
+        return P;
+    }
+};
+struct FMMODuelAcceptPacket {
+    uint64 DuelId = 0;
+    uint8 Accept = 1;
+    static constexpr uint16 WIRE_OPCODE = 0x2045;
+    FMMOPacket ToPacket() const {
+        FMMOPacket P;
+        P.Opcode = WIRE_OPCODE;
+        P.WriteU64(DuelId);
+        P.WriteU8(Accept);
+        return P;
+    }
+};
+
+/** SMSG_DUEL_STARTED 0x2044: круг дуэли (Decal+NiaRing) на карте. */
+struct FMMODuelStartedPacket {
+    uint64 DuelId = 0;
+    uint64 InitiatorGuid = 0;
+    uint64 TargetGuid = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2044;
+    static bool FromPacket(const FMMOPacket &P, FMMODuelStartedPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.DuelId) && R.ReadU64(Out.InitiatorGuid) && R.ReadU64(Out.TargetGuid);
+    }
+};
+
+/** SMSG_DUEL_COMPLETE 0x2046: HP/MP restore + RemoveDebuffs на клиенте-победителе. */
+struct FMMODuelCompletePacket {
+    uint64 DuelId = 0;
+    uint64 WinnerGuid = 0;
+    uint8 Reason = 0; // 0 killed / 1 cancelled / 2 timedout
+    static constexpr uint16 WIRE_OPCODE = 0x2046;
+    static bool FromPacket(const FMMOPacket &P, FMMODuelCompletePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.DuelId) && R.ReadU64(Out.WinnerGuid) && R.ReadU8(Out.Reason);
+    }
+};
+
+/** SMSG_PVP_KILL_NOTIFY 0x2047: honor/репутация/dishonor (зеркало KillOutcome). */
+struct FMMOPvpKillNotifyPacket {
+    uint64 KillerGuid = 0;
+    uint64 VictimGuid = 0;
+    uint16 HonorGain = 0;
+    int32 RepDelta = 0; // <0 потеря репутации; 0 ренегат/враг/флагнутый
+    uint8 Dishonored = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2047;
+    static bool FromPacket(const FMMOPacket &P, FMMOPvpKillNotifyPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.KillerGuid) && R.ReadU64(Out.VictimGuid) && R.ReadU16(Out.HonorGain) &&
+               R.ReadI32(Out.RepDelta) && R.ReadU8(Out.Dishonored);
+    }
+};
+
+/** SMSG_COMBAT_STATE 0x2048: CombatHUD таймер (6с декей = PvpConfig.combatTimeoutSec). */
+struct FMMOCombatStatePacket {
+    uint32 Guid = 0;
+    uint8 InCombat = 0;
+    uint16 CombatTimerMs = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2048;
+    static bool FromPacket(const FMMOPacket &P, FMMOCombatStatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.Guid) && R.ReadU8(Out.InCombat) && R.ReadU16(Out.CombatTimerMs);
+    }
+};
+
+/** SMSG_CORPSE_POLICY 0x2049: PvE graveyard vs PvP durability loss/sickness. */
+struct FMMOCorpsePolicyPacket {
+    uint32 Guid = 0;
+    uint8 Mode = 0; // 0 pve_graveyard / 1 pvp_durability_loss / 2 pvp_item_drop
+    uint16 GraveyardMap = 0;
+    uint8 DurabilityLossPct = 0;
+    uint32 SicknessSpellId = 0; // 80100 Resurrection Sickness (-50%, 10 мин)
+    static constexpr uint16 WIRE_OPCODE = 0x2049;
+    static bool FromPacket(const FMMOPacket &P, FMMOCorpsePolicyPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.Guid) && R.ReadU8(Out.Mode) && R.ReadU16(Out.GraveyardMap) &&
+               R.ReadU8(Out.DurabilityLossPct) && R.ReadU32(Out.SicknessSpellId);
     }
 };
 

@@ -299,3 +299,42 @@ void AMMOPlayerController::OnSpellLearned(uint32 SpellId, EMMOSpellSource Source
     if (UClassFXManager *FX = UClassFXManager::Get(this))
         FX->TriggerScreenFlash(FLinearColor(0.1f, 0.9f, 1.f), 0.15f, 0.4f); // мягкая вспышка «выучено»
 }
+
+// ------------------------------------------------------------------ //
+// PvE/PvP v1.7 API (defs 0x2040/0x2043/0x2045)                        //
+// ------------------------------------------------------------------ //
+
+void AMMOPlayerController::RequestPvpToggle(bool bEnable) {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdPvpToggle);
+        P.WriteU8(bEnable ? 1 : 0);
+        Client->SendMessage(P);
+    }
+}
+
+void AMMOPlayerController::RequestDuel(uint64 TargetGuid) {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMODuelRequestPacket Req;
+        Req.TargetGuid = TargetGuid;
+        Client->SendMessage(Req.ToPacket());
+    }
+}
+
+void AMMOPlayerController::RespondDuel(uint64 DuelId, bool bAccept) {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMODuelAcceptPacket Req;
+        Req.DuelId = DuelId;
+        Req.Accept = bAccept ? 1 : 0;
+        Client->SendMessage(Req.ToPacket());
+    }
+}

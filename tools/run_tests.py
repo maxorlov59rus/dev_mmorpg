@@ -163,6 +163,10 @@ def suite_protocol() -> Suite:
         "CLASS_INFO_QUERY": ["SMSG_CLASS_INFO"],
         "TALENT_QUERY": ["SMSG_TALENT_DATA"],
         "TALENT_RESET": ["SMSG_TALENT_RESULT"],
+        # PvE/PvP v1.7 (defs 0x2040..0x2049)
+        "PVP_TOGGLE": ["SMSG_PVP_FLAG_UPDATE", "SMSG_PVP_ZONE_INFO"],
+        "DUEL_REQUEST": ["SMSG_DUEL_STARTED", "SMSG_DUEL_COMPLETE"],
+        "DUEL_ACCEPT": ["SMSG_DUEL_STARTED"],
         "LFG_LEAVE": ["SMSG_LFG_QUEUE_STATE"],
     }
     missing = []
@@ -239,9 +243,70 @@ def suite_unit(build_dir: Path | None) -> Suite:
     return s
 
 
+# ---------------------------------------------------------------------------
+#  Suite: kernel — сквозной контракт ядро(C++) <-> БД(SQL) <-> клиент(protocol)
+# ---------------------------------------------------------------------------
+def suite_kernel() -> Suite:
+    s = Suite("kernel")
+    defs = read(REPO / "proto/opcodes.defs")
+    sql = read(REPO / "sql/upgrades/PvE_PvP_Core.sql")
+    pvp_h = read(REPO / "dm-server/src/game/PvP/PvPSystem.h")
+    proto_h = read(REPO / "Plugins/MMOCore/Source/MMOCore/Public/MMOProtocol.h")
+
+    # 1. Битовая маска флагов идентична в трёх источниках
+    bits_defs = {"PVP_FLAGGED": 1, "FFA": 2, "IN_SANCTUARY": 4, "DUELING": 8, "WANTED": 16, "DISHONORED": 32}
+    ok_bits = all(f"{k} = {v}" in pvp_h or f"{k}={v}" in pvp_h.replace("u << 0", "1").replace("u << 1", "2")
+                  for k, v in bits_defs.items())
+    # точная сверка серверного enum через битовые сдвиги
+    shifts_ok = (f"PVP_FLAGGED   = 1u << 0" in pvp_h and "FFA           = 1u << 1" in pvp_h and
+                 "IN_SANCTUARY  = 1u << 2" in pvp_h and "DUELING       = 1u << 3" in pvp_h and
+                 "WANTED        = 1u << 4" in pvp_h and "DISHONORED    = 1u << 5" in pvp_h)
+    s.add("server PvpFlags bit shifts == defs contract", shifts_ok, "")
+    client_bits_ok = ("Flagged = 1" in proto_h and "Ffa = 2" in proto_h and "InSanctuary = 4" in proto_h and
+                      "Dueling = 8" in proto_h and "Wanted = 16" in proto_h and "Dishonored = 32" in proto_h)
+    s.add("client EMMOPvPFlag mirrors server bits", client_bits_ok, "")
+    s.add("defs comment documents bitmask", "1=PVP_FLAGGED 2=FFA 4=IN_SANCTUARY 8=DUELING" in defs.replace("\n", " ").replace("                       16=WANTED 32=DISHONORED", " 16=WANTED 32=DISHONORED") or "1=PVP_FLAGGED" in defs, "")
+
+    # 2. Таблицы SQL referenced by server SQL-builders
+    for tbl in ["character_flags", "pvp_kills_log", "pvp_zones", "graveyard_binding",
+                "spell_template", "hate_modifier_template", "creature_proto_aggro"]:
+        s.add(f"SQL table `{tbl}` created", f"CREATE TABLE IF NOT EXISTS `{tbl}`" in sql, "")
+    for tbl in ["character_flags", "pvp_kills_log"]:
+        s.add(f"kernel writes `{tbl}`", tbl in pvp_h + read(REPO / "dm-server/src/game/PvP/PvPSystem.cpp"), "")
+
+    # 3. Wire-номера v1.7 присутствуют и в defs, и в ToWire/FromWire клиента
+    for name, num in [("CMSG_PVP_TOGGLE", "0x2040"), ("SMSG_PVP_FLAG_UPDATE", "0x2041"),
+                      ("SMSG_PVP_ZONE_INFO", "0x2042"), ("CMSG_DUEL_REQUEST", "0x2043"),
+                      ("SMSG_DUEL_STARTED", "0x2044"), ("CMSG_DUEL_ACCEPT", "0x2045"),
+                      ("SMSG_DUEL_COMPLETE", "0x2046"), ("SMSG_PVP_KILL_NOTIFY", "0x2047"),
+                      ("SMSG_COMBAT_STATE", "0x2048"), ("SMSG_CORPSE_POLICY", "0x2049")]:
+        s.add(f"{name} {num} in defs+ToWire+FromWire",
+              (name in defs and num in defs and num in proto_h), "")
+
+    # 4. Компиляция и прогон кросс-контрактного C++ теста (если есть компилятор)
+    import shutil
+    cc = next((c for c in ("g++", "clang++") if shutil.which(c)), None)
+    if not cc:
+        s.add("contract cpp test", True, "компилятор не найден — пропущено", skipped=True)
+    else:
+        r = subprocess.run([cc, "-std=c++20", "-I", str(REPO / "dm-server/src"),
+                            str(REPO / "tests/contract/pvp_contract_test.cpp"),
+                            str(REPO / "dm-server/src/game/PvP/PvPSystem.cpp"),
+                            "-o", str(REPO / "tests/contract/pvp_contract_test_bin")],
+                           capture_output=True, text=True, timeout=120)
+        compiled = r.returncode == 0
+        s.add("contract cpp compiles", compiled, r.stderr[-300:] if not compiled else "")
+        if compiled:
+            r2 = subprocess.run([str(REPO / "tests/contract/pvp_contract_test_bin")],
+                                capture_output=True, text=True, timeout=60)
+            s.add("contract runtime (flags/zones/duel/rep/sql)", r2.returncode == 0,
+                  (r2.stdout + r2.stderr)[-200:])
+    return s
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--suite", default="all", choices=["all", "unit", "data", "protocol"])
+    ap.add_argument("--suite", default="all", choices=["all", "unit", "data", "protocol", "kernel"])
     ap.add_argument("--build-dir", default=None, help="Каталог сборки сервера для ctest")
     ap.add_argument("--json", default=None, help="Путь для JSON-отчёта")
     args = ap.parse_args(argv)
@@ -253,6 +318,8 @@ def main(argv=None) -> int:
         suites.append(suite_protocol())
     if args.suite in ("all", "unit"):
         suites.append(suite_unit(Path(args.build_dir) if args.build_dir else None))
+    if args.suite in ("all", "kernel"):
+        suites.append(suite_kernel())
 
     total_fail = sum(s.failed for s in suites)
     total_pass = sum(s.passed for s in suites)

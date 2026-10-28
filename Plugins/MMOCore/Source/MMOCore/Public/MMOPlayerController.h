@@ -116,6 +116,34 @@ public:
     UFUNCTION(BlueprintCallable, Category = "MMO|Talent")
     void RequestTalentData();
 
+    // ---------- PvE/PvP v1.7 API (UI_WarModeButton / UI_DuelPromptWidget) ----------
+    /** CMSG_PVP_TOGGLE 0x2040 — War Mode toggle в меню. */
+    UFUNCTION(BlueprintCallable, Category = "MMO|PvP")
+    void RequestPvpToggle(bool bEnable);
+    /** CMSG_DUEL_REQUEST 0x2043 по выделенной цели. */
+    UFUNCTION(BlueprintCallable, Category = "MMO|PvP")
+    void RequestDuel(uint64 TargetGuid);
+    /** CMSG_DUEL_ACCEPT 0x2045 (bAccept=false -> decline). */
+    UFUNCTION(BlueprintCallable, Category = "MMO|PvP")
+    void RespondDuel(uint64 DuelId, bool bAccept);
+
+public:
+    // Делегаты PvE/PvP v1.7 (PvPManagerComponent/CombatHUD подписываются нативно)
+    FMMOOnPvpFlagUpdate OnPvpFlagUpdate;
+    FMMOOnPvpZoneInfo OnPvpZoneInfo;
+    FMMOOnDuelStarted OnDuelStarted;
+    FMMOOnDuelComplete OnDuelComplete;
+    FMMOOnPvpKillNotify OnPvpKillNotify;
+    FMMOOnCombatState OnCombatState;
+    FMMOOnCorpsePolicy OnCorpsePolicy;
+
+    /** GUID локального игрока (ставится из SMSG_LOGIN/enter-world; до этого 0). */
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|PvP") uint64 LocalPlayerGuid = 0;
+    /** Кэш последнего собственного SMSG_PVP_FLAG_UPDATE (WarMode иконка/рамка). */
+    FMMOPvpFlagUpdatePacket LastSelfPvpFlags;
+
+private:
+
 protected:
     UFUNCTION()
     void HandleServerPacket(EMMOOpcode Opcode, const FMMOPacket &Packet);
