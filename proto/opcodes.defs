@@ -221,3 +221,69 @@
 @opcode SMSG_DESPAWN 0x1041 chan=map dir=s2c { guid id u8 reason }
 @opcode CMSG_PING 0x10FF chan=map dir=c2s { u32 client_time_ms_lo }
 @opcode SMSG_PONG 0x1100 chan=map dir=s2c { u32 client_time_ms_lo u32 server_time_ms_lo }
+
+; ---------- QUESTS (TCP/world, seq-acked) ----------
+; quest_flags: bit0 repeatable_daily bit1 hidden(auto) bit2 autoaccept
+;              bit3 autoreward bit4 faction_gated (см. sql/upgrades/StarterQuests.sql)
+@struct QuestState {
+    u32 quest_id
+    u8  state                          ; 0 available 1 active 2 completable 3 done
+    u8  progress                       ; счётчик простых kill/talk-goal'ей (0..255)
+}
+@opcode CMSG_QUEST_QUERY 0x2000 chan=world dir=c2s {}
+@opcode SMSG_QUEST_LIST 0x2001 chan=world dir=s2c {
+    arr<QuestState>{64} quests         ; журнал + стартовые available-квесты зоны
+}
+@opcode CMSG_QUEST_ACCEPT 0x2002 chan=world dir=c2s { u32 quest_id }
+@opcode CMSG_QUEST_COMPLETE 0x2003 chan=world dir=c2s { u32 quest_id }
+@opcode SMSG_QUEST_ACCEPTED 0x2004 chan=world dir=s2c {
+    u32 quest_id
+    str<128> title
+    str<256> objectives
+    u8  quest_flags
+}
+@opcode SMSG_QUEST_PROGRESS 0x2005 chan=world dir=s2c { u32 quest_id u8 progress }
+@opcode SMSG_QUEST_COMPLETE_RESULT 0x2006 chan=world dir=s2c {
+    u32 quest_id
+    u8  result                         ; 0 ok 1 not_ready 2 already_done 3 cheat_reject
+    i64 reward_money                   ; медь
+    arr<u32>{6} reward_items           ; item entries (0 = пусто)
+    arr<i32>{4} reward_rep             ; пары (faction<<16|raw_delta) — Q16 ед ReputationMgr
+}
+@opcode SMSG_QUEST_TURN_IN_HINT 0x2007 chan=world dir=s2c { u32 quest_id guid npc_entry }
+
+; ---------- GOSSIP / DIALOGUE (TCP/world) ----------
+; Сервер фильтрует опции по dm_conditions (rep_rank_min/is_renegade/...),
+; клиент НИКОГДА не показывает скрытые ветки; повторный guard на Select —
+; защита от packet-replay (см. SmartAI::GossipOptionSatisfiesCondition).
+@struct GossipTextEntry {                ; строка из broadcast_text (диалог мобов/NPC)
+    u32 text_id
+    str<256> text_ru                    ; локаль выбирается по client lang (M0: ru+en)
+}
+@struct GossipOption {
+    u8   option_id                      ; gossip_menu_option.ID
+    u8   icon                           ; 0 talk 1 quest! 2 quest? 3 vendor 7 rep
+    u16  text_broadcast_id              ; ссылка на broadcast_text (озвучка/подпись)
+    u8   has_quest                      ; 1 = рядом иконка квеста (!/?/…)
+}
+@opcode CMSG_GOSSIP_HELLO 0x2010 chan=world dir=c2s { guid npc_guid }
+@opcode SMSG_GOSSIP_SHOW 0x2011 chan=world dir=s2c {
+    guid npc_guid
+    u32 menu_id
+    u32 greeting_text_id               ; заголовок меню (broadcast_text)
+    arr<GossipOption>{8} options       ; УЖЕ отфильтровано по условиям репутации
+}
+@opcode CMSG_GOSSIP_SELECT 0x2012 chan=world dir=c2s { guid npc_guid u8 option_id }
+@opcode SMSG_GOSSIP_REPLY 0x2013 chan=world dir=s2c {
+    guid npc_guid
+    u32 text_id                        ; ответная реплика NPC (broadcast_text)
+    u8  action                         ; 0 close 1 open_vendor 2 open_quest_log
+                                       ; 3 quest_turn_in 4 rep_summary 5 black_market
+    u32 payload_id                     ; vendor_rec / quest_id / доп. id
+}
+@opcode SMSG_CREATURE_TEXT 0x2014 chan=world dir=s2c {
+    guid creature_guid
+    u32 text_id                        ; реплика моба: агрория стража на изгоя (90100),
+                                       ; таунты «Слизня» при аггро и т.п.
+    u8  type                           ; 0 say 1 yell 2 emote 3 whisper-like
+}

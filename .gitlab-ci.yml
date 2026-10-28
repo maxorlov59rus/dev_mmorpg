@@ -59,15 +59,22 @@ lint:cpp-format:
   stage: lint
   image: ubuntu:22.04
   tags: [linux-gcc12]
+  variables:
+    # Фиксируем версию clang-format — детерминизм между локалью и CI.
+    CLANG_FORMAT_VERSION: "15"
   before_script:
-    - apt-get update -qq && apt-get install -y -qq clang-format-15
+    - apt-get update -qq && apt-get install -y -qq clang-format-${CLANG_FORMAT_VERSION}
   script:
-    - find server Plugins Source -name '*.h' -o -name '*.hpp' -o -name '*.cpp' \
-        | grep -v ThirdParty || true
-    - clang-format-15 --dry-run --Werror $(find server Plugins/MMOCore/Source Source
-        -name '*.h' -o -name '*.cpp' ! -path '*/ThirdParty/*')
+    # Единый стиль задаётся корневым .clang-format (LLVM + IndentWidth 4).
+    # Команда НЕ передаёт --style, чтобы clang-format всегда брал конфиг из репо.
+    - test -f .clang-format || (echo "ERROR: root .clang-format missing" && exit 1)
+    - >
+      find dm-server Plugins Source -type f
+      \( -name '*.h' -o -name '*.hpp' -o -name '*.cpp' \) ! -path '*ThirdParty*'
+      -print0 | xargs -0 -r clang-format-${CLANG_FORMAT_VERSION} --dry-run --Werror
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master"
 
 lint:proto-drift:
   stage: lint

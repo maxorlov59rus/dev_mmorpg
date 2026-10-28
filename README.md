@@ -53,6 +53,7 @@ CI-задача `uproject-drift` (добавляется на M0): парсит 
 - [x] Плагин `Plugins/MMOCore` scaffold (Build.cs, NetworkClient, Protocol, AuthPackets)
 - [x] CI/CD v0.1: параллельная сборка (`build/BuildOrchestrator.py`, `.gitlab-ci.yml`, `build_config.json`, wrappers BuildClient.bat / ServerBuild.sh / ServerBuild.bat) — docs/07
 - [x] Фракционная система v1.2: сервер (ReputationMgr, SmartAI, Lua-хук) + SQL (схема, стартовые квесты, конфиг NPC) + новые опкоды SMSG_REP_UPDATE/RENEGADE_STATE/FACTION_VISUAL/CREATURE_AGGRO
+- [x] Единый стиль C++: корневой `.clang-format` (LLVM + IndentWidth 4), весь код отформатирован; CI `lint:cpp-format` детерминирован (конфиг из репо, версия clang-format зафиксирована)
 - [ ] `dm-server` scaffold (CMake + common/network) — цель M0
 - [ ] `proto-gen` tool + golden packet fixtures
 - [ ] Content-папка `Content/Maps/Login` (нужен хотя бы пустой уровень перед открытием в редакторе)
