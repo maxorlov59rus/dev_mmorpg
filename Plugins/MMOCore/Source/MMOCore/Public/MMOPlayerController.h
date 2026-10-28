@@ -38,6 +38,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMMOOnQuestLogUpdated, const TArray<
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(FMMOOnLevelUp, uint8, NewLevel, uint64, XpToNext, uint16,
                                               TalentPointsTotal, uint16, TalentPointsSpent);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FMMOOnTalentResult, uint32, TalentId, EMMOTalentResult, Result);
+// Карта локаций v1.8: смена зоны (SMSG_ZONE_UPDATE) и полный снимок (SMSG_ZONE_MAP).
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FMMOOnZoneChangedD, uint16, MapId, uint16, AreaId,
+                                               EMMOZoneCategory, Category);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMMOOnZoneMapReceivedD, int32, ZoneCount);
 
 UCLASS(Blueprintable, Config = MMOCore)
 class MMOCORE_API AMMOPlayerController : public APlayerController {
@@ -115,6 +119,54 @@ public:
     /** Отправить CMSG_TALENT_QUERY (открытие древа). */
     UFUNCTION(BlueprintCallable, Category = "MMO|Talent")
     void RequestTalentData();
+
+    // ---------- PvE/PvP v1.7 API (UI_WarModeButton / UI_DuelPromptWidget) ----------
+    /** CMSG_PVP_TOGGLE 0x2040 — War Mode toggle в меню. */
+    UFUNCTION(BlueprintCallable, Category = "MMO|PvP")
+    void RequestPvpToggle(bool bEnable);
+    /** CMSG_DUEL_REQUEST 0x2043 по выделенной цели. */
+    UFUNCTION(BlueprintCallable, Category = "MMO|PvP")
+    void RequestDuel(uint64 TargetGuid);
+    /** CMSG_DUEL_ACCEPT 0x2045 (bAccept=false -> decline). */
+    UFUNCTION(BlueprintCallable, Category = "MMO|PvP")
+    void RespondDuel(uint64 DuelId, bool bAccept);
+
+public:
+    // Делегаты PvE/PvP v1.7 (PvPManagerComponent/CombatHUD подписываются нативно)
+    FMMOOnPvpFlagUpdate OnPvpFlagUpdate;
+    FMMOOnPvpZoneInfo OnPvpZoneInfo;
+    FMMOOnDuelStarted OnDuelStarted;
+    FMMOOnDuelComplete OnDuelComplete;
+    FMMOOnPvpKillNotify OnPvpKillNotify;
+    FMMOOnCombatState OnCombatState;
+    FMMOOnCorpsePolicy OnCorpsePolicy;
+
+    /** GUID локального игрока (ставится из SMSG_LOGIN/enter-world; до этого 0). */
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|PvP") uint64 LocalPlayerGuid = 0;
+    // ---- Карта локаций v1.8 (UI_MapWidget / миникарта) ----
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Zone")
+    FMMOOnZoneChangedD OnZoneChanged;
+    UPROPERTY(BlueprintAssignable, Category = "MMO|Zone")
+    FMMOOnZoneMapReceivedD OnZoneMapReceived;
+
+    /** Текущая зона (источник — сервер: SMSG_ZONE_UPDATE 0x204C). */
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") uint16 CurrentMapId = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") uint16 CurrentZoneId = 0;
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") EMMOZoneCategory CurrentZoneCategory = EMMOZoneCategory::Unknown;
+    /** Кэш полного снимка SMSG_ZONE_MAP (миникарта/большая карта). */
+    UPROPERTY(BlueprintReadOnly, Category = "MMO|Zone") TArray<FMMOZoneMapEntry> ZoneCache;
+
+    /** CMSG_ZONE_MAP_REQUEST 0x204A — запросить снимок карты (вызывается GameInstance при enter-world). */
+    UFUNCTION(BlueprintCallable, Category = "MMO|Zone")
+    void RequestZoneMap();
+
+    /** Поиск записи кэша по map/area (UI_MapWidget: цвет рамки/название зоны). */
+    UFUNCTION(BlueprintPure, Category = "MMO|Zone")
+    bool TryGetZoneInfo(uint16 MapId, uint16 AreaId, FMMOZoneMapEntry &Out) const;
+    /** Кэш последнего собственного SMSG_PVP_FLAG_UPDATE (WarMode иконка/рамка). */
+    FMMOPvpFlagUpdatePacket LastSelfPvpFlags;
+
+private:
 
 protected:
     UFUNCTION()

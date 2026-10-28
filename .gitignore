@@ -23,3 +23,7 @@ Packaged/
 server/build-*/
 __pycache__/
 *.pyc
+
+# artefacts
+tests/contract/pvp_contract_test_bin
+*.obj

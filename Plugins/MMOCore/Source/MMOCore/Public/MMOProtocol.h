@@ -40,8 +40,18 @@ enum class EMMOOpcode : uint16 {
     SrvAuthSessionResult = 0x0106 UMETA(DisplayName = "AuthSessionResult"),
 
     // ---- Login / realm block (0x02xx) — loginserver: список шардов ----
-    CmdCharListRequest = 0x0201 UMETA(DisplayName = "CharListRequest"),
-    SrvCharList = 0x0202 UMETA(DisplayName = "CharList"),
+    // NOTE: world-session handshake (defs 0x0010/0x0011/0x0014/0x0015) is carried by these
+    // enum entries; MMOWire::ToWire maps them to the wire numbers below.
+    CmdWorldHello = 0x0201 UMETA(
+        DisplayName = "WorldHello"), // wire: CMSG_WORLD_HELLO (defs 0x0010) ticket+build
+    CmdCharListRequest = 0x0211 UMETA(
+        DisplayName =
+            "CharListRequest"), // wire: SMSG_CHAR_LIST request side (see also 0x0011 resp)
+    SrvCharList = 0x0202 UMETA(DisplayName = "CharList"), // wire: SMSG_CHAR_LIST (defs 0x0011)
+    CmdCharSelect =
+        0x0214 UMETA(DisplayName = "CharSelect"), // wire: CMSG_CHAR_SELECT (defs 0x0014) guid
+    SrvMapAssign = 0x0215 UMETA(
+        DisplayName = "MapAssign"), // wire: SMSG_MAP_ASSIGN (defs 0x0015) ip/port/key/token
     CmdCharCreate =
         0x0203 UMETA(DisplayName = "CharCreate"), // wire: CMSG_CHAR_CREATE (defs 0x0012)
     CmdCharDelete = 0x0204 UMETA(DisplayName = "CharDelete"),
@@ -59,10 +69,19 @@ enum class EMMOOpcode : uint16 {
     CmdSetActiveObject = 0x0304 UMETA(DisplayName = "SetActiveObject"),
     SrvTutorialFlags = 0x0305 UMETA(DisplayName = "TutorialFlags"),
 
-    // ---- Movement / sync (0x04xx) ----
-    CmdPlayerMove = 0x0401 UMETA(DisplayName = "PlayerMove"),
-    SrvObjectsUpdate = 0x0402 UMETA(DisplayName = "ObjectsUpdate"),
+    // ---- Movement / sync (0x04xx) — map channel (UDP/KCP), defs 0x1xxx ----
+    CmdPlayerMove = 0x0401 UMETA(
+        DisplayName = "PlayerMove"), // wire: CMSG_MOVE_TICK (defs 0x1001) sub-tick deltas
+    SrvObjectsUpdate =
+        0x0402 UMETA(DisplayName = "ObjectsUpdate"), // wire: SMSG_DELTA (defs 0x1011) AOI delta
     SrvValuesUpdate = 0x0403 UMETA(DisplayName = "ValuesUpdate"),
+    SrvMapSnapshot = 0x0404 UMETA(
+        DisplayName = "MapSnapshot"), // wire: SMSG_SNAPSHOT (defs 0x1010) full AOI snapshot
+    CmdAoiAck = 0x0405 UMETA(DisplayName = "AoiAck"), // wire: CMSG_AOI_ACK (defs 0x1012)
+    CmdSetInterest = 0x0406 UMETA(
+        DisplayName = "SetInterest"), // wire: CMSG_SET_INTEREST (defs 0x1013) camera pos/radius
+    CmdMapPing = 0x0407 UMETA(DisplayName = "MapPing"), // wire: CMSG_PING (defs 0x10FF)
+    SrvMapPong = 0x0408 UMETA(DisplayName = "MapPong"), // wire: SMSG_PONG (defs 0x1100)
 
     // ---- Combat / factions (0x05xx) ----
     CmdAttack = 0x0501 UMETA(DisplayName = "Attack"),
@@ -70,6 +89,13 @@ enum class EMMOOpcode : uint16 {
     SrvReputationUpdate =
         0x0503 UMETA(DisplayName = "ReputationUpdate"), // wire: SMSG_REP_UPDATE (defs 0x0075): u8
                                                         // faction, i32 standing(Q16), u8 rank
+    CmdCastSpell =
+        0x0510 UMETA(DisplayName = "CastSpell"), // wire: CMSG_CAST (defs 0x1020) spellid+targets
+    SrvCastResult =
+        0x0511 UMETA(DisplayName = "CastResult"),   // wire: SMSG_CAST_RESULT (defs 0x1022)
+    SrvSpawn = 0x0512 UMETA(DisplayName = "Spawn"), // wire: SMSG_SPAWN (defs 0x1040) EntityFull
+    SrvDespawn =
+        0x0513 UMETA(DisplayName = "Despawn"), // wire: SMSG_DESPAWN (defs 0x1041) guid + reason
 
     // ---- Faction / Renegade system v1.2 (ReputationMgr.h, sql/upgrades/*) ----
     SrvRenegadeState = 0x0504 UMETA(
@@ -81,10 +107,19 @@ enum class EMMOOpcode : uint16 {
     SrvCreatureAggro =
         0x0506 UMETA(DisplayName = "CreatureAggro"), // wire: SMSG_CREATURE_AGGRO (defs 0x0078, map
                                                      // chan): guid creature, guid target
+    SrvFactionState = 0x0507 UMETA(
+        DisplayName = "FactionState"), // wire: SMSG_FACTION_STATE (defs 0x0070): season + frontline
+    CmdCorruptionQuery = 0x0508 UMETA(
+        DisplayName = "CorruptionQuery"), // wire: CMSG_CORRUPTION_QUERY (defs 0x0071) empty payload
+    SrvCorruptionState =
+        0x0509 UMETA(DisplayName = "CorruptionState"), // wire: SMSG_CORRUPTION_STATE (defs 0x0074):
+                                                       // u16 x100, u8 altered
+    SrvSeepageList = 0x050A UMETA(
+        DisplayName = "SeepageList"), // wire: SMSG_SEEPAGE_LIST (defs 0x0073): active seepages
 
     // ---- Chat (0x06xx) — отдельный chat-сервер принимает тот же фрейминг ----
-    CmdChatMessage = 0x0601 UMETA(DisplayName = "ChatMessage"),
-    SrvChatMessage = 0x0602 UMETA(DisplayName = "ChatMessageSrv"),
+    CmdChatSend = 0x0601 UMETA(DisplayName = "ChatSend"), // wire: CMSG_CHAT_SEND (defs 0x0020)
+    SrvChatRecv = 0x0602 UMETA(DisplayName = "ChatRecv"), // wire: SMSG_CHAT_RECV (defs 0x0021)
 
     // ---- Quests / Gossip v1.3 (proto/opcodes.defs 0x2000..0x2014) ----
     CmdQuestQuery = 0x0701 UMETA(DisplayName = "QuestQuery"),                   // wire 0x2000
@@ -129,6 +164,21 @@ enum class EMMOOpcode : uint16 {
     CmdTalentReset = 0x0A07 UMETA(DisplayName = "TalentReset"),         // wire 0x2036
     SrvItemEquipUpdate = 0x0A08 UMETA(DisplayName = "ItemEquipUpdate"), // wire 0x2037
 
+    // PvE/PvP (v1.7, defs 0x2040..0x2049): флаги/зоны/дуэли/combat/corpse
+    CmdPvpToggle = 0x0B01 UMETA(DisplayName = "PvpToggle"),         // wire 0x2040
+    SrvPvpFlagUpdate = 0x0B02 UMETA(DisplayName = "PvpFlagUpdate"), // wire 0x2041
+    SrvPvpZoneInfo = 0x0B03 UMETA(DisplayName = "PvpZoneInfo"),     // wire 0x2042
+    CmdDuelRequest = 0x0B04 UMETA(DisplayName = "DuelRequest"),     // wire 0x2043
+    SrvDuelStarted = 0x0B05 UMETA(DisplayName = "DuelStarted"),     // wire 0x2044
+    CmdDuelAccept = 0x0B06 UMETA(DisplayName = "DuelAccept"),       // wire 0x2045
+    SrvDuelComplete = 0x0B07 UMETA(DisplayName = "DuelComplete"),   // wire 0x2046
+    SrvPvpKillNotify = 0x0B08 UMETA(DisplayName = "PvpKillNotify"), // wire 0x2047
+    SrvCombatState = 0x0B09 UMETA(DisplayName = "CombatState"),     // wire 0x2048
+    SrvCorpsePolicy = 0x0B0A UMETA(DisplayName = "CorpsePolicy"),   // wire 0x2049
+    CmdZoneMapRequest = 0x0B0B UMETA(DisplayName = "ZoneMapRequest"), // wire 0x204A
+    SrvZoneMap = 0x0B0C UMETA(DisplayName = "ZoneMap"),               // wire 0x204B
+    SrvZoneUpdate = 0x0B0D UMETA(DisplayName = "ZoneUpdate"),         // wire 0x204C
+
     Max = 0xFFFF UMETA(Hidden),
 };
 
@@ -139,6 +189,50 @@ enum class EMMOOpcode : uint16 {
 namespace MMOWire {
 inline constexpr uint16 ToWire(EMMOOpcode Op) {
     switch (Op) {
+    // World-session handshake (legacy block, defs 0x00xx)
+    case EMMOOpcode::CmdWorldHello:
+        return 0x0010; // CMSG_WORLD_HELLO
+    case EMMOOpcode::SrvCharList:
+        return 0x0011; // SMSG_CHAR_LIST
+    case EMMOOpcode::CmdCharSelect:
+        return 0x0014; // CMSG_CHAR_SELECT
+    case EMMOOpcode::SrvMapAssign:
+        return 0x0015; // SMSG_MAP_ASSIGN
+    case EMMOOpcode::CmdChatSend:
+        return 0x0020; // CMSG_CHAT_SEND
+    case EMMOOpcode::SrvChatRecv:
+        return 0x0021; // SMSG_CHAT_RECV
+    case EMMOOpcode::SrvFactionState:
+        return 0x0070; // SMSG_FACTION_STATE
+    case EMMOOpcode::CmdCorruptionQuery:
+        return 0x0071; // CMSG_CORRUPTION_QUERY
+    case EMMOOpcode::SrvSeepageList:
+        return 0x0073; // SMSG_SEEPAGE_LIST
+    case EMMOOpcode::SrvCorruptionState:
+        return 0x0074; // SMSG_CORRUPTION_STATE
+    // Map channel (UDP/KCP, defs 0x1xxx)
+    case EMMOOpcode::CmdPlayerMove:
+        return 0x1001; // CMSG_MOVE_TICK
+    case EMMOOpcode::SrvMapSnapshot:
+        return 0x1010; // SMSG_SNAPSHOT
+    case EMMOOpcode::SrvObjectsUpdate:
+        return 0x1011; // SMSG_DELTA
+    case EMMOOpcode::CmdAoiAck:
+        return 0x1012; // CMSG_AOI_ACK
+    case EMMOOpcode::CmdSetInterest:
+        return 0x1013; // CMSG_SET_INTEREST
+    case EMMOOpcode::CmdCastSpell:
+        return 0x1020; // CMSG_CAST
+    case EMMOOpcode::SrvCastResult:
+        return 0x1022; // SMSG_CAST_RESULT
+    case EMMOOpcode::SrvSpawn:
+        return 0x1040; // SMSG_SPAWN
+    case EMMOOpcode::SrvDespawn:
+        return 0x1041; // SMSG_DESPAWN
+    case EMMOOpcode::CmdMapPing:
+        return 0x10FF; // CMSG_PING
+    case EMMOOpcode::SrvMapPong:
+        return 0x1100; // SMSG_PONG
     // Quests (defs 0x2000..0x2007)
     case EMMOOpcode::CmdQuestQuery:
         return 0x2000;
@@ -214,6 +308,33 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
         return 0x2036;
     case EMMOOpcode::SrvItemEquipUpdate:
         return 0x2037;
+    // PvE/PvP (defs 0x2040..0x2049)
+    case EMMOOpcode::CmdPvpToggle:
+        return 0x2040;
+    case EMMOOpcode::SrvPvpFlagUpdate:
+        return 0x2041;
+    case EMMOOpcode::SrvPvpZoneInfo:
+        return 0x2042;
+    case EMMOOpcode::CmdDuelRequest:
+        return 0x2043;
+    case EMMOOpcode::SrvDuelStarted:
+        return 0x2044;
+    case EMMOOpcode::CmdDuelAccept:
+        return 0x2045;
+    case EMMOOpcode::SrvDuelComplete:
+        return 0x2046;
+    case EMMOOpcode::SrvPvpKillNotify:
+        return 0x2047;
+    case EMMOOpcode::SrvCombatState:
+        return 0x2048;
+    case EMMOOpcode::SrvCorpsePolicy:
+        return 0x2049;
+    case EMMOOpcode::CmdZoneMapRequest:
+        return 0x204A;
+    case EMMOOpcode::SrvZoneMap:
+        return 0x204B;
+    case EMMOOpcode::SrvZoneUpdate:
+        return 0x204C;
     default:
         return static_cast<uint16>(Op);
     }
@@ -221,6 +342,50 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
 
 inline constexpr EMMOOpcode FromWire(uint16 Wire) {
     switch (Wire) {
+    // World-session handshake (legacy block, defs 0x00xx)
+    case 0x0010:
+        return EMMOOpcode::CmdWorldHello;
+    case 0x0011:
+        return EMMOOpcode::SrvCharList;
+    case 0x0014:
+        return EMMOOpcode::CmdCharSelect;
+    case 0x0015:
+        return EMMOOpcode::SrvMapAssign;
+    case 0x0020:
+        return EMMOOpcode::CmdChatSend;
+    case 0x0021:
+        return EMMOOpcode::SrvChatRecv;
+    case 0x0070:
+        return EMMOOpcode::SrvFactionState;
+    case 0x0071:
+        return EMMOOpcode::CmdCorruptionQuery;
+    case 0x0073:
+        return EMMOOpcode::SrvSeepageList;
+    case 0x0074:
+        return EMMOOpcode::SrvCorruptionState;
+    // Map channel (UDP/KCP, defs 0x1xxx)
+    case 0x1001:
+        return EMMOOpcode::CmdPlayerMove;
+    case 0x1010:
+        return EMMOOpcode::SrvMapSnapshot;
+    case 0x1011:
+        return EMMOOpcode::SrvObjectsUpdate;
+    case 0x1012:
+        return EMMOOpcode::CmdAoiAck;
+    case 0x1013:
+        return EMMOOpcode::CmdSetInterest;
+    case 0x1020:
+        return EMMOOpcode::CmdCastSpell;
+    case 0x1022:
+        return EMMOOpcode::SrvCastResult;
+    case 0x1040:
+        return EMMOOpcode::SrvSpawn;
+    case 0x1041:
+        return EMMOOpcode::SrvDespawn;
+    case 0x10FF:
+        return EMMOOpcode::CmdMapPing;
+    case 0x1100:
+        return EMMOOpcode::SrvMapPong;
     case 0x2000:
         return EMMOOpcode::CmdQuestQuery;
     case 0x2001:
@@ -293,6 +458,33 @@ inline constexpr EMMOOpcode FromWire(uint16 Wire) {
         return EMMOOpcode::CmdTalentReset;
     case 0x2037:
         return EMMOOpcode::SrvItemEquipUpdate;
+    // PvE/PvP (defs 0x2040..0x2049)
+    case 0x2040:
+        return EMMOOpcode::CmdPvpToggle;
+    case 0x2041:
+        return EMMOOpcode::SrvPvpFlagUpdate;
+    case 0x2042:
+        return EMMOOpcode::SrvPvpZoneInfo;
+    case 0x2043:
+        return EMMOOpcode::CmdDuelRequest;
+    case 0x2044:
+        return EMMOOpcode::SrvDuelStarted;
+    case 0x2045:
+        return EMMOOpcode::CmdDuelAccept;
+    case 0x2046:
+        return EMMOOpcode::SrvDuelComplete;
+    case 0x2047:
+        return EMMOOpcode::SrvPvpKillNotify;
+    case 0x2048:
+        return EMMOOpcode::SrvCombatState;
+    case 0x2049:
+        return EMMOOpcode::SrvCorpsePolicy;
+    case 0x204A:
+        return EMMOOpcode::CmdZoneMapRequest;
+    case 0x204B:
+        return EMMOOpcode::SrvZoneMap;
+    case 0x204C:
+        return EMMOOpcode::SrvZoneUpdate;
     default:
         return static_cast<EMMOOpcode>(Wire);
     }
@@ -436,6 +628,13 @@ struct FMMOPacket {
             if (N - Pos < 4)
                 return false;
             Out = ReadLE<uint32>();
+            return true;
+        }
+        bool ReadI32(int32 &Out) {
+            uint32 U;
+            if (!ReadU32(U))
+                return false;
+            Out = static_cast<int32>(U); // LE two's complement
             return true;
         }
         bool ReadU64(uint64 &Out) {
@@ -1004,10 +1203,10 @@ struct FMMOXpGainedPacket {
 struct FMMOTalentNode {
     uint32 TalentId = 0;
     uint16 TreeId = 0;
-    uint8 Row = 0;   // 1..7 (Row7 = prestige, cost 3)
+    uint8 Row = 0; // 1..7 (Row7 = prestige, cost 3)
     uint8 Column = 0;
     uint8 MaxRank = 1;
-    uint8 Type = 0;  // 0=passive 1=active 2=mechanic
+    uint8 Type = 0; // 0=passive 1=active 2=mechanic
     uint8 ReqPoints = 0;
     uint8 ReqLevel = 10;
     uint8 Prestige = 0;
@@ -1042,9 +1241,10 @@ struct FMMOTalentDataPacket {
             return false;
         for (uint16 i = 0; i < NodeCount; ++i) {
             FMMOTalentNode N;
-            if (!R.ReadU32(N.TalentId) || !R.ReadU16(N.TreeId) || !R.ReadU8(N.Row) || !R.ReadU8(N.Column) ||
-                !R.ReadU8(N.MaxRank) || !R.ReadU8(N.Type) || !R.ReadU8(N.ReqPoints) || !R.ReadU8(N.ReqLevel) ||
-                !R.ReadU8(N.Prestige) || !R.ReadU32(N.AuraSpell) || !R.ReadU32(N.ActiveSpell))
+            if (!R.ReadU32(N.TalentId) || !R.ReadU16(N.TreeId) || !R.ReadU8(N.Row) ||
+                !R.ReadU8(N.Column) || !R.ReadU8(N.MaxRank) || !R.ReadU8(N.Type) ||
+                !R.ReadU8(N.ReqPoints) || !R.ReadU8(N.ReqLevel) || !R.ReadU8(N.Prestige) ||
+                !R.ReadU32(N.AuraSpell) || !R.ReadU32(N.ActiveSpell))
                 return false;
             Out.Nodes.Add(N);
         }
@@ -1094,10 +1294,228 @@ struct FMMOTalentResultPacket {
     }
 };
 
+/**
+ * EPvPFlag — зеркало серверного enum PvpFlags (dm-server/src/game/PvP/PvPSystem.h)
+ * и character_flags.pvp_flags (sql/upgrades/PvE_PvP_Core.sql). НЕ МЕНЯТЬ биты
+ * без синхронизации всех трёх мест (defs v1.7 — контракт).
+ */
+UENUM(BlueprintType)
+enum class EMMOPvPFlag : uint8 {
+    None = 0,
+    Flagged = 1 UMETA(DisplayName = "PvP Flagged"),
+    Ffa = 2 UMETA(DisplayName = "FFA Zone"),
+    InSanctuary = 4 UMETA(DisplayName = "Sanctuary"),
+    Dueling = 8 UMETA(DisplayName = "Dueling"),
+    Wanted = 16 UMETA(DisplayName = "Wanted"),
+    Dishonored = 32 UMETA(DisplayName = "Dishonored"),
+};
+
+/** SMSG_PVP_FLAG_UPDATE 0x2041: bitmask флагов + таймер + wanted level. */
+struct FMMOPvpFlagUpdatePacket {
+    uint64 Guid = 0;
+    uint16 PvpFlags = 0; // EMMOPvPFlag bitmask
+    uint16 FlagTimerSec = 0;
+    uint8 WantedLevel = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2041;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOPvpFlagUpdatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.Guid) && R.ReadU16(Out.PvpFlags) && R.ReadU16(Out.FlagTimerSec) &&
+               R.ReadU8(Out.WantedLevel);
+    }
+    bool Has(EMMOPvPFlag F) const { return (PvpFlags & uint16(F)) != 0; }
+};
+
+/** SMSG_PVP_ZONE_INFO 0x2042: правила зоны при входе (источник — pvp_zones). */
+struct FMMOPvpZoneInfoPacket {
+    uint16 MapId = 0;
+    uint16 AreaId = 0;
+    uint8 Ruleset = 0; // 1 Sanctuary / 2 Arena / 3 FFA
+    uint8 ForcedFlag = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2042;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOPvpZoneInfoPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU16(Out.MapId) && R.ReadU16(Out.AreaId) && R.ReadU8(Out.Ruleset) &&
+               R.ReadU8(Out.ForcedFlag);
+    }
+};
+
+/** Карта локаций v1.8: категория зоны == areatable.category (ZoneManager.h). */
+UENUM(BlueprintType)
+enum class EMMOZoneCategory : uint8 {
+    Unknown = 0,
+    City = 1 UMETA(DisplayName = "Sanctuary City"),
+    PveZone = 2 UMETA(DisplayName = "PvE Zone"),
+    Ffa = 3 UMETA(DisplayName = "FFA"),
+    Arena = 4 UMETA(DisplayName = "Arena"),
+    Dungeon = 5 UMETA(DisplayName = "Dungeon"),
+    Raid = 6 UMETA(DisplayName = "Raid"),
+    Wilderness = 7 UMETA(DisplayName = "Wilderness"),
+};
+
+/** Одна запись снимка SMSG_ZONE_MAP 0x204B (строка v_zone_map_export). */
+struct FMMOZoneMapEntry {
+    uint16 MapId = 0;
+    uint16 AreaId = 0;
+    EMMOZoneCategory Category = EMMOZoneCategory::Unknown;
+    uint8 LevelMin = 1;
+    uint8 LevelMax = 95;
+    uint16 FactionId = 0;
+    uint8 Ruleset = 0; // 1 Sanctuary / 2 Arena / 3 FFA (pvp_zones.ruleset)
+
+    bool IsDangerous() const {
+        return Category == EMMOZoneCategory::Ffa || Category == EMMOZoneCategory::Arena ||
+               Category == EMMOZoneCategory::Wilderness || Ruleset == 3;
+    }
+    bool IsSanctuary() const { return Ruleset == 1 || Category == EMMOZoneCategory::City; }
+};
+
+/** SMSG_ZONE_MAP 0x204B: полный снимок карты при входе в мир (после
+ *  CMSG_ZONE_MAP_REQUEST 0x204A). Payload: u16 count, затем count записей по
+ *  10 байт (u16 map,u16 area,u8 cat,u8 lmin,u8 lmax,u16 faction,u8 ruleset). */
+struct FMMOZoneMapPacket {
+    static constexpr uint16 WIRE_OPCODE = 0x204B;
+    static constexpr int32 ENTRY_SIZE = 10;
+    TArray<FMMOZoneMapEntry> Zones;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOZoneMapPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint16 Count = 0;
+        if (!R.ReadU16(Count))
+            return false;
+        Out.Zones.Reset(Count);
+        for (uint16 i = 0; i < Count; ++i) {
+            FMMOZoneMapEntry E;
+            uint8 Cat = 0;
+            if (!R.ReadU16(E.MapId) || !R.ReadU16(E.AreaId) || !R.ReadU8(Cat) ||
+                !R.ReadU8(E.LevelMin) || !R.ReadU8(E.LevelMax) || !R.ReadU16(E.FactionId) ||
+                !R.ReadU8(E.Ruleset))
+                return false;
+            E.Category = static_cast<EMMOZoneCategory>(Cat);
+            Out.Zones.Add(E);
+        }
+        return true;
+    }
+};
+
+/** SMSG_ZONE_UPDATE 0x204C: смена текущей зоны игрока (ZoneManager::OnPlayerEnterZone). */
+struct FMMOZoneUpdatePacket {
+    uint16 MapId = 0;
+    uint16 AreaId = 0;
+    EMMOZoneCategory Category = EMMOZoneCategory::Unknown;
+    uint8 LevelMin = 1;
+    uint8 LevelMax = 95;
+    uint16 FactionId = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x204C;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOZoneUpdatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint8 Cat = 0;
+        if (!R.ReadU16(Out.MapId) || !R.ReadU16(Out.AreaId) || !R.ReadU8(Cat) ||
+            !R.ReadU8(Out.LevelMin) || !R.ReadU8(Out.LevelMax) || !R.ReadU16(Out.FactionId))
+            return false;
+        Out.Category = static_cast<EMMOZoneCategory>(Cat);
+        return true;
+    }
+};
+
+/** CMSG_DUEL_REQUEST 0x2043 / CMSG_DUEL_ACCEPT 0x2045 (клиент -> сервер). */
+struct FMMODuelRequestPacket {
+    uint64 TargetGuid = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2043;
+    FMMOPacket ToPacket() const {
+        FMMOPacket P;
+        P.Opcode = WIRE_OPCODE;
+        P.WriteU64(TargetGuid);
+        return P;
+    }
+};
+struct FMMODuelAcceptPacket {
+    uint64 DuelId = 0;
+    uint8 Accept = 1;
+    static constexpr uint16 WIRE_OPCODE = 0x2045;
+    FMMOPacket ToPacket() const {
+        FMMOPacket P;
+        P.Opcode = WIRE_OPCODE;
+        P.WriteU64(DuelId);
+        P.WriteU8(Accept);
+        return P;
+    }
+};
+
+/** SMSG_DUEL_STARTED 0x2044: круг дуэли (Decal+NiaRing) на карте. */
+struct FMMODuelStartedPacket {
+    uint64 DuelId = 0;
+    uint64 InitiatorGuid = 0;
+    uint64 TargetGuid = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2044;
+    static bool FromPacket(const FMMOPacket &P, FMMODuelStartedPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.DuelId) && R.ReadU64(Out.InitiatorGuid) && R.ReadU64(Out.TargetGuid);
+    }
+};
+
+/** SMSG_DUEL_COMPLETE 0x2046: HP/MP restore + RemoveDebuffs на клиенте-победителе. */
+struct FMMODuelCompletePacket {
+    uint64 DuelId = 0;
+    uint64 WinnerGuid = 0;
+    uint8 Reason = 0; // 0 killed / 1 cancelled / 2 timedout
+    static constexpr uint16 WIRE_OPCODE = 0x2046;
+    static bool FromPacket(const FMMOPacket &P, FMMODuelCompletePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.DuelId) && R.ReadU64(Out.WinnerGuid) && R.ReadU8(Out.Reason);
+    }
+};
+
+/** SMSG_PVP_KILL_NOTIFY 0x2047: honor/репутация/dishonor (зеркало KillOutcome). */
+struct FMMOPvpKillNotifyPacket {
+    uint64 KillerGuid = 0;
+    uint64 VictimGuid = 0;
+    uint16 HonorGain = 0;
+    int32 RepDelta = 0; // <0 потеря репутации; 0 ренегат/враг/флагнутый
+    uint8 Dishonored = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2047;
+    static bool FromPacket(const FMMOPacket &P, FMMOPvpKillNotifyPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU64(Out.KillerGuid) && R.ReadU64(Out.VictimGuid) && R.ReadU16(Out.HonorGain) &&
+               R.ReadI32(Out.RepDelta) && R.ReadU8(Out.Dishonored);
+    }
+};
+
+/** SMSG_COMBAT_STATE 0x2048: CombatHUD таймер (6с декей = PvpConfig.combatTimeoutSec). */
+struct FMMOCombatStatePacket {
+    uint32 Guid = 0;
+    uint8 InCombat = 0;
+    uint16 CombatTimerMs = 0;
+    static constexpr uint16 WIRE_OPCODE = 0x2048;
+    static bool FromPacket(const FMMOPacket &P, FMMOCombatStatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.Guid) && R.ReadU8(Out.InCombat) && R.ReadU16(Out.CombatTimerMs);
+    }
+};
+
+/** SMSG_CORPSE_POLICY 0x2049: PvE graveyard vs PvP durability loss/sickness. */
+struct FMMOCorpsePolicyPacket {
+    uint32 Guid = 0;
+    uint8 Mode = 0; // 0 pve_graveyard / 1 pvp_durability_loss / 2 pvp_item_drop
+    uint16 GraveyardMap = 0;
+    uint8 DurabilityLossPct = 0;
+    uint32 SicknessSpellId = 0; // 80100 Resurrection Sickness (-50%, 10 мин)
+    static constexpr uint16 WIRE_OPCODE = 0x2049;
+    static bool FromPacket(const FMMOPacket &P, FMMOCorpsePolicyPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.Guid) && R.ReadU8(Out.Mode) && R.ReadU16(Out.GraveyardMap) &&
+               R.ReadU8(Out.DurabilityLossPct) && R.ReadU32(Out.SicknessSpellId);
+    }
+};
+
 /** SMSG_ITEM_EQUIP_UPDATE 0x2037: смена экипировки (тиры/илвл — ItemTierMatrix). */
 struct FMMOItemEquipUpdatePacket {
     uint32 UnitGuid = 0;
-    uint8 Slot = 0;      // CONTRACT equipSlot: 1=head 2=shoulders 3=chest ...
+    uint8 Slot = 0; // CONTRACT equipSlot: 1=head 2=shoulders 3=chest ...
     uint32 ItemId = 0;
     uint16 Ilvl = 0;
     uint8 Tier = 0;      // ItemTier enum серверного ProgressionCore.h

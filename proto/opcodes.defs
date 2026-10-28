@@ -366,3 +366,62 @@
 @opcode SMSG_TALENT_RESULT 0x2035 chan=world dir=s2c { u32 talent_id u8 rank u8 result } ; result: 0=ok 1=no_points 2=prereq 3=level 4=prestige_gate
 @opcode CMSG_TALENT_RESET  0x2036 chan=world dir=c2s { }
 @opcode SMSG_ITEM_EQUIP_UPDATE 0x2037 chan=map dir=s2c { guid u8 slot u32 item_id u16 ilvl u8 tier u8 armor_type }
+
+# ---------------------------------------------------------------------
+# v1.7 — PvE/PvP (docs/11, PvPSystem.h/.cpp, PvEEncounterMgr.h/.cpp)
+# Контракт флагов: bitmask pvp_flags (см. EPvPFlag в MMOProtocol.h и
+# enum PvpFlags на сервере): 1=PVP_FLAGGED 2=FFA 4=IN_SANCTUARY 8=DUELING
+#                       16=WANTED 32=DISHONORED
+# Зоны (pvp_zones.RuleSet): 1=Sanctuary 2=Arena 3=FFA(OpenWorld-raid)
+# Источник истины таймеров — character_flags (MySQL), клиент только рендерит.
+# ---------------------------------------------------------------------
+@opcode CMSG_PVP_TOGGLE        0x2040 chan=world dir=c2s { u8 enable } ; war mode toggle (OnPvPCommand)
+@opcode SMSG_PVP_FLAG_UPDATE   0x2041 chan=map dir=s2c {
+    u64 guid
+    u16 pvp_flags                          ; bitmask EPvPFlag (источник — сервер)
+    u16 flag_timer_sec                     ; до авто-снятия флага (combat timeout + остаток); 0 = нет таймера
+    u8  wanted_level                       ; PvP Bounty (череп с цифрой), 0..5
+}
+@opcode SMSG_PVP_ZONE_INFO     0x2042 chan=world dir=s2c {
+    u16 map_id
+    u16 area_id
+    u8  ruleset                            ; 1 Sanctuary / 2 Arena / 3 FFA
+    u8  forced_flag                        ; 1 = сервер принудительно снял/включил флаг при входе
+}
+@opcode CMSG_DUEL_REQUEST      0x2043 chan=world dir=c2s { u64 target_guid }
+@opcode SMSG_DUEL_STARTED      0x2044 chan=map dir=s2c { u64 duel_id u64 initiator_guid u64 target_guid }
+@opcode CMSG_DUEL_ACCEPT       0x2045 chan=world dir=c2s { u64 duel_id u8 accept } ; 0 = decline
+@opcode SMSG_DUEL_COMPLETE     0x2046 chan=map dir=s2c { u64 duel_id u64 winner_guid u8 reason } ; 0 killed 1 cancelled 2 timedout
+@opcode SMSG_PVP_KILL_NOTIFY   0x2047 chan=world dir=s2c {
+    u64 killer_guid
+    u64 victim_guid
+    u16 honor_gain                         ; очки чести за убийство (HonorPoints в CombatHUD)
+    i32 rep_delta                          ; потеря репутации софракционам (<0) или 0 (ренегат/враг)
+    u8  dishonored                         ; 1 = victim был слабее >10 ур. -> Dishonorable Death
+}
+@opcode SMSG_COMBAT_STATE      0x2048 chan=map dir=s2c { guid u8 in_combat u16 combat_timer_ms } ; CombatHUD: 6с декей
+@opcode SMSG_CORPSE_POLICY     0x2049 chan=map dir=s2c {
+    u64 guid
+    u8  mode                               ; 0=pve_graveyard 1=pvp_durability_loss 2=pvp_item_drop
+    u16 graveyard_map                      ; телепорт к кладбищу (PvE)
+    u8  durability_loss_pct                ; штраф PvP (0..100)
+    u32 sickness_spell_id                  ; Resurrection Sickness (-50% статов, 10 мин) = 80100
+}
+
+# ---------------------------------------------------------------------
+# v1.8 — Карта локаций и зоны (sql/create/06_world_map.sql, ZoneManager)
+# areatable.category: 1 City 2 PvE-Zone 3 FFA 4 Arena 5 Dungeon 6 Raid 7 Wilderness
+# ruleset/graveyard — join v_zone_map_export; источник истины — MySQL, клиент кэширует.
+# ---------------------------------------------------------------------
+@opcode CMSG_ZONE_MAP_REQUEST  0x204A chan=world dir=c2s { } ; полный снимок карты при входе в мир
+@opcode SMSG_ZONE_MAP          0x204B chan=world dir=s2c {
+    u16 zone_count
+    u16 map_id
+    u16 area_id
+    u8  category
+    u8  level_min
+    u8  level_max
+    u16 faction_id
+    u8  ruleset
+} ; повторяющиеся поля = элемент массива (count записей), снимок v_zone_map_export
+@opcode SMSG_ZONE_UPDATE       0x204C chan=map dir=s2c { u16 map_id u16 area_id u8 category u8 level_min u8 level_max u16 faction_id } ; смена зоны (ZoneManager::OnEnterZone)

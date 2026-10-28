@@ -185,8 +185,50 @@ void AMMOPlayerController::HandleServerPacket(EMMOOpcode Opcode, const FMMOPacke
         break;
     }
 
+    case EMMOOpcode::SrvZoneUpdate: {
+        FMMOZoneUpdatePacket Z;
+        if (FMMOZoneUpdatePacket::FromPacket(Packet, Z)) {
+            CurrentMapId = Z.MapId;
+            CurrentZoneId = Z.AreaId;
+            CurrentZoneCategory = Z.Category;
+            UE_LOG(LogPlayerCtl, Log, TEXT("Zone update: map=%u area=%u cat=%u lvl=%u-%u faction=%u"), Z.MapId,
+                   Z.AreaId, uint8(Z.Category), Z.LevelMin, Z.LevelMax, Z.FactionId);
+            OnZoneChanged.Broadcast(Z.MapId, Z.AreaId, Z.Category);
+        }
+        break;
+    }
+    case EMMOOpcode::SrvZoneMap: {
+        FMMOZoneMapPacket M;
+        if (FMMOZoneMapPacket::FromPacket(Packet, M)) {
+            ZoneCache = MoveTemp(M.Zones);
+            UE_LOG(LogPlayerCtl, Log, TEXT("Zone map snapshot: %d zones"), ZoneCache.Num());
+            OnZoneMapReceived.Broadcast(ZoneCache.Num());
+        }
+        break;
+    }
+
     default:
         break;
+    }
+}
+
+bool AMMOPlayerController::TryGetZoneInfo(uint16 MapId, uint16 AreaId, FMMOZoneMapEntry &Out) const {
+    for (const FMMOZoneMapEntry &E : ZoneCache)
+        if (E.MapId == MapId && E.AreaId == AreaId) {
+            Out = E;
+            return true;
+        }
+    return false;
+}
+
+void AMMOPlayerController::RequestZoneMap() {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdZoneMapRequest);
+        Client->SendMessage(P);
     }
 }
 
@@ -298,4 +340,43 @@ void AMMOPlayerController::OnSpellLearned(uint32 SpellId, EMMOSpellSource Source
     // ClassFXManager сам найдёт ключ (class,spec,moment) при первом касте.
     if (UClassFXManager *FX = UClassFXManager::Get(this))
         FX->TriggerScreenFlash(FLinearColor(0.1f, 0.9f, 1.f), 0.15f, 0.4f); // мягкая вспышка «выучено»
+}
+
+// ------------------------------------------------------------------ //
+// PvE/PvP v1.7 API (defs 0x2040/0x2043/0x2045)                        //
+// ------------------------------------------------------------------ //
+
+void AMMOPlayerController::RequestPvpToggle(bool bEnable) {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdPvpToggle);
+        P.WriteU8(bEnable ? 1 : 0);
+        Client->SendMessage(P);
+    }
+}
+
+void AMMOPlayerController::RequestDuel(uint64 TargetGuid) {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMODuelRequestPacket Req;
+        Req.TargetGuid = TargetGuid;
+        Client->SendMessage(Req.ToPacket());
+    }
+}
+
+void AMMOPlayerController::RespondDuel(uint64 DuelId, bool bAccept) {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMODuelAcceptPacket Req;
+        Req.DuelId = DuelId;
+        Req.Accept = bAccept ? 1 : 0;
+        Client->SendMessage(Req.ToPacket());
+    }
 }
