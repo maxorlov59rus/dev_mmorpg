@@ -14,11 +14,13 @@ using int32 = std::int32_t;
 
 enum ItemClass : uint8 { ITEM_CONSUMABLE = 1, ITEM_WEAPON = 2, ITEM_ARMOR = 4, ITEM_TRADE = 5, ITEM_QUEST = 6 };
 enum ItemQuality : uint8 { QUALITY_POOR = 0, QUALITY_COMMON = 1, QUALITY_UNCOMMON = 2, QUALITY_RARE = 4, QUALITY_EPIC = 5, QUALITY_LEGENDARY = 6 };
-enum SpellTriggerType : uint8 { TRIGGER_USE = 0, TRIGGER_EQUIP_CAST = 1, TRIGGER_PROC_ON_HIT = 2 };
+// Итоговый контракт «Финализация»: spelltrigger_1 = 1 => PROC (согласовано с SQL).
+enum SpellTriggerType : uint8 { TRIGGER_USE = 0, TRIGGER_PROC_ON_HIT = 1, TRIGGER_EQUIP_CAST = 2 };
 
 struct ItemStatBlock {
-    uint8 Type[3]{};   // stat_type1..3 (3=STR 4=AGI 5=STA 6=INT 7=SPI 31=CritRating 32=Haste 36=Mastery)
-    int32 Value[3]{};
+    static constexpr int kMaxStats = 10;
+    uint8 Type[kMaxStats]{};   // stat_type1..10 (3=STR 4=AGI 5=STA 6=INT 7=SPI 31=CritRating 32=Haste 36=Mastery)
+    int32 Value[kMaxStats]{};
 };
 
 struct ItemTemplate {
