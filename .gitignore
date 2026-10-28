@@ -1,0 +1,17 @@
+# === BlackMatter UE project — артефакты UBT/IDE, в git не попадают ===
+Binaries/
+Intermediate/
+Saved/
+Build/
+DerivedDataCache/
+.vs/
+.idea/
+*.VC.db
+*.sln
+*.xcodeproj
+Config/HoloLens/
+
+# Android staging
+*.apk
+*.aab
+*.obb
