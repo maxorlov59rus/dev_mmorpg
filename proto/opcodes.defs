@@ -287,3 +287,29 @@
                                        ; таунты «Слизня» при аггро и т.п.
     u8  type                           ; 0 say 1 yell 2 emote 3 whisper-like
 }
+
+; ---------- CLASSES / SPECS / STATS (v1.4: промпт «Система классов») ----------
+; race: 1 Human 2 Lumenar 3 Ashen 4 Hollowed 5 Thresholdkin   (PlayerClassMgr.h)
+; class: 1 Warrior 2 Priest 3 Mage 4 Rogue 5 Hunter 6 Warlock
+; spec_id: см. class_specs (sql/upgrades/Create_Class_Database.sql), 0 = нет спеки
+; Валидация Race×Class×Faction×Spec — PlayerClassMgr::ValidateCreation ДО INSERT;
+; отказ => SMSG_CHAR_CREATE_ERROR reason 7..12 (ClassCheckResult+6).
+@opcode CMSG_CLASS_INFO_QUERY 0x0090 chan=world dir=c2s { u8 for_race } ; 0=all (экран создания)
+@opcode SMSG_CLASS_INFO 0x0091 chan=world dir=s2c {
+    guid char_guid                       ; 0 = превью для экрана создания
+    u8   class                           ; CLASS_*
+    u8   spec                            ; SPEC_* (текущая выбранная/активная)
+    arr<u8>{6} allowed_races             ; обратный фильтр UI (0 terminates list)
+}
+@opcode SMSG_INITIALIZE_STATS 0x0092 chan=world dir=s2c {
+    guid unit                            ; self при входе в мир
+    u32  health_max u32 health_cur       ; display int (Q16 -> округление вверх)
+    u8   power_type                      ; 0 none 1 mana 2 rage 3 energy
+    u32  power_max u32 power_cur
+    u32  strength u32 agility u32 stamina u32 intellect u32 spirit
+    u32  armor u32 spell_power
+}
+@opcode SMSG_LEARN_SPELL 0x0093 chan=world dir=s2c {
+    u32 spell_id                         ; классовая авто-способность (class_spells)
+    u8  source                           ; 0 class_default 1 level_up 2 racial 3 quest
+}

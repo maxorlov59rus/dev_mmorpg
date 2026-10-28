@@ -101,6 +101,12 @@ enum class EMMOOpcode : uint16 {
     SrvGossipReply = 0x070C UMETA(DisplayName = "GossipReply"),                 // wire 0x2013
     SrvCreatureText = 0x070D UMETA(DisplayName = "CreatureText"),               // wire 0x2014
 
+    // Classes / Specs / Stats (v1.4, defs 0x0090..0x0093)
+    CmdClassInfoQuery = 0x0801 UMETA(DisplayName = "ClassInfoQuery"),           // wire 0x0090
+    SrvClassInfo = 0x0802 UMETA(DisplayName = "ClassInfo"),                     // wire 0x0091
+    SrvInitializeStats = 0x0803 UMETA(DisplayName = "InitializeStats"),         // wire 0x0092
+    SrvLearnSpell = 0x0804 UMETA(DisplayName = "LearnSpell"),                   // wire 0x0093
+
     Max = 0xFFFF UMETA(Hidden),
 };
 
@@ -139,6 +145,15 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
         return 0x2013;
     case EMMOOpcode::SrvCreatureText:
         return 0x2014;
+    // Classes (defs 0x0090..0x0093)
+    case EMMOOpcode::CmdClassInfoQuery:
+        return 0x0090;
+    case EMMOOpcode::SrvClassInfo:
+        return 0x0091;
+    case EMMOOpcode::SrvInitializeStats:
+        return 0x0092;
+    case EMMOOpcode::SrvLearnSpell:
+        return 0x0093;
     default:
         return static_cast<uint16>(Op);
     }
@@ -172,6 +187,14 @@ inline constexpr EMMOOpcode FromWire(uint16 Wire) {
         return EMMOOpcode::SrvGossipReply;
     case 0x2014:
         return EMMOOpcode::SrvCreatureText;
+    case 0x0090:
+        return EMMOOpcode::CmdClassInfoQuery;
+    case 0x0091:
+        return EMMOOpcode::SrvClassInfo;
+    case 0x0092:
+        return EMMOOpcode::SrvInitializeStats;
+    case 0x0093:
+        return EMMOOpcode::SrvLearnSpell;
     default:
         return static_cast<EMMOOpcode>(Wire);
     }
@@ -475,6 +498,129 @@ struct FMMOCharCreateErrorPacket {
         if (!FMMOPacket::FReader(P.Payload).ReadU8(Raw))
             return false;
         Out.Reason = static_cast<EMMOCharCreateError>(Raw);
+        return true;
+    }
+};
+
+// =============================================================================
+// v1.4 — СИСТЕМА КЛАССОВ (промпт «Система классов», docs/09)
+//   CMSG_CLASS_INFO_QUERY     (CmdClassInfoQuery, wire 0x0090)
+//   SMSG_CLASS_INFO           (SrvClassInfo,       wire 0x0091)
+//   SMSG_INITIALIZE_STATS     (SrvInitializeStats, wire 0x0092)
+//   SMSG_LEARN_SPELL          (SrvLearnSpell,      wire 0x0093)
+// Wire-payload = proto/opcodes.defs (единственный источник истины).
+// =============================================================================
+
+/** Тип ресурса класса (зеркало PlayerClassMgr::PowerType). */
+UENUM(BlueprintType)
+enum class EMMOPowerType : uint8 {
+    None = 0 UMETA(DisplayName = "None"),
+    Mana = 1 UMETA(DisplayName = "Mana"),
+    Rage = 2 UMETA(DisplayName = "Rage"),
+    Energy = 3 UMETA(DisplayName = "Energy"),
+};
+
+/** Причина изучения спелла (поле source в SMSG_LEARN_SPELL). */
+UENUM(BlueprintType)
+enum class EMMOSpellSource : uint8 {
+    ClassDefault = 0 UMETA(DisplayName = "ClassDefault"),
+    LevelUp = 1 UMETA(DisplayName = "LevelUp"),
+    Racial = 2 UMETA(DisplayName = "Racial"),
+    Quest = 3 UMETA(DisplayName = "Quest"),
+};
+
+/** Запрос таблицы Race×Class для экрана создания (CMSG_CLASS_INFO_QUERY). */
+struct FMMOClassInfoQueryPacket {
+    uint8 ForRace = 0; // 0 = все расы (полный дамп доступности)
+
+    static constexpr uint16 WIRE_OPCODE = 0x0090;
+
+    FMMOPacket ToPacket() const {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdClassInfoQuery);
+        P.WriteU8(ForRace);
+        return P;
+    }
+};
+
+/** Ответ сервера: активные class/spec перса + список разрешённых рас. */
+struct FMMOClassInfoPacket {
+    uint32 CharGuid = 0;              // 0 = превью для UI_CharacterCreate
+    uint8 Class = 0;                  // CLASS_*
+    uint8 Spec = 0;                   // SPEC_*
+    TArray<uint8> AllowedRaces;       // terminates by explicit count field on wire
+
+    static constexpr uint16 WIRE_OPCODE = 0x0091;
+    static constexpr int32 MAX_ALLOWED = 6;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOClassInfoPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        if (!R.ReadU32(Out.CharGuid))
+            return false;
+        if (!R.ReadU8(Out.Class) || !R.ReadU8(Out.Spec))
+            return false;
+        uint8 Count = 0;
+        if (!R.ReadU8(Count) || Count > MAX_ALLOWED)
+            return false;
+        Out.AllowedRaces.Reset();
+        for (uint8 i = 0; i < Count; ++i) {
+            uint8 Race = 0;
+            if (!R.ReadU8(Race))
+                return false;
+            Out.AllowedRaces.Add(Race);
+        }
+        return true;
+    }
+};
+
+/** Полный снимок базовых характеристик при входе в мир (SMSG_INITIALIZE_STATS). */
+struct FMMOInitializeStatsPacket {
+    uint32 UnitGuid = 0;
+    uint32 HealthMax = 0, HealthCur = 0;
+    EMMOPowerType PowerType = EMMOPowerType::None;
+    uint32 PowerMax = 0, PowerCur = 0;
+    uint32 Strength = 0, Agility = 0, Stamina = 0, Intellect = 0, Spirit = 0;
+    uint32 Armor = 0, SpellPower = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x0092;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOInitializeStatsPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        if (!R.ReadU32(Out.UnitGuid))
+            return false;
+        if (!R.ReadU32(Out.HealthMax) || !R.ReadU32(Out.HealthCur))
+            return false;
+        uint8 PT = 0;
+        if (!R.ReadU8(PT))
+            return false;
+        Out.PowerType = static_cast<EMMOPowerType>(PT);
+        if (!R.ReadU32(Out.PowerMax) || !R.ReadU32(Out.PowerCur))
+            return false;
+        if (!R.ReadU32(Out.Strength) || !R.ReadU32(Out.Agility) || !R.ReadU32(Out.Stamina))
+            return false;
+        if (!R.ReadU32(Out.Intellect) || !R.ReadU32(Out.Spirit))
+            return false;
+        if (!R.ReadU32(Out.Armor) || !R.ReadU32(Out.SpellPower))
+            return false;
+        return true;
+    }
+};
+
+/** Изучение способности (SMSG_LEARN_SPELL) — рисует иконку в action bar. */
+struct FMMOLearnSpellPacket {
+    uint32 SpellId = 0;
+    EMMOSpellSource Source = EMMOSpellSource::ClassDefault;
+
+    static constexpr uint16 WIRE_OPCODE = 0x0093;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOLearnSpellPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        if (!R.ReadU32(Out.SpellId))
+            return false;
+        uint8 Src = 0;
+        if (!R.ReadU8(Src))
+            return false;
+        Out.Source = static_cast<EMMOSpellSource>(Src);
         return true;
     }
 };
