@@ -119,6 +119,16 @@ enum class EMMOOpcode : uint16 {
     CmdLfgProposalAccept = 0x0909 UMETA(DisplayName = "LfgProposalAccept"),   // wire 0x2028
     SrvLfgProposal = 0x090A UMETA(DisplayName = "LfgProposal"),               // wire 0x2029
 
+    // Прогрессия 1-95: XP/Level + таланты (v1.6, defs 0x2030..0x2037)
+    SrvLevelUpdate = 0x0A01 UMETA(DisplayName = "LevelUpdate"),         // wire 0x2030
+    SrvXpGained = 0x0A02 UMETA(DisplayName = "XpGained"),               // wire 0x2031
+    CmdTalentQuery = 0x0A03 UMETA(DisplayName = "TalentQuery"),         // wire 0x2032
+    SrvTalentData = 0x0A04 UMETA(DisplayName = "TalentData"),           // wire 0x2033
+    CmdTalentLearn = 0x0A05 UMETA(DisplayName = "TalentLearn"),         // wire 0x2034
+    SrvTalentResult = 0x0A06 UMETA(DisplayName = "TalentResult"),       // wire 0x2035
+    CmdTalentReset = 0x0A07 UMETA(DisplayName = "TalentReset"),         // wire 0x2036
+    SrvItemEquipUpdate = 0x0A08 UMETA(DisplayName = "ItemEquipUpdate"), // wire 0x2037
+
     Max = 0xFFFF UMETA(Hidden),
 };
 
@@ -187,6 +197,23 @@ inline constexpr uint16 ToWire(EMMOOpcode Op) {
         return 0x2028;
     case EMMOOpcode::SrvLfgProposal:
         return 0x2029;
+    // Прогрессия 1-95 (defs 0x2030..0x2037)
+    case EMMOOpcode::SrvLevelUpdate:
+        return 0x2030;
+    case EMMOOpcode::SrvXpGained:
+        return 0x2031;
+    case EMMOOpcode::CmdTalentQuery:
+        return 0x2032;
+    case EMMOOpcode::SrvTalentData:
+        return 0x2033;
+    case EMMOOpcode::CmdTalentLearn:
+        return 0x2034;
+    case EMMOOpcode::SrvTalentResult:
+        return 0x2035;
+    case EMMOOpcode::CmdTalentReset:
+        return 0x2036;
+    case EMMOOpcode::SrvItemEquipUpdate:
+        return 0x2037;
     default:
         return static_cast<uint16>(Op);
     }
@@ -249,6 +276,23 @@ inline constexpr EMMOOpcode FromWire(uint16 Wire) {
         return EMMOOpcode::CmdLfgProposalAccept;
     case 0x2029:
         return EMMOOpcode::SrvLfgProposal;
+    // Прогрессия 1-95 (defs 0x2030..0x2037)
+    case 0x2030:
+        return EMMOOpcode::SrvLevelUpdate;
+    case 0x2031:
+        return EMMOOpcode::SrvXpGained;
+    case 0x2032:
+        return EMMOOpcode::CmdTalentQuery;
+    case 0x2033:
+        return EMMOOpcode::SrvTalentData;
+    case 0x2034:
+        return EMMOOpcode::CmdTalentLearn;
+    case 0x2035:
+        return EMMOOpcode::SrvTalentResult;
+    case 0x2036:
+        return EMMOOpcode::CmdTalentReset;
+    case 0x2037:
+        return EMMOOpcode::SrvItemEquipUpdate;
     default:
         return static_cast<EMMOOpcode>(Wire);
     }
@@ -915,5 +959,155 @@ struct FMMOQuestProgressPacket {
     static bool FromPacket(const FMMOPacket &P, FMMOQuestProgressPacket &Out) {
         FMMOPacket::FReader R(P.Payload);
         return R.ReadU32(Out.QuestId) && R.ReadU8(Out.Progress);
+    }
+};
+
+// =============================================================================
+// Прогрессия 1-95 packets (v1.6) — зеркало /proto/opcodes.defs 0x2030..0x2037.
+// Контракт формул: dm-server/src/game/Progression/ProgressionCore.h, docs/09.
+// =============================================================================
+
+/** SMSG_LEVEL_UPDATE 0x2030: уровень + XP-панель + очки талантов. */
+struct FMMOLevelUpdatePacket {
+    uint32 UnitGuid = 0;
+    uint8 NewLevel = 0;
+    uint64 XpCumulative = 0;
+    uint64 XpToNext = 0;
+    uint16 TalentPointsTotal = 0;
+    uint16 TalentPointsSpent = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2030;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOLevelUpdatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.UnitGuid) && R.ReadU8(Out.NewLevel) && R.ReadU64(Out.XpCumulative) &&
+               R.ReadU64(Out.XpToNext) && R.ReadU16(Out.TalentPointsTotal) &&
+               R.ReadU16(Out.TalentPointsSpent);
+    }
+};
+
+/** SMSG_XP_GAINED 0x2031: всплывающий счётчик опыта (0=mob 1=quest 2=script). */
+struct FMMOXpGainedPacket {
+    uint32 UnitGuid = 0;
+    uint32 XpAmount = 0;
+    uint8 Source = 0;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2031;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOXpGainedPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.UnitGuid) && R.ReadU32(Out.XpAmount) && R.ReadU8(Out.Source);
+    }
+};
+
+/** Одна ноля древа талантов из SMSG_TALENT_DATA (контракт таблицы talents). */
+struct FMMOTalentNode {
+    uint32 TalentId = 0;
+    uint16 TreeId = 0;
+    uint8 Row = 0;   // 1..7 (Row7 = prestige, cost 3)
+    uint8 Column = 0;
+    uint8 MaxRank = 1;
+    uint8 Type = 0;  // 0=passive 1=active 2=mechanic
+    uint8 ReqPoints = 0;
+    uint8 ReqLevel = 10;
+    uint8 Prestige = 0;
+    uint32 AuraSpell = 0;
+    uint32 ActiveSpell = 0;
+};
+
+/** SMSG_TALENT_DATA 0x2033: полный снимок дерева для UI_TalentTreeWidget. */
+struct FMMOTalentDataPacket {
+    struct FTreeHeader {
+        uint16 TreeId = 0;
+        uint8 Class = 0;
+        uint8 SpecId = 0;
+    };
+    TArray<FTreeHeader> Trees;
+    TArray<FMMOTalentNode> Nodes;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2033;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOTalentDataPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint16 TreeCount = 0, NodeCount = 0;
+        if (!R.ReadU16(TreeCount))
+            return false;
+        for (uint16 i = 0; i < TreeCount; ++i) {
+            FTreeHeader H;
+            if (!R.ReadU16(H.TreeId) || !R.ReadU8(H.Class) || !R.ReadU8(H.SpecId))
+                return false;
+            Out.Trees.Add(H);
+        }
+        if (!R.ReadU16(NodeCount))
+            return false;
+        for (uint16 i = 0; i < NodeCount; ++i) {
+            FMMOTalentNode N;
+            if (!R.ReadU32(N.TalentId) || !R.ReadU16(N.TreeId) || !R.ReadU8(N.Row) || !R.ReadU8(N.Column) ||
+                !R.ReadU8(N.MaxRank) || !R.ReadU8(N.Type) || !R.ReadU8(N.ReqPoints) || !R.ReadU8(N.ReqLevel) ||
+                !R.ReadU8(N.Prestige) || !R.ReadU32(N.AuraSpell) || !R.ReadU32(N.ActiveSpell))
+                return false;
+            Out.Nodes.Add(N);
+        }
+        return true;
+    }
+};
+
+/** CMSG_TALENT_LEARN 0x2034. */
+struct FMMOTalentLearnPacket {
+    uint32 TalentId = 0;
+    uint8 Rank = 1;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2034;
+
+    void ToPacket(FMMOPacket &P) const {
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdTalentLearn);
+        FMMOPacket::FWriter W(P.Payload);
+        W.WriteU32(TalentId);
+        W.WriteU8(Rank);
+    }
+};
+
+/** SMSG_TALENT_RESULT 0x2035: 0=ok 1=no_points 2=prereq 3=level 4=prestige_gate. */
+UENUM(BlueprintType)
+enum class EMMOTalentResult : uint8 {
+    Ok = 0 UMETA(DisplayName = "Принято"),
+    NoPoints = 1 UMETA(DisplayName = "Нет очков"),
+    Prereq = 2 UMETA(DisplayName = "Нужен предыдущий талант"),
+    LevelGate = 3 UMETA(DisplayName = "Мало уровня"),
+    PrestigeGate = 4 UMETA(DisplayName = "Prestige закрыт"),
+};
+
+struct FMMOTalentResultPacket {
+    uint32 TalentId = 0;
+    uint8 Rank = 0;
+    EMMOTalentResult Result = EMMOTalentResult::Ok;
+
+    static constexpr uint16 WIRE_OPCODE = 0x2035;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOTalentResultPacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        uint8 Res = 0;
+        if (!R.ReadU32(Out.TalentId) || !R.ReadU8(Out.Rank) || !R.ReadU8(Res))
+            return false;
+        Out.Result = static_cast<EMMOTalentResult>(Res);
+        return true;
+    }
+};
+
+/** SMSG_ITEM_EQUIP_UPDATE 0x2037: смена экипировки (тиры/илвл — ItemTierMatrix). */
+struct FMMOItemEquipUpdatePacket {
+    uint32 UnitGuid = 0;
+    uint8 Slot = 0;      // CONTRACT equipSlot: 1=head 2=shoulders 3=chest ...
+    uint32 ItemId = 0;
+    uint16 Ilvl = 0;
+    uint8 Tier = 0;      // ItemTier enum серверного ProgressionCore.h
+    uint8 ArmorType = 0; // 1Cloth 2Leather 3Mail 4Plate
+
+    static constexpr uint16 WIRE_OPCODE = 0x2037;
+
+    static bool FromPacket(const FMMOPacket &P, FMMOItemEquipUpdatePacket &Out) {
+        FMMOPacket::FReader R(P.Payload);
+        return R.ReadU32(Out.UnitGuid) && R.ReadU8(Out.Slot) && R.ReadU32(Out.ItemId) &&
+               R.ReadU16(Out.Ilvl) && R.ReadU8(Out.Tier) && R.ReadU8(Out.ArmorType);
     }
 };

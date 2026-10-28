@@ -144,8 +144,78 @@ void AMMOPlayerController::HandleServerPacket(EMMOOpcode Opcode, const FMMOPacke
         break;
     }
 
+    // ---- Прогрессия 1-95 (wire 0x2030..0x2037, v1.6) ----
+    case EMMOOpcode::SrvLevelUpdate: {
+        FMMOLevelUpdatePacket Upd;
+        if (FMMOLevelUpdatePacket::FromPacket(Packet, Upd)) {
+            CurrentLevel = Upd.NewLevel;
+            XpCumulative = Upd.XpCumulative;
+            XpToNext = Upd.XpToNext;
+            TalentPointsTotal = Upd.TalentPointsTotal;
+            TalentPointsSpent = Upd.TalentPointsSpent;
+            OnLevelUp.Broadcast(Upd.NewLevel, Upd.XpToNext, Upd.TalentPointsTotal, Upd.TalentPointsSpent);
+        }
+        break;
+    }
+    case EMMOOpcode::SrvXpGained: {
+        FMMOXpGainedPacket Xp;
+        // TODO(M1): фильтр по собственному GUID персонажа (кэш SMSG_LOGIN_SUCCESS).
+        if (FMMOXpGainedPacket::FromPacket(Packet, Xp))
+            UE_LOG(LogPlayerCtl, Log, TEXT("guid=%u +%u XP (source %u)"), Xp.UnitGuid, Xp.XpAmount,
+                   Xp.Source);
+        break;
+    }
+    case EMMOOpcode::SrvTalentData: {
+        FMMOTalentDataPacket Data;
+        if (FMMOTalentDataPacket::FromPacket(Packet, Data))
+            CachedTalentData = MoveTemp(Data); // UI_TalentTreeWidget читает через getter
+        break;
+    }
+    case EMMOOpcode::SrvTalentResult: {
+        FMMOTalentResultPacket Res;
+        if (FMMOTalentResultPacket::FromPacket(Packet, Res))
+            OnTalentLearnResult.Broadcast(Res.TalentId, Res.Result);
+        break;
+    }
+    case EMMOOpcode::SrvItemEquipUpdate: {
+        FMMOItemEquipUpdatePacket Eq;
+        if (FMMOItemEquipUpdatePacket::FromPacket(Packet, Eq))
+            UE_LOG(LogPlayerCtl, Log, TEXT("Equip slot=%u item=%u ilvl=%u tier=%u"), Eq.Slot, Eq.ItemId,
+                   Eq.Ilvl, Eq.Tier);
+        break;
+    }
+
     default:
         break;
+    }
+}
+
+// ------------------------------------------------------------------ //
+// Talent API (UI_TalentTreeWidget)                                    //
+// ------------------------------------------------------------------ //
+
+void AMMOPlayerController::RequestTalentLearn(uint32 TalentId, uint8 Rank) {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMOPacket P;
+        FMMOTalentLearnPacket Learn;
+        Learn.TalentId = TalentId;
+        Learn.Rank = Rank;
+        Learn.ToPacket(P);
+        Client->SendPacket(P);
+    }
+}
+
+void AMMOPlayerController::RequestTalentData() {
+    UMMOGameInstance *DMGI = Cast<UMMOGameInstance>(GetGameInstance());
+    if (!DMGI)
+        return;
+    if (TSharedPtr<FMMONetworkClient> Client = DMGI->GetNetworkClient()) {
+        FMMOPacket P;
+        P.Opcode = static_cast<uint16>(EMMOOpcode::CmdTalentQuery);
+        Client->SendPacket(P);
     }
 }
 
