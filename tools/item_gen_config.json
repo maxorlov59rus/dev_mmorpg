@@ -1,0 +1,66 @@
+{
+  "displayid_base": 50000,
+  "expected_total": 1200,
+  "weapons": {
+    "start_id": 10001,
+    "tiers": [
+      {
+        "name": "Common_1_20",
+        "count": 50,
+        "min_level": 1,
+        "max_level": 20,
+        "quality": "common",
+        "types": ["sword", "staff", "dagger"],
+        "stat_type": "STRENGTH"
+      },
+      {
+        "name": "Uncommon_21_60",
+        "count": 100,
+        "min_level": 21,
+        "max_level": 60,
+        "quality": "uncommon",
+        "types": ["sword", "staff", "dagger", "mace"],
+        "stats": ["AGILITY", "INTELLECT"]
+      },
+      {
+        "name": "Rare_61_90",
+        "count": 150,
+        "min_level": 61,
+        "max_level": 90,
+        "quality": "rare",
+        "types": ["sword", "staff", "dagger", "mace"],
+        "secondary": true,
+        "durability_boost": true
+      },
+      {
+        "name": "Epic_91_95",
+        "count": 100,
+        "min_level": 88,
+        "max_level": 95,
+        "quality": "epic",
+        "types": ["sword", "staff", "dagger", "mace"],
+        "sockets": true,
+        "proc": true
+      }
+    ]
+  },
+  "armor": {
+    "families": [
+      { "class_name": "Arcanum", "armor": "cloth",   "count": 100, "start_id": 20001, "min_level": 1, "max_level": 95, "main_stat": "INTELLECT" },
+      { "class_name": "Shadow",  "armor": "leather", "count": 100, "start_id": 21001, "min_level": 1, "max_level": 95, "main_stat": "AGILITY" },
+      { "class_name": "Ironwall","armor": "mail",    "count": 100, "start_id": 22001, "min_level": 1, "max_level": 70, "main_stat": "STAMINA" },
+      { "class_name": "Aegis",   "armor": "plate",   "count": 100, "start_id": 23001, "min_level": 40, "max_level": 95, "main_stat": "STRENGTH" }
+    ]
+  },
+  "consumables": {
+    "start_id": 30001,
+    "food":     { "count": 50,  "min_level": 1,  "max_level": 95 },
+    "scrolls":  { "count": 50,  "spell_map": { "teleport": 60001, "buff": 60002 } },
+    "potions":  { "count": 100, "min_level": 5,  "max_level": 95 }
+  },
+  "world": {
+    "start_id": 40001,
+    "resources":    { "count": 100, "min_level": 1, "max_level": 95 },
+    "world_items":  { "count": 100 }
+  }
+}
