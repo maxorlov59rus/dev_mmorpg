@@ -106,8 +106,7 @@
 	},
 
 	"TargetPlatforms": [
-		"WindowsNoEditor",
-		"Windows",
+		"Win64",
 		"Android_ASTC",
 		"Android_ETC2",
 		"Android_Multi"
