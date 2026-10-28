@@ -29,7 +29,8 @@
 				"Win64",
 				"Android",
 				"Linux"
-			]
+			],
+			"Comment": "Локальный плагин Plugins/MMOCore: сетевой стек (TCP, бинарный протокол, SRP-auth), AMMOGameInstance, FMMONetworkClient (Runnable)."
 		},
 		{
 			"Name": "WorldPartition",
