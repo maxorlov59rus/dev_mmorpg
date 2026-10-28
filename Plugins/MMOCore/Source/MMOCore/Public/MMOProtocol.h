@@ -43,10 +43,12 @@ enum class EMMOOpcode : uint16
 	// ---- Login / realm block (0x02xx) — loginserver: список шардов ----
 	CmdCharListRequest  = 0x0201 UMETA(DisplayName = "CharListRequest"),
 	SrvCharList         = 0x0202 UMETA(DisplayName = "CharList"),
-	CmdCharCreate       = 0x0203 UMETA(DisplayName = "CharCreate"),
+	CmdCharCreate       = 0x0203 UMETA(DisplayName = "CharCreate"),   // wire: CMSG_CHAR_CREATE (defs 0x0012)
 	CmdCharDelete       = 0x0204 UMETA(DisplayName = "CharDelete"),
 	CmdEnterWorld       = 0x0205 UMETA(DisplayName = "EnterWorld"),
 	SrvWorldServerInfo  = 0x0206 UMETA(DisplayName = "WorldServerInfo"), // IP/port mapserver ticket
+	SrvCharCreateSuccess= 0x0207 UMETA(DisplayName = "CharCreateSuccess"), // wire: SMSG_CHAR_CREATE_SUCCESS (defs 0x0013)
+	SrvCharCreateError  = 0x0208 UMETA(DisplayName = "CharCreateError"),   // wire: SMSG_CHAR_CREATE_ERROR   (defs 0x0017)
 
 	// ---- World block (0x03xx) — worldserver ----
 	CmdPlayerLogin      = 0x0301 UMETA(DisplayName = "PlayerLogin"),
@@ -222,5 +224,121 @@ private:
 		{
 			Payload.Add(static_cast<uint8>((V >> (8 * i)) & 0xFF));
 		}
+	}
+};
+
+// =============================================================================
+// Character creation packets — зеркало /proto/opcodes.defs @version 1.1
+//   CMSG_CHAR_CREATE        (CmdCharCreate, wire 0x0012)
+//   SMSG_CHAR_CREATE_SUCCESS(SrvCharCreateSuccess, wire 0x0013)
+//   SMSG_CHAR_CREATE_ERROR  (SrvCharCreateError, wire 0x0017)
+// Blob кастомизации канонизируется сервером: клиент шлёт FCharacterCustomization,
+// сервер парсит -> валидирует/клампит -> нормализует -> кладёт в БД (mediumblob)
+// и возвращает байт-в-байт тот же blob в preview_customization.
+// =============================================================================
+
+/** Ошибки создания (ECharCreateError, TRC-style char create result). */
+UENUM(BlueprintType)
+enum class EMMOCharCreateError : uint8
+{
+	None              = 0,
+	NameInvalid       = 1,  // регэксп/длина/спецсимволы
+	NameReserved      = 2,  // стоп-лист / «зарезервировано GM»
+	NameExists        = 3,  // уник в characters.name
+	FactionInvalid    = 4,  // вне 1..3 или несовместима с расой/классом
+	RaceClassMismatch = 5,  // класс недоступен расе
+	CustomizationBlob = 6,  // битый/перекачанный blob (>512 B)
+	PerCharLimit      = 7,  // >=10 персонажей на аккаунт
+	ServerInternal    = 8,
+};
+
+/** Пакет CMSG_CHAR_CREATE. */
+struct FMMOCharCreatePacket
+{
+	FString Name;                      // <=24 UTF-8 байт после нормализации
+	uint8   Race   = 0;                // dbc Races.dbc entry
+	uint8   Class  = 0;                // Classes.dbc entry
+	uint8   Gender = 0;                // 0=male 1=female
+	uint8   Faction= 0;                // 1=DawnGuard 2=BlackMatter 3=ThresholdGuild
+	TArray<uint8> CustomizationBlob;   // сериализованный FCharacterCustomization (<=512 B)
+
+	static constexpr uint16 WIRE_OPCODE = 0x0012; // defs: CMSG_CHAR_CREATE
+
+	/** Лимит blob'а на проводе (байт). Единая константа для обоих пакетов. */
+	static constexpr int32 MAX_BLOB_SIZE = 512;
+
+	FMMOPacket ToPacket() const
+	{
+		FMMOPacket P;
+		P.Opcode = static_cast<uint16>(EMMOOpcode::CmdCharCreate);
+		P.WriteString(Name);
+		P.WriteU8(Race);
+		P.WriteU8(Class);
+		P.WriteU8(Gender);
+		P.WriteU8(Faction);
+		P.WriteU16(static_cast<uint16>(CustomizationBlob.Num()));
+		P.Payload.Append(CustomizationBlob);
+		return P;
+	}
+
+	static bool FromPacket(const FMMOPacket& P, FMMOCharCreatePacket& Out)
+	{
+		FMMOPacket::FReader R(P.Payload);
+		if (!R.ReadString(Out.Name)) return false;
+		if (!R.ReadU8(Out.Race) || !R.ReadU8(Out.Class)) return false;
+		if (!R.ReadU8(Out.Gender) || !R.ReadU8(Out.Faction)) return false;
+		uint16 BlobLen = 0;
+		if (!R.ReadU16(BlobLen) || BlobLen > FMMOCharCreatePacket::MAX_BLOB_SIZE) return false;
+		return R.ReadBytes(Out.CustomizationBlob, BlobLen);
+	}
+};
+
+/** Пакет SMSG_CHAR_CREATE_SUCCESS (сервер → клиент). */
+struct FMMOCharCreateSuccessPacket
+{
+	uint32  CharacterId = 0;           // guid
+	FString Name;
+	uint8   Race = 0, Class = 0, Gender = 0, Faction = 0;
+	uint16  StartMap = 0;
+	int32   StartX = 0, StartY = 0, StartZ = 0; // Q16.16 fixed (как EntityFull в map-канале)
+	int32   StartOrientationQ16 = 0;             // yaw, Q16.16 (единый формат с координатами)
+	TArray<uint8> PreviewCustomization;          // нормализованный blob — рендер списка без БД
+
+	static constexpr uint16 WIRE_OPCODE = 0x0013; // defs: SMSG_CHAR_CREATE_SUCCESS
+
+	static bool FromPacket(const FMMOPacket& P, FMMOCharCreateSuccessPacket& Out)
+	{
+		FMMOPacket::FReader R(P.Payload);
+		if (!R.ReadU32(Out.CharacterId)) return false;
+		if (!R.ReadString(Out.Name)) return false;
+		if (!R.ReadU8(Out.Race) || !R.ReadU8(Out.Class)) return false;
+		if (!R.ReadU8(Out.Gender) || !R.ReadU8(Out.Faction)) return false;
+		if (!R.ReadU16(Out.StartMap)) return false;
+		int32 X, Y, Z, O;
+		// подписанные 32-битные поля читаем через ReadU32 + реинтерпретацию (LE, двух's complement)
+		if (!R.ReadU32(reinterpret_cast<uint32&>(X))) return false;
+		if (!R.ReadU32(reinterpret_cast<uint32&>(Y))) return false;
+		if (!R.ReadU32(reinterpret_cast<uint32&>(Z))) return false;
+		if (!R.ReadU32(reinterpret_cast<uint32&>(O))) return false;
+		Out.StartX = X; Out.StartY = Y; Out.StartZ = Z; Out.StartOrientationQ16 = O;
+		uint16 BlobLen = 0;
+		if (!R.ReadU16(BlobLen) || BlobLen > FMMOCharCreatePacket::MAX_BLOB_SIZE) return false;
+		return R.ReadBytes(Out.PreviewCustomization, BlobLen);
+	}
+};
+
+/** Пакет SMSG_CHAR_CREATE_ERROR. */
+struct FMMOCharCreateErrorPacket
+{
+	EMMOCharCreateError Reason = EMMOCharCreateError::ServerInternal;
+
+	static constexpr uint16 WIRE_OPCODE = 0x0017; // defs: SMSG_CHAR_CREATE_ERROR
+
+	static bool FromPacket(const FMMOPacket& P, FMMOCharCreateErrorPacket& Out)
+	{
+		uint8 Raw = 0;
+		if (!FMMOPacket::FReader(P.Payload).ReadU8(Raw)) return false;
+		Out.Reason = static_cast<EMMOCharCreateError>(Raw);
+		return true;
 	}
 };

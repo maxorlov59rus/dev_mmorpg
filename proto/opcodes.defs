@@ -48,11 +48,34 @@
 @opcode SMSG_CHAR_LIST 0x0011 chan=world dir=s2c {
     arr<CharInfo>{10} chars
 }
+; ---- Character creation (v1.1: customization blob + faction) ----
+; CustomizationBlob = канонический FCharacterCustomization (docs/charcreate §Protocol):
+;   u16 BlobVersion | u8 MorphCount | MorphCount * { u16 SliderId; u16 ValueX1000 }
+; | u8 HairStyle | u8 HairColorIdx | u8 EyeColorIdx | u8 SkinToneIdx
+; | ColorBGRA ClothingPrimary | ColorBGRA ClothingSecondary | u16 Reserved
+; Жёсткий лимит blob на проводе: 512 байт (валидация сервера до парсинга).
 @opcode CMSG_CHAR_CREATE 0x0012 chan=world dir=c2s {
     str<24> name
     u8      race
     u8      class
     u8      gender
+    u8      faction                      ; 1=Орден Рассвета 2=Круг Поглощения 3=Гильдия Порога
+    bytes   customization_blob           ; см. выше (<=512 B, LE)
+}
+@opcode SMSG_CHAR_CREATE_SUCCESS 0x0013 chan=world dir=s2c {
+    guid     id
+    str<24>  name
+    u8       race
+    u8       class
+    u8       gender
+    u8       faction
+    u16      start_map                   ; стартовая карта по расе/фракции
+    i32      start_x i32 start_y i32 start_z   ; Q16.16 fixed
+    fp16     start_o                     ; orientation yaw, Q16.16
+    bytes    preview_customization       ; нормализованный blob — мгновенный рендер в списке без БД
+}
+@opcode SMSG_CHAR_CREATE_ERROR 0x0017 chan=world dir=s2c {
+    u8 reason                            ; см. ECharCreateError: 1=name_invalid ...
 }
 @opcode CMSG_CHAR_SELECT 0x0014 chan=world dir=c2s {
     guid id
