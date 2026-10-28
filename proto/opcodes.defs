@@ -311,7 +311,7 @@
 }
 @opcode SMSG_LEARN_SPELL 0x0093 chan=world dir=s2c {
     u32 spell_id                         ; классовая авто-способность (class_spells)
-    u8  source                           ; 0 class_default 1 level_up 2 racial 3 quest
+    u8  source                           ; 0 class_default 1 level_up 2 racial 3 spec (квест-награды — отдельный канал SMSG_QUEST_COMPLETE)
 }
 
 ; ---------- QUESTS 6-10: SPEC SELECTION + LFG (v1.5, промпт «Квестовая система 6–10») ----------
