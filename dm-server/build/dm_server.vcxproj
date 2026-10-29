@@ -401,6 +401,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\LFG\LFGMgr.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Maps\Map.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\OpcodeDispatcher.h" />
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\PacketRouter.cpp" />
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\PacketRouter.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\Sessions\WorldSession.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Player\PlayerSession.h" />
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Progression\ProgressionCore.cpp" />
@@ -420,6 +422,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Vendor\VendorMgr.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\World\World.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\CharacterDatabase.h" />
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\SQLClient.cpp" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\SQLClient.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\WorldDatabase.h" />
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Protocol\MMOProtocol.h" />

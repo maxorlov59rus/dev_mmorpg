@@ -34,6 +34,9 @@
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\ItemTemplate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\PacketRouter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Progression\ProgressionCore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -44,6 +47,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\SQLClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\main.cpp">
@@ -103,6 +109,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\OpcodeDispatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\PacketRouter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\Sessions\WorldSession.h">
