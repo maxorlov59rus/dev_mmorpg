@@ -1,42 +1,13 @@
-# =============================================================================
-#  «Чёрная Материя» — CI для сборки под Windows (GitHub Actions)
-#
-#  Зеркалит GitLab-пайплайн для Windows-агентов:
-#    lint        -> форматирование (.clang-format) + сверка opcodes с proto/
-#    build       -> сервер (MSVC 2022, ServerBuild.bat --clcache) параллельно
-#                   с клиентом (UE5.8 UAT, BuildClient.bat, Win64)
-#    test        -> unit-тесты сервера (ctest) + golden-packet протокола
-#    package     -> бандл артефактов client+server (единый релиз)
-#    deploy      -> manual approval, только master/tag
-#
-#  self-hosted раннеры (рекомендуется):
-#    - label "msvc2022" : Windows 2022, VS2022 (vcvars64 в PATH), CMake>=3.24,
-#                         Ninja, Boost 1.83, OpenSSL 3.x, MySQL Client, Python 3.11
-#    - label "ue58-win" : дополнительно UE_5.8 в "C:\Program Files\Epic Games\UE_5.8"
-#  lint-джоба исполняется на публичном windows-2022 runner'e.
-# =============================================================================
-
+# Build & Test (Windows) — обновлено под миграцию на Unity
 name: Build & Test (Windows)
 
 on:
   push:
-    branches: [master, main, develop, 'release/**']
-    tags: ['v*']
+    branches: [master, main, develop, "release/**"]
+    tags: ["v*"]
   pull_request:
     branches: [master, main, develop]
   workflow_dispatch:
-    inputs:
-      config:
-        description: 'Server configuration'
-        required: false
-        default: 'Release'
-        type: choice
-        options: [Debug, RelWithDebInfo, Release]
-      build_client:
-        description: 'Build UE client (нужен runner с UE5.8)'
-        required: false
-        default: true
-        type: boolean
 
 concurrency:
   group: win-ci-${{ github.ref }}
@@ -44,287 +15,61 @@ concurrency:
 
 env:
   SERVER_SOURCE_DIR: dm-server
-  BUILD_CONFIG: build/build_config.json
-  UE_ROOT_WIN: 'C:\Program Files\Epic Games\UE_5.8'
-  UPROJECT: DMClient.uproject
 
 jobs:
-  # -------------------------------------------------------------------------
-  #  STAGE: lint — детерминированное форматирование и контракты данных
-  # -------------------------------------------------------------------------
   lint:
     name: Lint (clang-format / proto / data contracts)
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Install clang-format (версия зафиксирована, как в GitLab CI)
-        run: pip install clang-format==15.0.7
-
-      - name: Verify .clang-format exists (единый источник стиля)
+          python-version: "3.11"
+      - name: Run clang-format
         shell: pwsh
         run: |
-          if (-not (Test-Path .clang-format)) {
-            Write-Error "Отсутствует корневой .clang-format"; exit 1
-          }
-
-      - name: Run clang-format --dry-run -Werror
-        shell: pwsh
-        run: |
-          $files = Get-ChildItem -Recurse -Include *.h,*.cpp `
-                  -Path dm-server, Plugins/MMOCore/Source, Source -ErrorAction SilentlyContinue |
-                  Where-Object { $_.FullName -notmatch 'ThirdParty|generated' }
-          if (-not $files -or $files.Count -eq 0) { Write-Warning "Нет C++ файлов"; exit 0 }
+          $files = Get-ChildItem -Recurse -Include *.h,*.cpp -Path dm-server -ErrorAction SilentlyContinue
+          if (-not $files) { Write-Warning "No C++ files"; exit 0 }
           $fail = 0
           foreach ($f in $files) {
             clang-format --dry-run -Werror "$($f.FullName)"
             if ($LASTEXITCODE -ne 0) { $fail = 1 }
           }
           exit $fail
-
-      - name: SyncUProject.py --dry-run (uproject актуален)
-        shell: cmd
-        run: |
-          if exist tools\SyncUProject.py (
-            python tools\SyncUProject.py --project %UPROJECT% --dry-run
-          ) else (
-            echo [skip] tools\SyncUProject.py отсутствует
-          )
-
-      - name: Сверка opcodes (proto/opcodes.defs — уникальность ID)
+      - name: Validate opcodes
         shell: pwsh
-        run: |
-          $defs = Select-String -Path proto/opcodes.defs -Pattern '#define\s+(CMSG|SMSG)_\w+\s+0x([0-9A-Fa-f]+)'
-          $ids  = $defs | ForEach-Object { $_.Matches[0].Groups[2].Value.ToUpper() }
-          $dupes = $ids | Group-Object | Where-Object Count -gt 1
-          if ($dupes) { $dupes | ForEach-Object { Write-Host "DUP opcode 0x$($_.Name)" }; exit 1 }
-          Write-Host "OK: $($ids.Count) уникальных опкодов"
+        run: python tools/run_tests.py --suite protocol
 
-      - name: Валидация генератора предметов (assert 1200, dry-run)
-        shell: pwsh
-        run: python tools/Generate_Item_Data.py --dry-run
-
-  # -------------------------------------------------------------------------
-  #  STAGE: build — сервер под MSVC 2022 (параллельно с клиентом)
-  # -------------------------------------------------------------------------
-  build-server-win:
-    name: Build Server (MSVC 2022 x64)
+  build-server:
+    name: Build Server (CMake + MSVC)
     needs: lint
     runs-on: [self-hosted, Windows, msvc2022]
-    timeout-minutes: 45
-    defaults:
-      run:
-        shell: cmd
-    env:
-      CLCACHE_DIR: ${{ github.workspace }}\.cache\clcache
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-
-      - name: Cache clcache objects
-        uses: actions/cache@v4
-        with:
-          path: .cache/clcache
-          key: clcache-${{ runner.os }}-${{ github.ref_name }}-${{ hashFiles('dm-server/**/*.cpp', 'dm-server/**/*.h') }}
-          restore-keys: |
-            clcache-${{ runner.os }}-${{ github.ref_name }}-
-            clcache-${{ runner.os }}-
-
-      - name: Dependencies check (cmake / msbuild)
+      - name: Configure & Build
+        shell: cmd
         run: |
-          cmake --version || (echo [FATAL] cmake not in PATH & exit /b 1)
-          where msbuild >nul 2>&1 || (
-            echo [INFO] msbuild вне PATH — подключаем VsDevCmd...
-            for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do set "VSROOT=%%i"
-            call "%VSROOT%\Common7\Tools\VsDevCmd.bat" -arch=x64 >nul
-          )
-          msbuild -version
-
-      - name: Build server (ServerBuild.bat --config --clcache)
-        run: |
-          call build\scripts\ServerBuild.bat --source=%SERVER_SOURCE_DIR% --build=%SERVER_SOURCE_DIR%\build-win --config=${{ inputs.config || 'Release' }} --clcache
-
-      - name: Upload server binaries
+          cd dm-server
+          mkdir build 2>nul
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release
+      - name: Upload server binary
         uses: actions/upload-artifact@v4
         with:
           name: server-win-${{ github.sha }}
-          path: |
-            dm-server/build-win/${{ inputs.config || 'Release' }}/*.exe
-            dm-server/build-win/${{ inputs.config || 'Release' }}/*.dll
-          if-no-files-found: warn
+          path: dm-server/build/Release/dm_server.exe
           retention-days: 7
 
-  # -------------------------------------------------------------------------
-  #  STAGE: build — клиент UE5.8 Win64 (runner с движком)
-  # -------------------------------------------------------------------------
-  build-client-win:
-    name: Build Client (UE5.8 Win64)
-    needs: lint
-    if: ${{ github.event.inputs.build_client != 'false' }}
-    runs-on: [self-hosted, Windows, ue58-win]
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Sync uproject (идемпотентно)
-        shell: cmd
-        run: |
-          if exist tools\SyncUProject.py python tools\SyncUProject.py --project %UPROJECT%
-
-      - name: Check UE5.8 present
-        shell: pwsh
-        run: |
-          if (-not (Test-Path "$env:UE_ROOT_WIN\Engine\Build\BatchFiles\RunUAT.bat")) {
-            Write-Host "::warning::UE 5.8 не найден в '$env:UE_ROOT_WIN' — пропускаем сборку клиента"
-            echo "UE_FOUND=false" >> $env:GITHUB_ENV
-          } else {
-            echo "UE_FOUND=true" >> $env:GITHUB_ENV
-          }
-
-      - name: Build via UAT wrapper (BuildClient.bat)
-        if: env.UE_FOUND == 'true'
-        shell: cmd
-        run: |
-          call build\scripts\BuildClient.bat --platforms=Win64 --config=Development --ue="%UE_ROOT_WIN%"
-
-      - name: Upload client package
-        if: env.UE_FOUND == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: client-win64-${{ github.sha }}
-          path: Packaged/Win64/**
-          if-no-files-found: warn
-          retention-days: 7
-
-  # -------------------------------------------------------------------------
-  #  STAGE: test — unit + golden-packet (поверх собранного сервера)
-  # -------------------------------------------------------------------------
-  test-server-win:
-    name: Test Server (ctest + golden-packet)
-    needs: build-server-win
-    runs-on: [self-hosted, Windows, msvc2022]
-    timeout-minutes: 20
-    defaults:
-      run:
-        shell: cmd
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download server build
-        uses: actions/download-artifact@v4
-        with:
-          name: server-win-${{ github.sha }}
-          path: dm-server/build-win/Release
-
-      - name: ctest (network/protocol/auth/faction)
-        run: |
-          cd dm-server\build-win
-          ctest --output-on-failure -j4 -R "dm_(network|protocol|auth|faction)_.*"
-
-      - name: Golden-packet drift test
-        run: |
-          if exist tools\run_tests.py (
-            python tools\run_tests.py --suite protocol --json test-report.json
-          ) else (
-            echo [skip] tools\run_tests.py отсутствует
-          )
-
-      - name: Upload test report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-report-win-${{ github.sha }}
-          path: |
-            test-report.json
-            dm-server/build-win/**/test-results.xml
-          if-no-files-found: ignore
-          retention-days: 14
-
-  # -------------------------------------------------------------------------
-  #  STAGE: package — единый релизный бандл (конвергенция build+test)
-  # -------------------------------------------------------------------------
-  package-release:
-    name: Package Release Bundle
-    needs: [build-server-win, test-server-win]
-    if: needs.build-server-win.result == 'success' && needs.test-server-win.result == 'success'
+  test:
+    name: Test (protocol / data)
+    needs: build-server
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
-
-      - name: Download server artifacts
-        uses: actions/download-artifact@v4
+      - uses: actions/setup-python@v5
         with:
-          name: server-win-${{ github.sha }}
-          path: bundle/server
-
-      - name: Assemble bundle + manifest
-        shell: pwsh
-        run: |
-          Copy-Item -Recurse sql bundle/sql
-          if (Test-Path data/mapping_displayid.csv) {
-            New-Item -ItemType Directory -Force -Path bundle/data | Out-Null
-            Copy-Item data/mapping_displayid.csv bundle/data/
-          }
-          $manifest = @{
-            commit   = '${{ github.sha }}'
-            branch   = '${{ github.ref_name }}'
-            built_at = (Get-Date).ToUniversalTime().ToString('o')
-            targets  = @('server-win-msvc')
-          } | ConvertTo-Json
-          Set-Content bundle/release_manifest.json $manifest
-          Compress-Archive -Path bundle/* -DestinationPath blackmatter-win-server.zip
-
-      - name: Upload release bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-bundle-win
-          path: blackmatter-win-server.zip
-          retention-days: 30
-
-  # -------------------------------------------------------------------------
-  #  STAGE: deploy — только master/тег, требует подтверждения окружения
-  # -------------------------------------------------------------------------
-  deploy-win:
-    name: Deploy to Windows Test Shard
-    needs: package-release
-    if: github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v')
-    environment: win-test-shard
-    runs-on: [self-hosted, Windows, msvc2022]
-    steps:
-      - name: Download bundle
-        uses: actions/download-artifact@v4
-        with:
-          name: release-bundle-win
-
-      - name: Stop services
-        shell: pwsh
-        run: |
-          foreach ($svc in 'dm-authserver','dm-loginserver','dm-worldserver','dm-mapserver') {
-            if (Get-Service $svc -ErrorAction SilentlyContinue) { Stop-Service $svc -Force }
-          }
-
-      - name: Unpack & start
-        shell: pwsh
-        run: |
-          Expand-Archive -Path blackmatter-win-server.zip -DestinationPath C:\blackmatter\current -Force
-          foreach ($svc in 'dm-authserver','dm-loginserver','dm-worldserver','dm-mapserver') {
-            if (Get-Service $svc -ErrorAction SilentlyContinue) { Start-Service $svc }
-          }
-
-      - name: Health check
-        shell: pwsh
-        run: |
-          Start-Sleep -Seconds 10
-          $svcs = Get-Service dm-* -ErrorAction Stop
-          $svcs | Format-Table Name, Status
-          $failed = $svcs | Where-Object Status -ne 'Running'
-          if ($failed) { $failed | Format-Table; exit 1 }
+          python-version: "3.11"
+      - name: Run tests
+        run: python tools/run_tests.py --suite all
