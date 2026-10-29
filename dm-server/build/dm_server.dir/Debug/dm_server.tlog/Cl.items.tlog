@@ -9,6 +9,7 @@ C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Factions\Faction
 C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Grids\ZoneManager.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\ZoneManager.obj
 C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\EquipmentMgr.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\EquipmentMgr.obj
 C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\ItemTemplate.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\ItemTemplate.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\Handlers\PacketHandlers.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\PacketHandlers.obj
 C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\PacketRouter.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\PacketRouter.obj
 C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Progression\ProgressionCore.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\ProgressionCore.obj
 C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\PvPSystem.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\PvPSystem.obj

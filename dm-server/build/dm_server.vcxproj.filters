@@ -34,6 +34,9 @@
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\ItemTemplate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\Handlers\PacketHandlers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\PacketRouter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -106,6 +109,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Maps\Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\Handlers\PacketHandlers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\OpcodeDispatcher.h">
