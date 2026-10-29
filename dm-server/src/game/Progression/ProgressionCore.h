@@ -113,7 +113,7 @@ public:
     // ---------- Экипировка: ilvl-бюджет ----------
     static uint32 ArmorBudget(uint32 ilvl) {
         return ilvl * 6 / 5;
-    }                                      // ilvl*1.2
+    } // ilvl*1.2
     static uint32 WeaponDpsQ8(uint32 ilvl) // DPS=int(ilvl*0.8), Q8
     {
         return (ilvl * 4 / 5) * static_cast<uint32>(fx::Q8_SCALE);
