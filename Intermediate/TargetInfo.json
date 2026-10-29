@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "DMClient",
+			"Path": "..\\Source\\DMClient.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "DMClientEditor",
+			"Path": "..\\Source\\DMClientEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

@@ -6,7 +6,7 @@ public class MMOCoreEditor : ModuleRules
 {
 	public MMOCoreEditor(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PCHUsage = ModuleRules.PModulePCHUsage.UseSharedPCHs;
+		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 		CppStandard = CppStandardVersion.Cpp20;
 
 		PublicDependencyModuleNames.AddRange(new string[]

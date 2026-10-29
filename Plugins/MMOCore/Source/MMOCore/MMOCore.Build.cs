@@ -35,7 +35,6 @@ public class MMOCore : ModuleRules
 		{
 			"Projects",        // IPluginManager — получить путь плагина для ThirdParty
 			"Json",            // конфиг endpoints в JSON
-			"OpenSSLWrapper",  // опционально: крипто UE уже поставляет на desktop
 		});
 
 		string PluginDir = Path.GetFullPath(Path.Combine(ModuleDirectory, "..", ".."));
@@ -46,14 +45,14 @@ public class MMOCore : ModuleRules
 		// ------------------------------------------------------------------
 		if (Target.Platform == UnrealTargetPlatform.Win64)
 		{
-			PublicAdditionalIncludePaths.Add(Path.Combine(ThirdPartyDir, "boost_stub", "include"));
-			PublicAdditionalIncludePaths.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "include"));
+			PublicIncludePaths.Add(Path.Combine(ThirdPartyDir, "boost_stub", "include"));
+			PublicIncludePaths.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "include"));
 
 			// Заглушки header-only на этапе M0. Когда положим реальные сборки:
 			//   PublicAdditionalLibraries.Add(Path.Combine(BoostDir, "lib", "win64", "libboost_system-x64-mt-1_83.lib"));
 			//   PublicDelayLoadDLLs.Add("libcrypto-3-x64.dll");
 			//   PublicDelayLoadDLLs.Add("libssl-3-x64.dll");
-			RuntimeDependencies.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "bin", "win64", "*.dll"), staged: false);
+			RuntimeDependencies.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "bin", "win64", "*.dll"));
 
 			// Windows sockets
 			PublicSystemLibraries.Add("ws2_32.lib");
@@ -64,8 +63,8 @@ public class MMOCore : ModuleRules
 		// ------------------------------------------------------------------
 		else if (Target.Platform == UnrealTargetPlatform.Android)
 		{
-			PublicAdditionalIncludePaths.Add(Path.Combine(ThirdPartyDir, "boost_stub", "include"));
-			PublicAdditionalIncludePaths.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "include"));
+			PublicIncludePaths.Add(Path.Combine(ThirdPartyDir, "boost_stub", "include"));
+			PublicIncludePaths.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "include"));
 
 			// NDK даёт нам libc++ (STL shared) и libz; OpenSSL/Boost собираются
 			// отдельно через ExternalNativeLibraryBuild (см. п.4 ТЗ, libMMOCore.so).
@@ -79,7 +78,7 @@ public class MMOCore : ModuleRules
 
 			// Указываем UBT, что нам нужна поставка native libs в APK:
 			// (.so подхватятся автоматически из Intermediate/Android/arm64-v8a)
-			bLinkWithLibcxx = true; // UE на Android линкуется с libc++_shared
+			// UE на Android линкуется с libc++_shared автоматически
 		}
 
 		// ------------------------------------------------------------------
@@ -87,8 +86,8 @@ public class MMOCore : ModuleRules
 		// ------------------------------------------------------------------
 		else if (Target.Platform == UnrealTargetPlatform.Linux)
 		{
-			PublicAdditionalIncludePaths.Add(Path.Combine(ThirdPartyDir, "boost_stub", "include"));
-			PublicAdditionalIncludePaths.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "include"));
+			PublicIncludePaths.Add(Path.Combine(ThirdPartyDir, "boost_stub", "include"));
+			PublicIncludePaths.Add(Path.Combine(ThirdPartyDir, "openssl_stub", "include"));
 			PublicSystemLibraries.Add("pthread");
 			PublicSystemLibraries.Add("dl");
 		}

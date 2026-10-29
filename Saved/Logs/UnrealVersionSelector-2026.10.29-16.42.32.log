@@ -1,0 +1,79 @@
+Log started at 10/29/2026 16:42:32 (2026-10-29T11:42:32Z)
+Resolved project argument C:/Users/Orel/AppData/Local/Cline/dev_mmorpg/DMClient.uproject to C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\DMClient.uproject
+No config file at C:\ProgramData\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No config file at C:\Users\Orel\AppData\Local\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No config file at C:\Users\Orel\Documents\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Configuration will be read from:
+  C:\Users\Orel\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+No project scope config file at C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\Saved\UnrealBuildTool\BuildConfiguration.xml. Creating default.
+Reading configuration file from: C:\Users\Orel\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from: C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\Saved\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from: C:\Users\Orel\AppData\Local\UnrealEngine\Intermediate\Build\UnrealBuildTool.Env.BuildConfiguration.xml
+Log file: C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\Saved\Logs\UnrealVersionSelector-2026.10.29-16.42.32.log
+
+Setting temp directory to 'C:\Users\Orel\AppData\Local\Temp\UnrealBuildTool\eb6d2d82'
+    Registering build platform: UnrealBuildTool.AndroidPlatformFactory
+    Registering build platform: UnrealBuildTool.IOSPlatformFactory
+    Registering build platform: UnrealBuildTool.LinuxPlatformFactory
+    Registering build platform: UnrealBuildTool.MacPlatformFactory
+    Registering build platform: UnrealBuildTool.TVOSPlatformFactory
+    Registering build platform: UnrealBuildTool.WindowsPlatformFactory
+Found Windows 10 SDK root at C:\Program Files (x86)\Windows Kits\10 (1)
+Found Windows 10 SDK root at C:\Program Files (x86)\Windows Kits\10 (2)
+Found Windows 10 SDK version 10.0.26100.0 at C:\Program Files (x86)\Windows Kits\10
+Found Universal CRT version 10.0.26100.0 at C:\Program Files (x86)\Windows Kits\10
+Win64 Installed SDK(s): MinVersion_Sdk=10.0.19041.0, MaxVersion_Sdk=10.9.99999.0, CurrentVersion_Sdk=10.0.26100.0, Version_AutoSdk=10.0.22621.0, CurrentVersion_AutoSdk=
+        Registering build platform: Win64 - buildable: True
+    Registering build platform: UnrealBuildTool.VisionOSPlatformFactory
+Resolved project argument C:/Users/Orel/AppData/Local/Cline/dev_mmorpg/DMClient.uproject to C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\DMClient.uproject
+Reading configuration file from cache (C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\Intermediate\Build\XmlConfigCache.bin): C:\Users\Orel\AppData\Roaming\Unreal Engine\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from cache (C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\Intermediate\Build\XmlConfigCache.bin): C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\Saved\UnrealBuildTool\BuildConfiguration.xml
+Reading configuration file from cache (C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\Intermediate\Build\XmlConfigCache.bin): C:\Users\Orel\AppData\Local\UnrealEngine\Intermediate\Build\UnrealBuildTool.Env.BuildConfiguration.xml
+Registering project generator UnrealBuildTool.AndroidProjectGenerator for Android
+Skipping project file generator registration for Android due to no valid BuildPlatform.
+Registering project generator UnrealBuildTool.IOSProjectGenerator for IOS
+Skipping project file generator registration for IOS due to no valid BuildPlatform.
+Registering project generator UnrealBuildTool.LinuxProjectGenerator for Linux
+Skipping project file generator registration for Linux due to no valid BuildPlatform.
+Registering project generator UnrealBuildTool.LinuxProjectGenerator for LinuxArm64
+Skipping project file generator registration for LinuxArm64 due to no valid BuildPlatform.
+Registering project generator UnrealBuildTool.MacProjectGenerator for Mac
+Skipping project file generator registration for Mac due to no valid BuildPlatform.
+Registering project generator UnrealBuildTool.TVOSProjectGenerator for TVOS
+Skipping project file generator registration for TVOS due to no valid BuildPlatform.
+Registering project generator UnrealBuildTool.WindowsProjectGenerator for Win64
+Registering project generator UnrealBuildTool.VisionOSProjectGenerator for VisionOS
+Skipping project file generator registration for VisionOS due to no valid BuildPlatform.
+
+---   SDK INFO START   ---
+---   SDK INFO END   ---
+
+DMClient.uproject(0): error: JsonReaderException: '0xFF' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadFirstToken(Byte first)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter, Boolean allowDuplicateProperties)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonDocumentOptions options)
+   at EpicGames.Core.JsonObject.ParseUtf8File(String path)
+   at EpicGames.Core.JsonObject.Read(FileReference file)
+   at UnrealBuildTool.ProjectDescriptor.FromFile(FileReference FileName)Wrapped by JsonException: '0xFF' is an invalid start of a value. LineNumber: 0 | BytePositionInLine: 0. (in C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\DMClient.uproject)
+   at UnrealBuildTool.ProjectDescriptor.FromFile(FileReference FileName)
+   at UnrealBuildTool.ProjectFileGenerator..ctor(FileReference InOnlyGameProject, CSharpProjectCache InCSharpProjCache)
+   at UnrealBuildTool.GenerateProjectFilesMode.ExecuteAsync(CommandLineArguments Arguments, ILogger Logger)
+   at UnrealBuildTool.UnrealBuildTool.Main(String[] ArgumentsArray)
+WriteFileIfChanged() wrote 0 changed files of 2 requested writes.
+
+Timeline:
+[  0.000]  +0.563 Main
+   0.049          [  0.049]  +0.124 Apply XmlConfig
+   0.182          [  0.182]  +0.129 AddTelemetry
+   0.325          [  0.325]  +0.237 RegisterPlatforms
+[  0.563]  +0.557 <unknown>
+[  1.121]  +0.004 TelemetryService.FlushEvents
+[  1.126]
+
+Result: Failed (OtherCompilationError)
+Total execution time: 1.13 seconds

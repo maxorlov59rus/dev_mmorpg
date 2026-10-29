@@ -168,6 +168,7 @@ def suite_protocol() -> Suite:
         "DUEL_REQUEST": ["SMSG_DUEL_STARTED", "SMSG_DUEL_COMPLETE"],
         "DUEL_ACCEPT": ["SMSG_DUEL_STARTED"],
         "LFG_LEAVE": ["SMSG_LFG_QUEUE_STATE"],
+        "ZONE_MAP_REQUEST": ["SMSG_ZONE_MAP"],
     }
     missing = []
     for n in names:

@@ -8,13 +8,13 @@ public class DMClientEditorTarget : TargetRules
 	public DMClientEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V6;
+		DefaultBuildSettings = BuildSettingsVersion.V7;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
-		bUseUnity = false;
+		bUseUnityBuild = false;
 		CppStandard = CppStandardVersion.Cpp20;
 
 		// Пакетирование Android-билда из редактора (Cook + stage) — без лишних модулей.
-		BuildEnvironment = TargetBuildEnvironment.Unique;
+		// BuildEnvironment по умолчанию Shared (установленный движок не поддерживает Unique).
 
 		ExtraModuleNames.AddRange(new string[] { "DMClient", "DMClientEditor" });
 	}

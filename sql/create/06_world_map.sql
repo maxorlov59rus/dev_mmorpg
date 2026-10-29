@@ -11,7 +11,7 @@
 --                            1 Sanctuary / 2 Arena / 3 FFA
 --     (dm_world.pvp_zones — канон из PvE_PvP_Core.sql; здесь только дополнения
 --      ON DUPLICATE KEY UPDATE для новых зон карты, идемпотентно).
---   * SMSG_ZONE_MAP 0x204A отдаёт клиенту строки этого файла (join areatable +
+--   * SMSG_ZONE_MAP 0x204B отдаёт клиенту строки этого файла (join areatable +
 --     pvp_zones + graveyard_binding), см. proto/opcodes.defs v1.8.
 -- =============================================================================
 USE dm_world;

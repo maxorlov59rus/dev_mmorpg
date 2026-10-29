@@ -52,7 +52,6 @@ public:
     virtual void EndPlay(const EEndPlayReason::Type Reason) override;
 
     /** Вызывается из HandlePacket(SMSG_INITIALIZE_STATS): базовые статы перса. */
-    UFUNCTION(BlueprintCallable, Category = "MMO|Class")
     void UpdateStats(const FMMOInitializeStatsPacket &Stats);
 
     /** Вызывается из HandlePacket(SMSG_LEARN_SPELL). */
@@ -169,7 +168,6 @@ public:
 private:
 
 protected:
-    UFUNCTION()
     void HandleServerPacket(EMMOOpcode Opcode, const FMMOPacket &Packet);
 
     /** Класс модалки выбора специализации (BP-дочерний UUI_SpecSelectionWidget). */

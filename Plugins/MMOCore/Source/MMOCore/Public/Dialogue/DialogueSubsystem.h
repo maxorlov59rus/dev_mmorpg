@@ -88,7 +88,6 @@ public:
     virtual void Deinitialize() override;
 
     /** Инициализация после установки world-соединения MMONetworkClient. */
-    UFUNCTION(BlueprintCallable, Category = "MMO|Dialogue")
     void BindNetwork(FMMONetworkClientPtr InClient);
 
     /** Отправить CMSG_GOSSIP_HELLO (по тапу/наведению на NPC). */

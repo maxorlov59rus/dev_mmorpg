@@ -1,0 +1,13 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/experimental:deterministic
+/DEF
+/NAME:"UnrealEditor-DMClientEditor.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:/Users/Orel/AppData/Local/Cline/dev_mmorpg/Intermediate/Build/Win64/x64/DMClientEditor/Development/UnrealEd/SharedPCH.UnrealEd.Project.ValApi.ValExpApi.Cpp20.h.obj"
+"C:/Users/Orel/AppData/Local/Cline/dev_mmorpg/Intermediate/Build/Win64/x64/UnrealEditor/Development/DMClientEditor/DMClientEditor.cpp.obj"
+"C:/Users/Orel/AppData/Local/Cline/dev_mmorpg/Intermediate/Build/Win64/x64/UnrealEditor/Development/DMClientEditor/PerModuleInline.gen.cpp.obj"
+/OUT:"C:/Users/Orel/AppData/Local/Cline/dev_mmorpg/Intermediate/Build/Win64/x64/UnrealEditor/Development/DMClientEditor/UnrealEditor-DMClientEditor.lib"

@@ -1,0 +1,11 @@
+{
+	"SourceFiles": [
+		"C:\\Users\\Orel\\AppData\\Local\\Cline\\dev_mmorpg\\Source\\DMClientEditor\\DMClientEditor.Build.cs",
+		"C:\\Users\\Orel\\AppData\\Local\\Cline\\dev_mmorpg\\Source\\DMClient\\DMClient.Build.cs",
+		"C:\\Users\\Orel\\AppData\\Local\\Cline\\dev_mmorpg\\Plugins\\MMOCore\\Source\\MMOCoreEditor\\MMOCoreEditor.Build.cs",
+		"C:\\Users\\Orel\\AppData\\Local\\Cline\\dev_mmorpg\\Plugins\\MMOCore\\Source\\MMOCore\\MMOCore.Build.cs",
+		"C:\\Users\\Orel\\AppData\\Local\\Cline\\dev_mmorpg\\Source\\DMClient.Target.cs",
+		"C:\\Users\\Orel\\AppData\\Local\\Cline\\dev_mmorpg\\Source\\DMClientEditor.Target.cs"
+	],
+	"EngineVersion": "5.8.4"
+}

@@ -18,7 +18,8 @@
 
 /** Индексы слайдеров лица (стабильные ID! Не переиспользовать после релиза). */
 UENUM(BlueprintType)
-enum class EFaceSlider : uint16 {
+enum class EFaceSlider : uint8 {
+    None = 0 UMETA(Hidden),
     JawWidth = 1,
     JawProjection = 2,
     CheekboneHeight = 3,

@@ -22,7 +22,7 @@ static constexpr uint32 MMOCORE_HEADER_SIZE = sizeof(uint16) + sizeof(uint16); /
  * Таблица сообщений клиента/сервера. Нумерация — блок-ориентированная,
  * как в TrinityCore (MessageHash->Opcode): нижние байты = индекс внутри блока.
  */
-UENUM(BlueprintType)
+UENUM()
 enum class EMMOOpcode : uint16 {
     // ---- Connection / keepalive (0x000x) ----
     None = 0x0000 UMETA(DisplayName = "None"),
@@ -1357,7 +1357,9 @@ enum class EMMOZoneCategory : uint8 {
 };
 
 /** Одна запись снимка SMSG_ZONE_MAP 0x204B (строка v_zone_map_export). */
+USTRUCT(BlueprintType)
 struct FMMOZoneMapEntry {
+    GENERATED_BODY()
     uint16 MapId = 0;
     uint16 AreaId = 0;
     EMMOZoneCategory Category = EMMOZoneCategory::Unknown;

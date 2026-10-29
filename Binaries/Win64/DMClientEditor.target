@@ -1,0 +1,27 @@
+{
+	"TargetName": "DMClientEditor",
+	"Platform": "Win64",
+	"Configuration": "Development",
+	"BuildSettingsVersion": "V6",
+	"TargetBuildEnvironment": "Shared",
+	"TargetType": "Editor",
+	"IsTestTarget": false,
+	"Architecture": "x64",
+	"Project": "../../DMClient.uproject",
+	"Version": 
+	{
+		"MajorVersion": 5,
+		"MinorVersion": 8,
+		"PatchVersion": 4,
+		"Changelist": 58902052,
+		"CompatibleChangelist": 55116800,
+		"IsLicenseeVersion": 0,
+		"IsPromotedBuild": 0,
+		"BranchName": "++UE5+Release-5.8",
+		"BuildId": "55116800"
+	},
+	"BuildProducts": [
+	],
+	"RuntimeDependencies": [
+	]
+}

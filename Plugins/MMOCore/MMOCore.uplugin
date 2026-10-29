@@ -14,19 +14,30 @@
 			"Name": "MMOCore",
 			"Type": "Runtime",
 			"LoadingPhase": "PreDefault",
-			"WhitelistPlatforms": [ "Win64", "Android", "Linux" ]
+			"WhitelistPlatforms": [
+				"Win64",
+				"Android",
+				"Linux"
+			]
 		},
 		{
 			"Name": "MMOCoreEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default",
-			"WhitelistPlatforms": [ "Win64", "Linux" ]
+			"WhitelistPlatforms": [
+				"Win64",
+				"Linux"
+			]
 		}
 	],
 	"Plugins": [
 		{
 			"Name": "OnlineSubsystem",
 			"Enabled": false
+		},
+		{
+			"Name": "Niagara",
+			"Enabled": true
 		}
 	]
 }

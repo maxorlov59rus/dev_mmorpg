@@ -74,7 +74,6 @@ public:
     bool SubmitCreation(const FString &InName, uint8 InGender, uint8 InFaction);
 
     /** Колбэк сети (подписан на OnPacketReceived в NativeConstruct). */
-    UFUNCTION()
     void HandleServerPacket(EMMOOpcode Opcode, const FMMOPacket &Packet);
 
 protected:
