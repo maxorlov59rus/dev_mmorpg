@@ -30,7 +30,7 @@ bool TcpListener::Start() {
     addr.sin_family = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port = htons(m_port);
-    if (bind(m_listenFd, (sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR) {
+    if (bind(m_listenFd, (sockaddr *)&addr, sizeof(addr)) == SOCKET_ERROR) {
         std::cerr << "bind failed" << std::endl;
         closesocket(m_listenFd);
         WSACleanup();
@@ -57,10 +57,11 @@ void TcpListener::Stop() {
 }
 
 int TcpListener::Accept() {
-    if (!m_running) return -1;
+    if (!m_running)
+        return -1;
     sockaddr_in clientAddr{};
     int len = sizeof(clientAddr);
-    int clientFd = accept(m_listenFd, (sockaddr*)&clientAddr, &len);
+    int clientFd = accept(m_listenFd, (sockaddr *)&clientAddr, &len);
     return clientFd;
 }
 

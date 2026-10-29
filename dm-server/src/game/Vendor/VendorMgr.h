@@ -16,8 +16,10 @@ public:
     static VendorMgr &Instance();
     void LoadVendor(uint32_t npcGuid, const std::vector<VendorItem> &items);
     const std::vector<VendorItem> *GetVendorItems(uint32_t npcGuid) const;
-    bool CanBuy(uint32_t npcGuid, uint32_t itemId, uint8_t count, uint32_t playerMoney, uint8_t freeSlots) const;
-    bool BuyItem(uint32_t npcGuid, uint32_t itemId, uint8_t count, uint32_t &playerMoney, uint8_t &freeSlots);
+    bool CanBuy(uint32_t npcGuid, uint32_t itemId, uint8_t count, uint32_t playerMoney,
+                uint8_t freeSlots) const;
+    bool BuyItem(uint32_t npcGuid, uint32_t itemId, uint8_t count, uint32_t &playerMoney,
+                 uint8_t &freeSlots);
     bool CanSell(uint64_t itemGuid, uint8_t count, uint32_t &outPrice) const;
     bool SellItem(uint64_t itemGuid, uint8_t count, uint32_t &playerMoney);
 };

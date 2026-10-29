@@ -15,8 +15,8 @@ struct TradeState {
     uint32_t MoneyA{0};
     uint32_t MoneyB{0};
     // items stored as (itemId, count)
-    std::vector<std::pair<uint32_t,uint8_t>> ItemsA;
-    std::vector<std::pair<uint32_t,uint8_t>> ItemsB;
+    std::vector<std::pair<uint32_t, uint8_t>> ItemsA;
+    std::vector<std::pair<uint32_t, uint8_t>> ItemsB;
 };
 
 class TradeMgr {

@@ -13,17 +13,17 @@
 
 namespace dm {
 
-QuestLoader& QuestLoader::Instance() {
+QuestLoader &QuestLoader::Instance() {
     static QuestLoader inst;
     return inst;
 }
 
-bool QuestLoader::LoadFromDatabase(SqlSession* /*session*/) {
+bool QuestLoader::LoadFromDatabase(SqlSession * /*session*/) {
     // Пустой прогон без БД: оставляем детерминированный снимок для unit-теста ядра.
     if (!m_quests.empty())
         return true;
 
-    auto add = [this](uint32_t id, const char* title, uint8_t lo, uint8_t hi, uint32_t zone,
+    auto add = [this](uint32_t id, const char *title, uint8_t lo, uint8_t hi, uint32_t zone,
                       uint32_t nextQ, uint32_t prevQ, uint8_t type, uint8_t flags,
                       std::vector<QuestObjective> objs) {
         QuestData q;
@@ -71,40 +71,41 @@ bool QuestLoader::LoadFromDatabase(SqlSession* /*session*/) {
         {{1015, QuestObjectiveType::ItemGather, 0, 60002, 6, "Лунотрава"}});
 
     // Привязки NPC (npc_quest_giver)
-    struct Link { uint32_t Npc; uint32_t Quest; };
-    static constexpr Link kLinks[] = {
-        {70011, 1001}, {70011, 1002}, {70011, 1009}, {70011, 1013},
-        {70012, 1004}, {70012, 1005},
-        {70013, 1015}, {70014, 1014}, {70014, 1003},
-        {70015, 1010}, {70015, 1011}, {70015, 1012},
+    struct Link {
+        uint32_t Npc;
+        uint32_t Quest;
     };
-    for (const auto& l : kLinks)
+    static constexpr Link kLinks[] = {
+        {70011, 1001}, {70011, 1002}, {70011, 1009}, {70011, 1013}, {70012, 1004}, {70012, 1005},
+        {70013, 1015}, {70014, 1014}, {70014, 1003}, {70015, 1010}, {70015, 1011}, {70015, 1012},
+    };
+    for (const auto &l : kLinks)
         m_npcToQuests[l.Npc].push_back(l.Quest);
 
     return true;
 }
 
-const QuestData* QuestLoader::Find(uint32_t questId) const {
+const QuestData *QuestLoader::Find(uint32_t questId) const {
     auto it = m_quests.find(questId);
     return it == m_quests.end() ? nullptr : &it->second;
 }
 
-const std::vector<uint32_t>& QuestLoader::QuestIdsForNpc(uint32_t npcEntry) const {
+const std::vector<uint32_t> &QuestLoader::QuestIdsForNpc(uint32_t npcEntry) const {
     static const std::vector<uint32_t> kEmpty;
     auto it = m_npcToQuests.find(npcEntry);
     return it == m_npcToQuests.end() ? kEmpty : it->second;
 }
 
 uint32_t QuestLoader::ChainNext(uint32_t questId) const {
-    const QuestData* q = Find(questId);
+    const QuestData *q = Find(questId);
     return q ? q->NextQuestId : 0u;
 }
 
-bool QuestLoader::IsQuestObjectiveComplete(const PlayerQuestState& state, uint32_t questId) const {
-    const QuestData* q = Find(questId);
+bool QuestLoader::IsQuestObjectiveComplete(const PlayerQuestState &state, uint32_t questId) const {
+    const QuestData *q = Find(questId);
     if (!q || q->Id != state.QuestId)
         return false;
-    for (const auto& obj : q->Objectives) {
+    for (const auto &obj : q->Objectives) {
         if (obj.Index >= state.CountsPerObjective.size())
             return false;
         if (state.CountsPerObjective[obj.Index] < obj.RequiredCount)

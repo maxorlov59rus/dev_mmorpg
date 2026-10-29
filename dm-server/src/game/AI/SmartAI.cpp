@@ -230,7 +230,8 @@ void SmartAI::OnJustDied(Creature *me) {
         return;
     const uint32 textId = me->GetTemplate()->DeathTextID;
     if (textId != 0)
-        me->MonsterTextEmote(textId, me->GetVictim() ? me->GetVictim()->GetPlayer() : nullptr, true);
+        me->MonsterTextEmote(textId, me->GetVictim() ? me->GetVictim()->GetPlayer() : nullptr,
+                             true);
 }
 
 // -----------------------------------------------------------------

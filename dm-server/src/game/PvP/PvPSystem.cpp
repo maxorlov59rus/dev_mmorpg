@@ -79,7 +79,8 @@ bool PvPSystem::OnAttackPlayer(uint32_t attackerGuid, uint32_t victimGuid) {
     return true;
 }
 
-int32_t PvPSystem::ComputeRepPenalty(bool sameFaction, bool victimRenegade, bool victimFlagged) const {
+int32_t PvPSystem::ComputeRepPenalty(bool sameFaction, bool victimRenegade,
+                                     bool victimFlagged) const {
     // Ренегат: потерь нет (контракт ReputationMgr «при убийстве ренегата обе
     // фракции не теряют репутацию»). Враг фракции: без штрафа. Софракцион
     // флагнутый (честный PvP): без штрафа. Софракцион без флага: штраф.
@@ -89,9 +90,10 @@ int32_t PvPSystem::ComputeRepPenalty(bool sameFaction, bool victimRenegade, bool
 }
 
 PvPSystem::KillOutcome PvPSystem::OnPlayerKilledPlayer(uint32_t killerGuid, uint32_t victimGuid,
-                                                       uint16_t mapId, uint16_t areaId, bool sameFaction,
-                                                       bool victimRenegade, bool victimFlagged,
-                                                       uint8_t killerLevel, uint8_t victimLevel) {
+                                                       uint16_t mapId, uint16_t areaId,
+                                                       bool sameFaction, bool victimRenegade,
+                                                       bool victimFlagged, uint8_t killerLevel,
+                                                       uint8_t victimLevel) {
     KillOutcome o;
     o.repDelta = ComputeRepPenalty(sameFaction, victimRenegade, victimFlagged);
 
@@ -171,13 +173,12 @@ uint16_t PvPSystem::GetPlayerFaction(uint32_t guid) const {
     return it == m_factions.end() ? 0 : it->second;
 }
 
-
-
 bool PvPSystem::CanAttack(uint32_t attackerGuid, uint32_t victimGuid) const {
     // Интеграция с межфракционными отношениями
     uint16_t afFaction = GetPlayerFaction(attackerGuid);
     uint16_t vfFaction = GetPlayerFaction(victimGuid);
-    if (afFaction != 0 && vfFaction != 0 && !dm::FactionRelationMgr::Instance().CanAttack(afFaction, vfFaction))
+    if (afFaction != 0 && vfFaction != 0 &&
+        !dm::FactionRelationMgr::Instance().CanAttack(afFaction, vfFaction))
         return false;
 
     uint16_t vf = GetFlags(victimGuid);
@@ -192,7 +193,6 @@ bool PvPSystem::CanAttack(uint32_t attackerGuid, uint32_t victimGuid) const {
         return true; // дуэлянты бьют только друг друга (проверка пары выше)
     return (af & PVP_FLAGGED) != 0;
 }
-
 
 uint8_t PvPSystem::GetWantedForSql(uint32_t guid) const {
     auto it = m_wanted.find(guid);
@@ -218,7 +218,8 @@ std::string PvPSystem::BuildKillLogSql(const KillOutcome &o, uint32_t killer, ui
     char buf[512];
     std::snprintf(buf, sizeof(buf),
                   "INSERT INTO dm_world.pvp_kills_log"
-                  " (killer_guid,victim_guid,map_id,area_id,zone_ruleset,rep_delta,honor_gain,dishonored,timestamp)"
+                  " (killer_guid,victim_guid,map_id,area_id,zone_ruleset,rep_delta,honor_gain,"
+                  "dishonored,timestamp)"
                   " VALUES (%u,%u,%u,%u,%u,%d,%u,%u,%u)",
                   killer, victim, mapId, areaId, unsigned(ruleset), int(o.repDelta),
                   unsigned(o.honorGain), unsigned(o.dishonored ? 1u : 0u), ts);

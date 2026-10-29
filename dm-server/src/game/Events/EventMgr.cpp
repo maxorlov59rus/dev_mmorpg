@@ -16,7 +16,8 @@ void EventMgr::LoadEvent(const WorldEvent &ev) {
 
 WorldEvent *EventMgr::GetEvent(uint32_t eventId) {
     auto it = s_events.find(eventId);
-    if (it == s_events.end()) return nullptr;
+    if (it == s_events.end())
+        return nullptr;
     return &it->second;
 }
 
@@ -31,7 +32,8 @@ void EventMgr::ScheduleEvent(uint32_t eventId, uint64_t startTime, uint64_t endT
 void EventMgr::UpdateEvents(uint64_t currentTime) {
     for (auto &kv : s_events) {
         WorldEvent &ev = kv.second;
-        if (!ev.Active && ev.StartTime > 0 && currentTime >= ev.StartTime && currentTime <= ev.EndTime) {
+        if (!ev.Active && ev.StartTime > 0 && currentTime >= ev.StartTime &&
+            currentTime <= ev.EndTime) {
             StartEvent(ev.EventId);
         }
         if (ev.Active && ev.EndTime > 0 && currentTime > ev.EndTime) {
@@ -42,18 +44,21 @@ void EventMgr::UpdateEvents(uint64_t currentTime) {
 
 void EventMgr::StartEvent(uint32_t eventId) {
     WorldEvent *ev = GetEvent(eventId);
-    if (ev) ev->Active = true;
+    if (ev)
+        ev->Active = true;
 }
 
 void EventMgr::StopEvent(uint32_t eventId) {
     WorldEvent *ev = GetEvent(eventId);
-    if (ev) ev->Active = false;
+    if (ev)
+        ev->Active = false;
 }
 
 std::vector<WorldEvent> EventMgr::GetActiveEvents() const {
     std::vector<WorldEvent> res;
     for (const auto &kv : s_events) {
-        if (kv.second.Active) res.push_back(kv.second);
+        if (kv.second.Active)
+            res.push_back(kv.second);
     }
     return res;
 }

@@ -6,7 +6,11 @@
 namespace dm {
 class Unit {
 public:
-    Player *GetPlayer() { return nullptr; }
-    uint16_t GetFactionId() const { return 0; }
+    Player *GetPlayer() {
+        return nullptr;
+    }
+    uint16_t GetFactionId() const {
+        return 0;
+    }
 };
 } // namespace dm

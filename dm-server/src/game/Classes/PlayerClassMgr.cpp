@@ -52,9 +52,9 @@ bool PlayerClassMgr::loadFromDb() {
     // sql/upgrades/Create_Class_Database.sql — golden-data тест CI сравнивает
     // обе стороны и не даёт им разойтись): --------------------------------
     _restrictions = {
-        {CLASS_WARLOCK, RACE_HUMAN, 2},       // Чернокнижник закрыт людям, только Круг Поглощения
-        {CLASS_WARLOCK, RACE_LUMENAR, 2},     // ...и светорождённым
-        {CLASS_PRIEST, RACE_ASHEN, 0},        // Жрец не играет за Орден Пепла
+        {CLASS_WARLOCK, RACE_HUMAN, 2},   // Чернокнижник закрыт людям, только Круг Поглощения
+        {CLASS_WARLOCK, RACE_LUMENAR, 2}, // ...и светорождённым
+        {CLASS_PRIEST, RACE_ASHEN, 0},    // Жрец не играет за Орден Пепла
         {CLASS_PRIEST, RACE_HOLLOWED, 0},
     };
 
@@ -63,7 +63,9 @@ bool PlayerClassMgr::loadFromDb() {
         _statsRows.push_back(st);
     };
     // Воин (плита, сила) — люди/пепельные
-    addStats(RACE_HUMAN, CLASS_WARRIOR, 1, {/*str*/ 22, /*agi*/ 12, /*sta*/ 20, /*int*/ 6, /*spi*/ 8, /*hp*/ 120, /*pow(rage cap)*/ 100, /*armor*/ 90, /*sp*/ 0});
+    addStats(RACE_HUMAN, CLASS_WARRIOR, 1,
+             {/*str*/ 22, /*agi*/ 12, /*sta*/ 20, /*int*/ 6, /*spi*/ 8, /*hp*/ 120,
+              /*pow(rage cap)*/ 100, /*armor*/ 90, /*sp*/ 0});
     addStats(RACE_ASHEN, CLASS_WARRIOR, 1, {24, 11, 21, 5, 7, 126, 100, 92, 0});
     addStats(RACE_HUMAN, CLASS_WARRIOR, 5, {34, 18, 31, 9, 12, 210, 100, 140, 0});
     // Маг (ткань, интеллект)
@@ -76,27 +78,32 @@ bool PlayerClassMgr::loadFromDb() {
     addStats(RACE_ASHEN, CLASS_ROGUE, 5, {18, 38, 22, 12, 14, 158, 100, 84, 0});
 
     _spells = {
-        {CLASS_WARRIOR, 1, 100 /*Удар (Heroic Strike)*/},
-        {CLASS_WARRIOR, 1, 78 /*Уклонение*/},
-        {CLASS_WARRIOR, 4, 116 /*Рывок (Charge)*/},
-        {CLASS_MAGE, 1, 133 /*Огненная стрела*/},
-        {CLASS_MAGE, 1, 44008 /*Полёт камня (binding)*/},
-        {CLASS_MAGE, 4, 122 /*Ледяная буря*/},
-        {CLASS_ROGUE, 1, 1752 /*Удар в спину*/},
-        {CLASS_ROGUE, 1, 2983 /*Скрытность*/},
+        {CLASS_WARRIOR, 1, 100 /*Удар (Heroic Strike)*/}, {CLASS_WARRIOR, 1, 78 /*Уклонение*/},
+        {CLASS_WARRIOR, 4, 116 /*Рывок (Charge)*/},       {CLASS_MAGE, 1, 133 /*Огненная стрела*/},
+        {CLASS_MAGE, 1, 44008 /*Полёт камня (binding)*/}, {CLASS_MAGE, 4, 122 /*Ледяная буря*/},
+        {CLASS_ROGUE, 1, 1752 /*Удар в спину*/},          {CLASS_ROGUE, 1, 2983 /*Скрытность*/},
         {CLASS_ROGUE, 4, 53 /*Полоса удушения*/},
     };
 
     _specs = {
-        {SPEC_WAR_SIEGE, CLASS_WARRIOR, "Осадный", "Сила разрушения: замедляющие удары по щитам, бонус к Strength-кастам.", 1},
-        {SPEC_WAR_VANGUARD, CLASS_WARRIOR, "Авангард", "Стена щитов: угроза, блок, временные HP от Порчи.", 3},
-        {SPEC_WAR_DUELIST, CLASS_WARRIOR, "Дуэлянт", "Клинок и стойка: крит от Agility, контрудары.", 2},
-        {SPEC_MAGE_FROST, CLASS_MAGE, "Мороз", "Ледяные кристаллы Niagara: заморозка, каст сквозь контроль.", 4},
-        {SPEC_MAGE_SEEPAGE, CLASS_MAGE, "Истечения", "Школа Чёрной Материи: DoT-вены, рост урона с Corruption.", 4},
-        {SPEC_MAGE_LIGHT, CLASS_MAGE, "Свет", "Священные мотыльки: лечение союзников, изгнание Полых.", 4},
-        {SPEC_ROG_SHADOW, CLASS_ROGUE, "Тень", "Afterimage при спринте: урон из стелса, энергия за убийства.", 2},
-        {SPEC_ROG_ALTRUIST, CLASS_ROGUE, "Послушник", "Яды и расходники: отравления, антидоты, торговля на чёрном рынке.", 2},
-        {SPEC_ROG_GATE, CLASS_ROGUE, "Порожник", "Портальные кувырки: рывки через Истечения ЧМ.", 2},
+        {SPEC_WAR_SIEGE, CLASS_WARRIOR, "Осадный",
+         "Сила разрушения: замедляющие удары по щитам, бонус к Strength-кастам.", 1},
+        {SPEC_WAR_VANGUARD, CLASS_WARRIOR, "Авангард",
+         "Стена щитов: угроза, блок, временные HP от Порчи.", 3},
+        {SPEC_WAR_DUELIST, CLASS_WARRIOR, "Дуэлянт",
+         "Клинок и стойка: крит от Agility, контрудары.", 2},
+        {SPEC_MAGE_FROST, CLASS_MAGE, "Мороз",
+         "Ледяные кристаллы Niagara: заморозка, каст сквозь контроль.", 4},
+        {SPEC_MAGE_SEEPAGE, CLASS_MAGE, "Истечения",
+         "Школа Чёрной Материи: DoT-вены, рост урона с Corruption.", 4},
+        {SPEC_MAGE_LIGHT, CLASS_MAGE, "Свет",
+         "Священные мотыльки: лечение союзников, изгнание Полых.", 4},
+        {SPEC_ROG_SHADOW, CLASS_ROGUE, "Тень",
+         "Afterimage при спринте: урон из стелса, энергия за убийства.", 2},
+        {SPEC_ROG_ALTRUIST, CLASS_ROGUE, "Послушник",
+         "Яды и расходники: отравления, антидоты, торговля на чёрном рынке.", 2},
+        {SPEC_ROG_GATE, CLASS_ROGUE, "Порожник", "Портальные кувырки: рывки через Истечения ЧМ.",
+         2},
     };
 
     // Строим inverse-маску: по умолчанию всё разрешено, restrictions выключают биты.
@@ -127,7 +134,8 @@ bool PlayerClassMgr::SpecBelongsToClass(uint8 specId, uint8 classId) const {
     return s && s->classId == classId;
 }
 
-ClassCheckResult PlayerClassMgr::ValidateCreation(uint8 raceId, uint8 classId, uint8 factionId, uint8 specId) const {
+ClassCheckResult PlayerClassMgr::ValidateCreation(uint8 raceId, uint8 classId, uint8 factionId,
+                                                  uint8 specId) const {
     if (raceId == 0 || raceId >= RACE_COUNT)
         return ClassCheckResult::InvalidRace;
     if (classId == 0 || classId >= CLASS_COUNT)
@@ -137,7 +145,8 @@ ClassCheckResult PlayerClassMgr::ValidateCreation(uint8 raceId, uint8 classId, u
 
     // Faction-bound классы: строки restrictions с required_faction != 0.
     for (const auto &r : _restrictions)
-        if (r.classId == classId && r.requiredFaction != 0 && factionId != 0 && factionId != r.requiredFaction)
+        if (r.classId == classId && r.requiredFaction != 0 && factionId != 0 &&
+            factionId != r.requiredFaction)
             return ClassCheckResult::FactionMismatch;
 
     // SpecID обязателен для классов со спеками (воин/маг/разбойник), M0.
@@ -175,7 +184,8 @@ std::vector<uint8> PlayerClassMgr::GetAllowedRacesForClass(uint8 classId) const 
 // Стартовые статы                                                    //
 // ------------------------------------------------------------------ //
 
-bool PlayerClassMgr::GetStartStats(uint8 raceId, uint8 classId, uint8 level, StartStats &out) const {
+bool PlayerClassMgr::GetStartStats(uint8 raceId, uint8 classId, uint8 level,
+                                   StartStats &out) const {
     // TRC хранит только 1-й уровень + пересчёт на уровень; здесь — прямые строки
     // на каждый запрошенный уровень (design-таблица заполняет SQL-файл).
     for (size_t i = 0; i < _statsKeys.size(); ++i) {
@@ -283,10 +293,12 @@ namespace ClassHooks {
 
 class CharacterHandler; // fwd — реальный тип появится с handlers/CharacterCreateHandler.h
 
-void OnValidateCharacter(CharacterHandler &handler, uint8 race, uint8 classId, uint8 faction, uint8 spec) {
+void OnValidateCharacter(CharacterHandler &handler, uint8 race, uint8 classId, uint8 faction,
+                         uint8 spec) {
     // Вызывается из CharacterCreateHandler ДО записи в БД (docs charcreate §2).
     // При != Ok handler отвечает SMSG_CHAR_CREATE_ERROR{reason}.
-    ClassCheckResult res = PlayerClassMgr::instance().ValidateCreation(race, classId, faction, spec);
+    ClassCheckResult res =
+        PlayerClassMgr::instance().ValidateCreation(race, classId, faction, spec);
     if (res != ClassCheckResult::Ok) {
         // TODO(KERNEL): handler.Reject(ECharCreateError::ClassForbidden /* маппинг res */);
         (void)handler;

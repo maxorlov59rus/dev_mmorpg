@@ -7,4 +7,3 @@ public:
     void KilledCreature(uint32_t entry, int count) {}
 };
 } // namespace dm
-

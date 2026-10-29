@@ -11,4 +11,3 @@ enum Opcodes : uint16_t {
 } // namespace protocol
 } // namespace shared
 } // namespace dm
-

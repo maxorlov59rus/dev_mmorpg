@@ -102,11 +102,11 @@ struct ClassSpecInfo {
 enum class ClassCheckResult : uint8_t {
     Ok = 0,
     InvalidRace = 1,
-    InvalidClass = 2,          // class == 0 или >= CLASS_COUNT
-    RaceClassForbidden = 3,    // class_restrictions (например Warlock×Human)
-    FactionMismatch = 4,       // класс требует фракцию (Warlock — только Круг)
-    InvalidSpec = 5,           // SpecID не принадлежит ClassID
-    LevelStatsMissing = 6,     // нет строки playercreateinfo_classlevelstats
+    InvalidClass = 2,       // class == 0 или >= CLASS_COUNT
+    RaceClassForbidden = 3, // class_restrictions (например Warlock×Human)
+    FactionMismatch = 4,    // класс требует фракцию (Warlock — только Круг)
+    InvalidSpec = 5,        // SpecID не принадлежит ClassID
+    LevelStatsMissing = 6,  // нет строки playercreateinfo_classlevelstats
 };
 
 constexpr std::string_view ToString(ClassCheckResult r) {
@@ -141,7 +141,8 @@ public:
     // Проверка разрешённости связки race×class (класс-таблица + restrictions).
     bool CanCreateClass(uint8 raceId, uint8 classId) const;
     // Полный предпроверочный прогон для CMSG_CHAR_CREATE (включая spec/faction).
-    ClassCheckResult ValidateCreation(uint8 raceId, uint8 classId, uint8 factionId, uint8 specId) const;
+    ClassCheckResult ValidateCreation(uint8 raceId, uint8 classId, uint8 factionId,
+                                      uint8 specId) const;
     // Список классов, доступных расе (для UI_CharacterCreate: блокировка кнопок).
     std::vector<uint8> GetAllowedClassesForRace(uint8 raceId) const;
     // Список рас, доступных классу (обратный фильтр при выборе класса первым).
@@ -199,7 +200,8 @@ private:
 // Реализация вызывает singleton; сигнатуры совпадают с Eluna-style реестром
 // dm-server/scripts/lua/LuaRacialSystem.lua (общий паттерн подклассов).
 namespace ClassHooks {
-void OnValidateCharacter(class CharacterHandler &handler, uint8 race, uint8 classId, uint8 faction, uint8 spec);
+void OnValidateCharacter(class CharacterHandler &handler, uint8 race, uint8 classId, uint8 faction,
+                         uint8 spec);
 void OnFirstLogin(Player *player); // ApplyStartStats + LearnDefaultSpells + SMSG_INITIALIZE_STATS
 void OnLevelChanged(Player *player, uint8 oldLevel, uint8 newLevel);
 } // namespace ClassHooks

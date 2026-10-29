@@ -9,7 +9,11 @@ public:
 };
 class Player {
 public:
-    bool IsRenegate() const { return false; }
-    QuestMgr *GetQuestMgr() { return nullptr; }
+    bool IsRenegate() const {
+        return false;
+    }
+    QuestMgr *GetQuestMgr() {
+        return nullptr;
+    }
 };
 } // namespace dm

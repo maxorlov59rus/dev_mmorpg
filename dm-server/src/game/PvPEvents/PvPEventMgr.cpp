@@ -19,7 +19,8 @@ void PvPEventMgr::LoadEvent(const PvPEvent &ev) {
 
 PvPEvent *PvPEventMgr::GetEvent(uint32_t eventId) {
     auto it = s_events.find(eventId);
-    if (it == s_events.end()) return nullptr;
+    if (it == s_events.end())
+        return nullptr;
     return &it->second;
 }
 
@@ -32,7 +33,8 @@ std::vector<PvPEvent> PvPEventMgr::GetAvailableEvents(uint8_t playerLevel) const
     return res;
 }
 
-uint32_t PvPEventMgr::JoinEvent(uint32_t eventId, uint64_t playerGuid, uint8_t level, uint32_t rating) {
+uint32_t PvPEventMgr::JoinEvent(uint32_t eventId, uint64_t playerGuid, uint8_t level,
+                                uint32_t rating) {
     PvPParticipant p;
     p.Guid = playerGuid;
     p.Level = level;
@@ -43,23 +45,31 @@ uint32_t PvPEventMgr::JoinEvent(uint32_t eventId, uint64_t playerGuid, uint8_t l
 
 void PvPEventMgr::LeaveEvent(uint32_t eventId, uint64_t playerGuid) {
     auto it = s_participants.find(eventId);
-    if (it == s_participants.end()) return;
+    if (it == s_participants.end())
+        return;
     auto &vec = it->second;
-    vec.erase(std::remove_if(vec.begin(), vec.end(), [playerGuid](const PvPParticipant &p) { return p.Guid == playerGuid; }), vec.end());
+    vec.erase(
+        std::remove_if(vec.begin(), vec.end(),
+                       [playerGuid](const PvPParticipant &p) { return p.Guid == playerGuid; }),
+        vec.end());
 }
 
 std::vector<uint64_t> PvPEventMgr::GetParticipants(uint32_t eventId) const {
     std::vector<uint64_t> res;
     auto it = s_participants.find(eventId);
-    if (it == s_participants.end()) return res;
-    for (const auto &p : it->second) res.push_back(p.Guid);
+    if (it == s_participants.end())
+        return res;
+    for (const auto &p : it->second)
+        res.push_back(p.Guid);
     return res;
 }
 
-std::vector<uint64_t> PvPEventMgr::Matchmaking(uint32_t eventId, uint8_t playerLevel, uint32_t rating) {
+std::vector<uint64_t> PvPEventMgr::Matchmaking(uint32_t eventId, uint8_t playerLevel,
+                                               uint32_t rating) {
     std::vector<uint64_t> result;
     auto it = s_participants.find(eventId);
-    if (it == s_participants.end()) return result;
+    if (it == s_participants.end())
+        return result;
     for (const auto &p : it->second) {
         if (std::abs((int)p.Level - (int)playerLevel) <= 2 &&
             std::abs((int)p.Rating - (int)rating) <= 200) {

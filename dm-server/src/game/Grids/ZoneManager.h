@@ -60,7 +60,9 @@ public:
     void LoadTeleports(const std::vector<FAreaTriggerTeleport> &rows);
 
     const FZoneInfo *FindZone(uint16_t mapId, uint16_t areaId) const;
-    uint32_t ZoneKey(uint16_t mapId, uint16_t areaId) const { return (uint32_t(mapId) << 16) | areaId; }
+    uint32_t ZoneKey(uint16_t mapId, uint16_t areaId) const {
+        return (uint32_t(mapId) << 16) | areaId;
+    }
 
     /// Хук перемещения игрока (MapServer::MovePlayer / teleport). Возвращает true,
     /// если зона реально сменилась. Внутри:
@@ -83,7 +85,9 @@ public:
     /// Один апдейт для SMSG_ZONE_UPDATE 0x204C.
     std::string BuildZoneUpdatePacket(uint16_t mapId, uint16_t areaId) const;
 
-    size_t ZoneCount() const { return m_zones.size(); }
+    size_t ZoneCount() const {
+        return m_zones.size();
+    }
 
 private:
     ZoneManager() = default;

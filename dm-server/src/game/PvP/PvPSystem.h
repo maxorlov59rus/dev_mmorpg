@@ -13,18 +13,18 @@ namespace dm {
 /// Битовая маска PvP-флагов. СЕРВЕР — источник истины; клиент только рендерит.
 /// Синхронизировано с sql/upgrades/PvE_PvP_Core.sql (character_flags.pvp_flags).
 enum PvpFlags : uint16_t {
-    PVP_FLAGGED   = 1u << 0, // ручной/по атаке флаг, таймер авто-снятия
-    FFA           = 1u << 1, // зона «Ржавые пустоши»: все атакуемы
-    IN_SANCTUARY  = 1u << 2, // город: атаки запрещены
-    DUELING       = 1u << 3, // активная дуэль
-    WANTED        = 1u << 4, // PvP Bounty (wanted_level > 0)
-    DISHONORED    = 1u << 5, // запрет вступать в группы (Dishonorable Death)
+    PVP_FLAGGED = 1u << 0,  // ручной/по атаке флаг, таймер авто-снятия
+    FFA = 1u << 1,          // зона «Ржавые пустоши»: все атакуемы
+    IN_SANCTUARY = 1u << 2, // город: атаки запрещены
+    DUELING = 1u << 3,      // активная дуэль
+    WANTED = 1u << 4,       // PvP Bounty (wanted_level > 0)
+    DISHONORED = 1u << 5,   // запрет вступать в группы (Dishonorable Death)
 };
 
 enum ZoneRuleSet : uint8_t {
     RULESET_SANCTUARY = 1,
-    RULESET_ARENA     = 2,
-    RULESET_FFA       = 3,
+    RULESET_ARENA = 2,
+    RULESET_FFA = 3,
 };
 
 struct PvpZoneInfo {
@@ -47,12 +47,12 @@ struct DuelState {
 
 /// Таймауты/пороги — единый баланс-контракт с клиентом (CombatHUD 6с декей).
 struct PvpConfig {
-    uint32_t combatTimeoutSec = 6;      // SMSG_COMBAT_STATE: снятие флага через 6с после последнего хита
-    uint32_t flagMinDurationSec = 15;   // флаг не снимается раньше этого срока (анти-чит-отрицание)
-    uint32_t dishonorLevelGap = 10;     // victim слабее на >10 ур -> Dishonorable
+    uint32_t combatTimeoutSec = 6; // SMSG_COMBAT_STATE: снятие флага через 6с после последнего хита
+    uint32_t flagMinDurationSec = 15; // флаг не снимается раньше этого срока (анти-чит-отрицание)
+    uint32_t dishonorLevelGap = 10;   // victim слабее на >10 ур -> Dishonorable
     uint32_t dishonorGroupBanSec = 7200;
-    uint32_t wantedKillsNoDeath = 5;    // 5 убийств без смерти -> +1 wanted level (cap 5)
-    int32_t repLossSameFaction = -75;   // убийство софракциона без флага
+    uint32_t wantedKillsNoDeath = 5;  // 5 убийств без смерти -> +1 wanted level (cap 5)
+    int32_t repLossSameFaction = -75; // убийство софракциона без флага
     int32_t honorBaseKill = 100;
 };
 
@@ -61,7 +61,6 @@ public:
     static PvPSystem &Instance();
     void SetPlayerFaction(uint32_t guid, uint16_t faction);
     uint16_t GetPlayerFaction(uint32_t guid) const;
-
 
     /// Загрузка pvp_zones из dm_world (SELECT * FROM pvp_zones).
     /// Вызывается при старте mapserver/worldserver.
@@ -97,7 +96,8 @@ public:
     // --- Дуэли ---
     uint64_t DuelRequest(uint32_t initiator, uint32_t target); // CMSG_DUEL_REQUEST 0x2043
     bool DuelAccept(uint64_t duelId, bool accept);             // CMSG_DUEL_ACCEPT 0x2045
-    void DuelComplete(uint64_t duelId, uint32_t winnerGuid, uint8_t reason); // 0 killed 1 cancel 2 timeout
+    void DuelComplete(uint64_t duelId, uint32_t winnerGuid,
+                      uint8_t reason); // 0 killed 1 cancel 2 timeout
 
     // --- Проверки для ядра (используется MapServer/Combat) ---
     bool CanAttack(uint32_t attackerGuid, uint32_t victimGuid) const;
@@ -115,7 +115,9 @@ public:
                                 uint16_t mapId, uint16_t areaId, uint8_t ruleset,
                                 uint32_t ts) const;
 
-    const PvpConfig &Config() const { return m_cfg; }
+    const PvpConfig &Config() const {
+        return m_cfg;
+    }
 
 private:
     PvPSystem() = default;

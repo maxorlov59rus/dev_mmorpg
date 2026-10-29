@@ -3,6 +3,6 @@
 namespace dm {
 class World {
 public:
-    static World& Instance();
+    static World &Instance();
 };
 } // namespace dm

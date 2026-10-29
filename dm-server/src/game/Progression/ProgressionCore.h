@@ -28,12 +28,12 @@ using uint64 = std::uint64_t;
 namespace DM {
 
 // ---- Масштабы проекта (docs/09 §0) ----
-inline constexpr uint8 MAX_PLAYER_LEVEL = 95;         // кап игрока
-inline constexpr uint8 MAX_CREATURE_LEVEL = 100;      // кап мобов
-inline constexpr uint8 TALENT_UNLOCK_LEVEL = 10;      // 1 очко таланта начиная с L10
+inline constexpr uint8 MAX_PLAYER_LEVEL = 95;    // кап игрока
+inline constexpr uint8 MAX_CREATURE_LEVEL = 100; // кап мобов
+inline constexpr uint8 TALENT_UNLOCK_LEVEL = 10; // 1 очко таланта начиная с L10
 inline constexpr uint16 TOTAL_TALENT_POINTS = MAX_PLAYER_LEVEL - TALENT_UNLOCK_LEVEL + 1; // 86
-inline constexpr uint8 PRESTIGE_MIN_LEVEL = 91;       // Row7: 3 очка за 1 талант
-inline constexpr uint8 CLASS_COUNT_MAX = 7;           // контракт с PlayerClassMgr::CLASS_COUNT
+inline constexpr uint8 PRESTIGE_MIN_LEVEL = 91; // Row7: 3 очка за 1 талант
+inline constexpr uint8 CLASS_COUNT_MAX = 7;     // контракт с PlayerClassMgr::CLASS_COUNT
 
 // ---- Fixed-point helpers (Q16 / Q8) ----
 namespace fx {
@@ -74,25 +74,26 @@ enum ItemTier : uint8_t {
 
 // ---- Таблица роста: ClassBase + GrowthRate по классам ----
 struct ClassGrowthProfile {
-    std::array<uint32, STAT_COUNT> Base{};      // статы на L1 (до расового бонуса)
+    std::array<uint32, STAT_COUNT> Base{};       // статы на L1 (до расового бонуса)
     std::array<int32_t, STAT_COUNT> GrowthQ16{}; // прирост за уровень, Q16
     uint8 Power{1};                              // PowerType из PlayerClassMgr (Mana=1)
 };
 
 class ProgressionCore {
 public:
-    static const ProgressionCore& Instance();
+    static const ProgressionCore &Instance();
 
     // ---------- Артефакт 1: базовые статы ----------
     // BaseStat = ClassBase + RaceBonus + floor((Level-1) * GrowthQ16 / 65536)
-    uint32 ComputeBaseStat(uint8 classId, const std::array<uint32, STAT_COUNT>& raceBonus,
+    uint32 ComputeBaseStat(uint8 classId, const std::array<uint32, STAT_COUNT> &raceBonus,
                            StatType stat, uint8 level) const;
 
     // Полный снапшот базовых статов уровня (SMSG_INITIALIZE_STATS / пересчет)
-    std::array<uint32, STAT_COUNT> ComputeLevelStats(
-        uint8 classId, const std::array<uint32, STAT_COUNT>& raceBonus, uint8 level) const;
+    std::array<uint32, STAT_COUNT>
+    ComputeLevelStats(uint8 classId, const std::array<uint32, STAT_COUNT> &raceBonus,
+                      uint8 level) const;
 
-    const ClassGrowthProfile& GetClassProfile(uint8 classId) const;
+    const ClassGrowthProfile &GetClassProfile(uint8 classId) const;
 
     // ---------- Вторичные статы: DR-кривая ----------
     // StatValue% = Coeff * log10(1 + Points); возврат в Q8 (1250 => 4.88%).
@@ -106,12 +107,14 @@ public:
     DerivedFromGear DeriveFromAgility(uint32 agility, uint32 critRating) const;
 
     // ---------- Кривая опыта ----------
-    uint64 XpToNext(uint8 level) const;    // XP для перехода Level -> Level+1
+    uint64 XpToNext(uint8 level) const;     // XP для перехода Level -> Level+1
     uint64 XpCumulative(uint8 level) const; // всего XP, чтобы ДОЙТИ до level
 
     // ---------- Экипировка: ilvl-бюджет ----------
-    static uint32 ArmorBudget(uint32 ilvl) { return ilvl * 6 / 5; } // ilvl*1.2
-    static uint32 WeaponDpsQ8(uint32 ilvl)                          // DPS=int(ilvl*0.8), Q8
+    static uint32 ArmorBudget(uint32 ilvl) {
+        return ilvl * 6 / 5;
+    }                                      // ilvl*1.2
+    static uint32 WeaponDpsQ8(uint32 ilvl) // DPS=int(ilvl*0.8), Q8
     {
         return (ilvl * 4 / 5) * static_cast<uint32>(fx::Q8_SCALE);
     }
@@ -121,7 +124,9 @@ public:
     // Tier предмета по ilvl (генерация лута, валидация vendor'ов)
     static ItemTier TierForItemLevel(uint32 ilvl);
 
-    bool IsValidLevel(uint8 level) const { return level >= 1 && level <= MAX_PLAYER_LEVEL; }
+    bool IsValidLevel(uint8 level) const {
+        return level >= 1 && level <= MAX_PLAYER_LEVEL;
+    }
 
 private:
     ProgressionCore();
@@ -151,6 +156,6 @@ struct TalentNodeRef {
 };
 
 // Стоимость вложения: Row7 prestige = 3 очка за 1 ранг, иначе 1.
-uint8 TalentPointCost(const TalentNodeRef& node);
+uint8 TalentPointCost(const TalentNodeRef &node);
 
 } // namespace DM

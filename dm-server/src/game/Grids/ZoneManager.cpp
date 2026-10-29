@@ -15,7 +15,9 @@ void AppendU16(std::string &b, uint16_t v) {
     b.push_back(char(v & 0xFF));
     b.push_back(char((v >> 8) & 0xFF));
 }
-void AppendU8(std::string &b, uint8_t v) { b.push_back(char(v)); }
+void AppendU8(std::string &b, uint8_t v) {
+    b.push_back(char(v));
+}
 
 } // namespace
 
