@@ -1,0 +1,16 @@
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\auth\SRPAuth.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\SRPAuth.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\PacketFraming.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\PacketFraming.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\TcpListener.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\TcpListener.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\CreatureAI.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\CreatureAI.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Classes\PlayerClassMgr.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\PlayerClassMgr.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Entities\CharacterHooks.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\CharacterHooks.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Events\EventMgr.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\EventMgr.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Factions\FactionRelationMgr.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\FactionRelationMgr.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Grids\ZoneManager.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\ZoneManager.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\EquipmentMgr.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\EquipmentMgr.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\ItemTemplate.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\ItemTemplate.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Progression\ProgressionCore.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\ProgressionCore.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\PvPSystem.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\PvPSystem.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvPEvents\PvPEventMgr.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\PvPEventMgr.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestLoader.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\QuestLoader.obj
+C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\main.cpp;C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\build\dm_server.dir\Debug\main.obj

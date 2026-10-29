@@ -1,0 +1,51 @@
+#include "game/Trade/TradeMgr.h"
+#include <unordered_map>
+
+namespace dm {
+
+TradeMgr &TradeMgr::Instance() {
+    static TradeMgr inst;
+    return inst;
+}
+
+static std::unordered_map<uint64_t, TradeState> s_trades;
+static uint64_t s_nextTradeId = 1;
+
+uint64_t TradeMgr::StartTrade(uint64_t playerA, uint64_t playerB) {
+    uint64_t id = s_nextTradeId++;
+    TradeState st;
+    st.PlayerA = playerA;
+    st.PlayerB = playerB;
+    s_trades[id] = st;
+    return id;
+}
+
+TradeState *TradeMgr::GetTrade(uint64_t tradeId) {
+    auto it = s_trades.find(tradeId);
+    if (it == s_trades.end()) return nullptr;
+    return &it->second;
+}
+
+void TradeMgr::AcceptTrade(uint64_t tradeId, uint64_t playerGuid) {
+    TradeState *st = GetTrade(tradeId);
+    if (!st) return;
+    if (playerGuid == st->PlayerA) st->AcceptedA = true;
+    else if (playerGuid == st->PlayerB) st->AcceptedB = true;
+}
+
+void TradeMgr::ConfirmTrade(uint64_t tradeId) {
+    TradeState *st = GetTrade(tradeId);
+    if (!st) return;
+    if (st->AcceptedA && st->AcceptedB) {
+        // Обмен предметами: переносим ItemsA -> PlayerB, ItemsB -> PlayerA
+        // Обмен деньгами: MoneyA <-> MoneyB
+        // TODO: интеграция с инвентарём и кошельком игроков
+        s_trades.erase(tradeId);
+    }
+}
+
+void TradeMgr::CancelTrade(uint64_t tradeId) {
+    s_trades.erase(tradeId);
+}
+
+} // namespace dm

@@ -1,0 +1,5 @@
+Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36260 for x64
+(C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
+
+VendorMgr.cpp
+src\game/Vendor/VendorMgr.h(3): fatal error C1083: Не удается открыть файл включение: cstdint: No such file or directory,

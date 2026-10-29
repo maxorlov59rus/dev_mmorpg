@@ -2,6 +2,7 @@
 // Реализация: флаги/зоны/дуэли/репутация + генерация SQL для
 // character_flags и pvp_kills_log (sql/upgrades/PvE_PvP_Core.sql).
 #include "PvPSystem.h"
+#include "game/Factions/FactionRelationMgr.h"
 
 #include <cstdio>
 
@@ -161,8 +162,24 @@ void PvPSystem::DuelComplete(uint64_t duelId, uint32_t winnerGuid, uint8_t reaso
     (void)reason;
     m_duels.erase(it);
 }
+void PvPSystem::SetPlayerFaction(uint32_t guid, uint16_t faction) {
+    m_factions[guid] = faction;
+}
+
+uint16_t PvPSystem::GetPlayerFaction(uint32_t guid) const {
+    auto it = m_factions.find(guid);
+    return it == m_factions.end() ? 0 : it->second;
+}
+
+
 
 bool PvPSystem::CanAttack(uint32_t attackerGuid, uint32_t victimGuid) const {
+    // Интеграция с межфракционными отношениями
+    uint16_t afFaction = GetPlayerFaction(attackerGuid);
+    uint16_t vfFaction = GetPlayerFaction(victimGuid);
+    if (afFaction != 0 && vfFaction != 0 && !dm::FactionRelationMgr::Instance().CanAttack(afFaction, vfFaction))
+        return false;
+
     uint16_t vf = GetFlags(victimGuid);
     uint16_t af = GetFlags(attackerGuid);
     if (vf & IN_SANCTUARY)

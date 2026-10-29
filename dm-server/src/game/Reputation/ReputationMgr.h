@@ -118,8 +118,8 @@ public:
         return RANK_HATED;
     }
 
-    [[nodiscard]] static constexpr bool CrossedRenegadeState(int32 repA, int32 repB) noexcept {
-        return repA < RENEGADE_THRESHOLD_A && repB < RENEGADE_THRESHOLD_B;
+    static bool CrossedRenegadeState(int32 repA, int32 repB) {
+        return (repA < RENEGADE_THRESHOLD_A) && (repB < RENEGADE_THRESHOLD_B);
     }
 
 private:

@@ -425,3 +425,44 @@
     u8  ruleset
 } ; повторяющиеся поля = элемент массива (count записей), снимок v_zone_map_export
 @opcode SMSG_ZONE_UPDATE       0x204C chan=map dir=s2c { u16 map_id u16 area_id u8 category u8 level_min u8 level_max u16 faction_id } ; смена зоны (ZoneManager::OnEnterZone)
+
+
+# ---------------------------------------------------------------------
+# v1.9 — Торговля (vendor, trade)
+# ---------------------------------------------------------------------
+@opcode CMSG_VENDOR_LIST_REQUEST  0x2050 chan=world dir=c2s { u32 npc_guid }
+@opcode SMSG_VENDOR_LIST          0x2051 chan=world dir=s2c {
+    u32 npc_guid
+    u16 item_count
+    u32 item_id
+    u32 price
+    u8  stack_count
+}
+@opcode CMSG_BUY_ITEM             0x2052 chan=world dir=c2s { u32 npc_guid u32 item_id u8 count }
+@opcode SMSG_BUY_RESULT           0x2053 chan=world dir=s2c { u8 result u32 item_id u8 count }
+@opcode CMSG_SELL_ITEM            0x2054 chan=world dir=c2s { u64 item_guid u8 count }
+@opcode SMSG_SELL_RESULT          0x2055 chan=world dir=s2c { u8 result u64 item_guid u32 money_gained }
+@opcode CMSG_TRADE_REQUEST        0x2056 chan=world dir=c2s { u64 target_guid }
+@opcode SMSG_TRADE_REQUEST        0x2057 chan=world dir=s2c { u64 requester_guid }
+@opcode CMSG_TRADE_ACCEPT         0x2058 chan=world dir=c2s { u8 accept }
+@opcode SMSG_TRADE_UPDATE         0x2059 chan=world dir=s2c { u64 player_guid u32 item_id u8 count u32 money }
+
+# ---------------------------------------------------------------------
+# v1.10 — Эвенты и PvP-события
+# ---------------------------------------------------------------------
+@opcode SMSG_WORLD_EVENT_START  0x2060 chan=world dir=s2c { u32 event_id str<64> name }
+@opcode SMSG_WORLD_EVENT_STOP   0x2061 chan=world dir=s2c { u32 event_id }
+@opcode SMSG_PVP_EVENT_LIST     0x2062 chan=world dir=s2c {
+    u8 count
+    u32 event_id
+    u8 type
+    u8 min_level
+    u8 max_level
+    u32 reward_honor
+    u32 reward_item
+}
+@opcode CMSG_PVP_EVENT_JOIN     0x2063 chan=world dir=c2s { u32 event_id }
+@opcode SMSG_PVP_EVENT_JOIN     0x2064 chan=world dir=s2c { u8 result u32 event_id }
+
+@opcode CMSG_TRADE_CONFIRM        0x205A chan=world dir=c2s { }
+@opcode SMSG_TRADE_COMPLETE       0x205B chan=world dir=s2c { u8 result }

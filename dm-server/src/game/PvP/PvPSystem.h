@@ -59,6 +59,9 @@ struct PvpConfig {
 class PvPSystem {
 public:
     static PvPSystem &Instance();
+    void SetPlayerFaction(uint32_t guid, uint16_t faction);
+    uint16_t GetPlayerFaction(uint32_t guid) const;
+
 
     /// Загрузка pvp_zones из dm_world (SELECT * FROM pvp_zones).
     /// Вызывается при старте mapserver/worldserver.
@@ -119,6 +122,7 @@ private:
     std::unordered_map<uint64_t, PvpZoneInfo> m_zones; // key = map<<16|area
     std::unordered_map<uint32_t, uint16_t> m_flags;
     std::unordered_map<uint32_t, uint8_t> m_wanted;
+    std::unordered_map<uint32_t, uint16_t> m_factions;
     std::unordered_map<uint64_t, DuelState> m_duels;
     uint64_t m_nextDuelId = 1;
     PvpConfig m_cfg;

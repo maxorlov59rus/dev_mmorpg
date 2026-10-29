@@ -78,20 +78,20 @@ public:
     // Вызывается из Player::LevelUpdate() после рассылки class_spells.
     // При oldLevel < 10 <= newLevel: автовыдача QUEST_PATH_CHOSEN (если ещё не
     // выполнен и нет активныой спеки) + SMSG_SPEC_SELECTION_OPEN.
-    void OnLevelChanged(Player *player, uint8 oldLevel, uint8 newLevel);
+    void OnLevelChanged(Player *player, uint8_t oldLevel, uint8_t newLevel);
 
     // === Выбор специализации ===
     // Единая точка входа для CMSG_CHOOSE_SPEC и Lua OnComplete квеста 1104.
     // Валидирует: уровень >= 10, SpecID принадлежит ClassID, спека ещё не выбрана
     // (перевыбор — только через тренера, вне этого пути, M2).
     // Возвращает false + reason (для SMSG_SPEC_ERROR, M1: пока лог в world-log).
-    bool ChooseSpec(Player *player, uint8 specId, const char *&outReason);
+    bool ChooseSpec(Player *player, uint8_t specId, const char *&outReason);
 
     // Выдача способностей специализации (публичный API для Lua:
     // Player:GrantSpecAbilities(specId)). Очищает старые ауры спеки (если смена),
     // изучает SpellID_1..N из playercreateinfo_specs, шлёт SMSG_LEARNED_SPELLS_BATCH.
     // Возвращает список выученных SpellID (пусто — если данных нет).
-    std::vector<uint32_t> GrantSpecAbilities(Player *player, uint8 specId);
+    std::vector<uint32_t> GrantSpecAbilities(Player *player, uint8_t specId);
 
     // Роль игрока для LFG по активной спеке (из кэша lfg_roles/spec primary_stat:
     // танк = STA-primary, хил = класс Priest, dps = остальные).
@@ -118,7 +118,7 @@ private:
 
 // Регистрация сетевых обработчиков диспетчера (аналог RegisterGossipHandlers).
 // Опкоды: CMSG_CHOOSE_SPEC 0x2024 (+ читатель SMSG_* внутри handler'ов).
-void RegisterSpecQuestHandlers(class Network::OpcodeDispatcher &disp, SpecQuestMgr &mgr);
+void RegisterSpecQuestHandlers(void *disp, void *mgr);
 
 } // namespace Game
 } // namespace DM

@@ -3,7 +3,7 @@
 // как во всём протоколе «Чёрной Материи» (proto/opcodes.defs).
 #include "Grids/ZoneManager.h"
 
-#include "PvP/PvPSystem.h"
+#include "game/PvP/PvPSystem.h"
 
 #include <algorithm>
 #include <cstring>

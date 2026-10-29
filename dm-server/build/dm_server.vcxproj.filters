@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\auth\SRPAuth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\PacketFraming.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\TcpListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\CreatureAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Classes\PlayerClassMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Entities\CharacterHooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Events\EventMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Factions\FactionRelationMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Grids\ZoneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\EquipmentMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\ItemTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Progression\ProgressionCore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\PvPSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvPEvents\PvPEventMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\auth\SRPAuth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\PacketFraming.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\TcpListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\AggressorAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\CreatureAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\SmartAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Classes\PlayerClassMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Entities\Creature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Entities\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Entities\Unit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Events\EventMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Factions\FactionRelationMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Grids\ZoneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\EquipmentMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\ItemTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\LFG\LFGMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Maps\Map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\OpcodeDispatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Network\Sessions\WorldSession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Player\PlayerSession.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Progression\ProgressionCore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\PvPSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvPEvents\PvPEventMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestGossipHandlers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestSystem_Level10.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Reputation\ReputationMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Scripting\HookMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Trade\TradeMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Vendor\VendorMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\World\World.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\CharacterDatabase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\SQLClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\WorldDatabase.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Protocol\MMOProtocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Protocol\Opcodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Text\ChatTextStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{5FDC3022-8C20-3232-A3B0-7559D7850422}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{3DCD4C9B-FD3D-392B-A76C-D2F358DBE472}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

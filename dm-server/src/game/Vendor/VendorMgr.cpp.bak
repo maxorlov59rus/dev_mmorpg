@@ -1,0 +1,63 @@
+#include "VendorMgr.h"
+#include <unordered_map>
+
+namespace dm {
+
+VendorMgr &VendorMgr::Instance() {
+    static VendorMgr inst;
+    return inst;
+}
+
+static std::unordered_map<uint32_t, std::vector<VendorItem>> s_vendors;
+
+void VendorMgr::LoadVendor(uint32_t npcGuid, const std::vector<VendorItem> &items) {
+    s_vendors[npcGuid] = items;
+}
+
+const std::vector<VendorItem> *VendorMgr::GetVendorItems(uint32_t npcGuid) const {
+    auto it = s_vendors.find(npcGuid);
+    if (it == s_vendors.end()) return nullptr;
+    return &it->second;
+}
+
+bool VendorMgr::CanBuy(uint32_t npcGuid, uint32_t itemId, uint8_t count, uint32_t playerMoney, uint8_t freeSlots) const {
+    const auto *items = GetVendorItems(npcGuid);
+    if (!items) return false;
+    for (const auto &vi : *items) {
+        if (vi.ItemId == itemId) {
+            uint32_t total = vi.Price * count;
+            if (playerMoney < total) return false;
+            if (freeSlots == 0) return false;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VendorMgr::BuyItem(uint32_t npcGuid, uint32_t itemId, uint8_t count, uint32_t &playerMoney, uint8_t &freeSlots) {
+    if (!CanBuy(npcGuid, itemId, count, playerMoney, freeSlots)) return false;
+    const auto *items = GetVendorItems(npcGuid);
+    for (const auto &vi : *items) {
+        if (vi.ItemId == itemId) {
+            uint32_t total = vi.Price * count;
+            playerMoney -= total;
+            if (freeSlots > 0) freeSlots--;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool VendorMgr::CanSell(uint64_t itemGuid, uint8_t count, uint32_t &outPrice) const {
+    outPrice = 10;
+    return true;
+}
+
+bool VendorMgr::SellItem(uint64_t itemGuid, uint8_t count, uint32_t &playerMoney) {
+    uint32_t price = 0;
+    if (!CanSell(itemGuid, count, price)) return false;
+    playerMoney += price * count;
+    return true;
+}
+
+} // namespace dm
