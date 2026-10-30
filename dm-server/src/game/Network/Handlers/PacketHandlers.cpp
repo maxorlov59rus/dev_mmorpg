@@ -271,7 +271,31 @@ void PacketHandlers::RegisterAll() {
             dm::common::Logger::Instance().Debug("CMSG_SPIRIT_ADD_EXP received from session " + std::to_string(sessionId));
         });
 
-}
+    // Duel System handlers
+    PacketRouter::Instance().Register(
+        0x20D0, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_DUEL_JOIN received from session " + std::to_string(sessionId));
+        });
+    PacketRouter::Instance().Register(
+        0x20D2, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_DUEL_LEAVE received from session " + std::to_string(sessionId));
+        });
+    PacketRouter::Instance().Register(
+        0x20D4, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_DUEL_START received from session " + std::to_string(sessionId));
+        });
+    PacketRouter::Instance().Register(
+        0x20D6, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_DUEL_RESULT received from session " + std::to_string(sessionId));
+        });
+    PacketRouter::Instance().Register(
+        0x20D8, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_DUEL_RATING_UPDATE received from session " + std::to_string(sessionId));
+        });
+    PacketRouter::Instance().Register(
+        0x20DA, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_DUEL_REQUEST_CHALLENGE received from session " + std::to_string(sessionId));
+        });
 
 } // namespace net
 } // namespace dm

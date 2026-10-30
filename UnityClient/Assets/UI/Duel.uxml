@@ -1,0 +1,20 @@
+#uxml
+<ui:UxmlDocument xmlns:ui="UnityToolkit.UIElements">
+    <visual class="duel-widget">
+        <header>
+            <label name="status-label" class="status-label" text="Ожидание Opponenta" />
+            <label name="queue-count" class="queue-count" text="В очереди: 0" />
+            <label name="timer-label" class="timer-label" text="Время: 5:00" />
+        </header>
+        <content>
+            <button name="join-queue-button" class="battle-button" text="В Дуэль" />
+            <button name="leave-queue-button" class="battle-button" style="display: none;" text="Покинуть" />
+            <list-view name="participant-list" class="participant-list">
+                <template class="participant-template">
+                    <label class="participant-name" text="Игрок" />
+                    <label class="participant-level" text="Уровень" />
+                </template>
+            </list-view>
+        </content>
+    </visual>
+</ui:UxmlDocument>
