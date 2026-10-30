@@ -1,0 +1,52 @@
+name: Validate SQL
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-sql:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: dm_world
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Wait for MySQL
+      run: |
+        while ! mysqladmin ping -h 127.0.0.1 -uroot -proot --silent; do
+          sleep 1
+        done
+
+    - name: Create database user
+      run: |
+        mysql -h 127.0.0.1 -uroot -proot -e "CREATE USER 'mmorpg'@'%' IDENTIFIED BY 'mmorpg_pass';"
+        mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'mmorpg'@'%';"
+        mysql -h 127.0.0.1 -uroot -proot -e "FLUSH PRIVILEGES;"
+
+    - name: Run SQL scripts
+      run: |
+        for f in sql/create/*.sql; do
+          echo "Running $f"
+          mysql -h 127.0.0.1 -ummorpg -pmmorpg_pass dm_world < "$f" || exit 1
+        done
+        for f in sql/upgrades/*.sql; do
+          echo "Running $f"
+          mysql -h 127.0.0.1 -ummorpg -pmmorpg_pass dm_world < "$f" || exit 1
+        done
