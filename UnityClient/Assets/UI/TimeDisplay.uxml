@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Label name="TimeText" text="--:--" class="time-display" />
+    <ui:Label name="DateText" text="--.--.----" class="date-display" />
+</ui:UXML>

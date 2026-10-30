@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="relationship-root" class="relationship-container">
+        <ui:Label name="relationship-title" text="Отношения" class="title-label" />
+        
+        <ui:VisualElement name="friends-section" class="section">
+            <ui:Label text="Друзья" class="section-title" />
+            <ui:TextField name="friend-name-input" placeholder-text="Имя друга..." class="input-field" />
+            <ui:Button name="add-friend-button" text="Добавить в друзья" class="action-button" />
+            <ui:ListView name="friend-list" class="friend-list" />
+            <ui:VisualElement name="friend-actions" class="button-row">
+                <ui:Button name="remove-friend-button" text="Удалить" class="action-button" />
+                <ui:Button name="block-button" text="Заблокировать" class="action-button" />
+                <ui:Button name="propose-button" text="Предложить отношения" class="action-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="relationship-section" class="section">
+            <ui:Label text="Отношения" class="section-title" />
+            <ui:Label name="status-label" text="Не в отношениях" class="status-label" />
+            <ui:Label name="partner-label" text="Партнёр: --" />
+            <ui:Label name="relationship-type-label" text="Тип: --" />
+            <ui:ListView name="relationship-list" class="relationship-list" />
+            <ui:VisualElement name="relationship-actions" class="button-row">
+                <ui:Button name="accept-button" text="Принять" class="action-button" />
+                <ui:Button name="decline-button" text="Отклонить" class="action-button" />
+                <ui:Button name="dissolve-button" text="Расстаться" class="action-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="DialoguePanel" class="dialogue-panel">
+        <ui:Label name="NpcName" text="NPC Name" class="npc-name" />
+        <ui:Label name="NpcTitle" text="NPC Title" class="npc-title" />
+        <ui:Label name="DialogueText" text="Dialogue text goes here..." class="dialogue-text" />
+        <ui:VisualElement name="ButtonRow" class="button-row">
+            <ui:Button name="AcceptButton" text="Принять" class="accept-button" />
+            <ui:Button name="DeclineButton" text="Отклонить" class="decline-button" />
+            <ui:Button name="CompleteButton" text="Завершить" class="complete-button" />
+            <ui:Button name="CloseButton" text="Закрыть" class="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="RewardPanel" class="reward-panel">
+        <ui:Label name="RewardText" text="Награда: ..." class="reward-text" />
+    </ui:VisualElement>
+</ui:UXML>

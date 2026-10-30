@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="LFGPanel" class="lfg-panel">
+        <ui:Label name="LFGTitle" text="Поиск группы" class="lfg-title" />
+        <ui:VisualElement name="ContentRow" class="content-row">
+            <ui:VisualElement name="DungeonColumn" class="dungeon-column">
+                <ui:Label name="DungeonListLabel" text="Данжи" class="list-label" />
+                <ui:ListView name="DungeonList" class="dungeon-list" />
+            </ui:VisualElement>
+            <ui:VisualElement name="DifficultyColumn" class="difficulty-column">
+                <ui:Label name="DifficultyListLabel" text="Сложность" class="list-label" />
+                <ui:ListView name="DifficultyList" class="difficulty-list" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="DungeonDetails" class="dungeon-details">
+            <ui:Label name="DungeonName" text="Название данжа" class="dungeon-name" />
+            <ui:Label name="DungeonDescription" text="Описание" class="dungeon-description" />
+            <ui:Label name="DungeonInfo" text="Инфо" class="dungeon-info" />
+            <ui:Label name="QueueStatus" text="Не в очереди" class="queue-status" />
+            <ui:VisualElement name="ButtonRow" class="button-row">
+                <ui:Button name="JoinQueueButton" text="Вступить в очередь" class="join-queue-button" />
+                <ui:Button name="LeaveQueueButton" text="Покинуть очередь" class="leave-queue-button" />
+                <ui:Button name="CloseButton" text="Закрыть" class="close-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

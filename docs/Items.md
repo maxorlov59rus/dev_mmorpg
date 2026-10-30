@@ -1,0 +1,78 @@
+# Предметы: 1200 item_template + Unity-ассеты (v1.0)
+
+Генератор: `tools/Generate_Item_Data.py` + конфиг `tools/item_gen_config.json`.
+Регенерация: `python3 tools/Generate_Item_Data.py` → `sql/upgrades/Insert_1200_Items.sql`, `data/mapping_displayid.csv`, затем `sql/upgrades/Insert_DisplayId_Map.sql`.
+
+## Структура БД MySQL
+```
+dm_items (04_dm_items.sql)
+├── item_template      — 1200 строк (entry 10001.., 26 колонок)
+├── displayid_map      — ItemID → DisplayID → Unity Mesh/Icon путь
+└── enchant_effects    — 5 VFX Graph-«подложек» (fire/ice/holy/shade/storm)
+```
+
+## Формулы (согласованы с ProgressionCore)
+| Показатель | Формула |
+|---|---|
+| Armor | ilvl × 1.2 × slotMult (chest 1.0, head 0.7, legs 0.9, shoulders/hands 0.6) |
+| WeaponDPS | ilvl × 0.8; dmg = DPS × speed ±15% |
+| Основной стат | round(ilvl × 0.9) |
+| Вторичный рейтинг (Rare+) | round(ilvl × 0.45), DR-кривая Coeff·log10(1+P) |
+| BuyPrice | ilvl² × (quality+1) × k медь |
+
+## Тировая матрица (1200)
+| Категория | Кол-во | Диапазон | Особенности |
+|---|---|---|---|
+| Оружие Common | 50 | 1–20 | меч/посох/кинжал, quality=1 |
+| Оружие Uncommon | 100 | 21–60 | AGILITY/INTELLECT чередуются |
+| Оружие Rare | 150 | 61–90 | CRIT/HASTE рейтинги, durability↑ |
+| Оружие Epic | 100 | 88–95 | socket_count 1–2, spelltrigger=PROC (spellid 70xxx) |
+| Cloth (маг) | 100 | 1–95 | 5 слотов × 20 |
+| Leather (разбойник) | 100 | 1–95 | 5 слотов × 20 |
+| Mail (воин) | 100 | 1–70 | 5 слотов × 20 |
+| Plate (воин) | 100 | 40–95 | 5 слотов × 20 |
+| Еда/Вода | 50 | 1–95 | restore HP/MP |
+| Свитки | 50 | 20+ | teleport/buff spellid_1, trigger=cast |
+| Зелья | 100 | 5–95 | instant heal / mana |
+| Ресурсы | 100 | 1–95 | class=TradeGoods, stack |
+| Key/Ammo | 100 | 1–95 | quest flags=0x10 / ammo subclass=8 |
+
+## Дерево Unity (Assets/Items/)
+```
+Assets/Items/
+├── Weapons/{Swords,Daggers,Staves,Maces}/SM_<Type>_<DisplayID>   (Static/Skeletal)
+├── Armor/{Cloth,Leather,Mail,Plate}/{HE,SH,CH,LG,HA}_<type>_<slot>_<DisplayID>
+├── Icons/T_<категория>_<DisplayID>.uasset                        (UI Texture)
+├── Data/DA_Item_<Entry>.uasset                                   (ItemDataAsset (ScriptableObject))
+│     ├── SkeletalMesh  : UnityEngine.Object  ← displayid_map.mesh_path
+│     ├── Icon          : UnityEngine.Object  ← displayid_map.icon_path
+│     ├── Material      : MI_Item_FactionColor (параметр FactionColor)
+│     └── ItemRarity    : EItemRarity {Common..Legendary}
+└── VFX/Enchants/NS_Enchant_{Fire,Ice,Holy,Shade,Storm}.uasset
+```
+
+## Mapping (пример строки data/mapping_displayid.csv)
+| ItemID | DisplayID | Unity Mesh Path | Unity Icon Path |
+|---|---|---|---|
+| 10001 | 50000 | /Game/Items/Weapons/Sword/SM_sword_50000 | /Game/Items/Icons/T_sword_50000 |
+| 20001 | 50400 | /Game/Items/Armor/Cloth/HE_cloth_head_50400 | /Game/Items/Icons/T_armor_head_50400 |
+
+## Клиентская интеграция
+1. `MMOPlayerController` маршрутизирует `SMSG_ITEM_EQUIP_UPDATE (0x2037)` → делегат.
+2. `UEquipmentManagerComponent::ApplyEquipUpdate(DisplayMainhand, DisplayOffhand, Quality, EnchantHint)`:
+   - при `Quality >= Epic (5)` и `EnchantHint > 0` → `SpawnSystemAttached(NS_Enchant_<Element>, WeaponMeshComp, "weapon_socket", ..., SnapToTarget, true)`;
+   - `ClearEnchantEffects()` при unequip/смене оружия.
+3. Сервер: `dm::EquipmentMgr::Equip()` валидирует level/class/slot по `item_template`, `BuildSnapshot()` считает броню/статы, `RollProcOnHit()` детерминированно катит proc (P≈5%+0.05%×rating).
+
+## TODO(KERNEL)
+- SELECT-загрузка `dm_items.item_template` в `ItemTemplateStore::LoadFromQuery` при старте worldserver.
+- Хук уровня: после SMSG_LEVEL_UPDATE рассылка изучаемых пассивок (ProgressionCore::SpellsUnlockedAtLevel).
+
+## Контракт «Финализация» (v1.7)
+
+- Entry: непрерывный диапазон 10001–11200 (assert в генераторе).
+- Оружие 10001–10400, броня 10401–10800 (cloth/leather/mail/plate ×100), расходники 10801–11000, мир 11001–11200.
+- DisplayID = 50000 + (ItemID − 10000): 50001–51200; совпадает в item_template, displayid_map и mapping_displayid.csv.
+- spelltrigger_1: 1 = PROC (epic-оружие со spellid 70000+); серверный enum SpellTriggerType приведён к контракту (TRIGGER_PROC_ON_HIT = 1).
+- Броня: ArmorValue хранится в dmg_min (ilvl*1.2*slotMult), dmg_max/delay = 0.
+- Схема item_template: 40 колонок (stat_type/value 1..10, socket_count, spellid_1, spelltrigger_1 в конце).

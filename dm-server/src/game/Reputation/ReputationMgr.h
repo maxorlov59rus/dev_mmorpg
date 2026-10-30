@@ -37,7 +37,7 @@ struct RepChangeContext {
     };
 
     Source source = Source::Script;
-    uint32 triggerEntry = 0; // creature/quest id источника
+    uint32_t triggerEntry = 0; // creature/quest id источника
     int32 rawAmount = 0;     // до множителей (для аудита)
 };
 

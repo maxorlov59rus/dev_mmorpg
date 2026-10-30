@@ -15,7 +15,7 @@ namespace DarkMatter.Network
             consumed = 0;
             if (num < 4) return false;
             ushort frameSize = (ushort)(data[0] | (data[1] << 8));
-            if (frameSize < 4 || frameSize > 512 * 1024) return false;
+            if (frameSize < 4 || (int)frameSize > 512 * 1024) return false;
             if (num < frameSize) return false;
             packet = new FMMOPacket();
             packet.Opcode = (ushort)(data[2] | (data[3] << 8));

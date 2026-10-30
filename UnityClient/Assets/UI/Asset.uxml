@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="asset-root" class="asset-container">
+        <ui:Label name="asset-title" text="Ассеты игры" class="title-label" />
+        
+        <ui:VisualElement name="music-section" class="section">
+            <ui:Label text="Музыка" class="section-title" />
+            <ui:ListView name="music-list" class="music-list" />
+            <ui:Label name="selected-music" text="Выберите трек" />
+            <ui:Button name="play-music-button" text="Воспроизвести" class="action-button" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="lore-section" class="section">
+            <ui:Label text="Лор" class="section-title" />
+            <ui:ListView name="lore-list" class="lore-list" />
+            <ui:Label name="selected-lore" text="Выберите запись" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,13 +1,18 @@
-// MMONetworkClient.cs — базовый TCP-клиент (зеркало FMMONetworkClient)
 using System;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace DarkMatter.Network
 {
-    public class MMONetworkClient
+    public class MMONetworkClient : MonoBehaviour
     {
+        [Header("Network Settings")]
+        public string ipAddress = "127.0.0.1";
+        public int port = 7777;
+        public bool connectOnStart = true;
+
         private TcpClient _client;
         private NetworkStream _stream;
         private Thread _recvThread;
@@ -77,5 +82,13 @@ namespace DarkMatter.Network
         }
 
         public event Action<FMMOPacket> OnPacketReceived;
+
+        void Start()
+        {
+            if (connectOnStart)
+            {
+                Connect(ipAddress, port);
+            }
+        }
     }
 }

@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="loading-root" class="loading-container">
+        <ui:VisualElement name="background" class="loading-background" />
+        <ui:VisualElement name="content" class="loading-content">
+            <ui:VisualElement name="logo" class="loading-logo" />
+            <ui:Label name="title-label" text="Чёрная Материя" class="title-label" />
+            <ui:Label name="version-label" text="v1.0.0" class="version-label" />
+            <ui:ProgressBar name="progress-bar" value="0" class="progress-bar" />
+            <ui:Label name="status-label" text="Загрузка..." class="status-label" />
+            
+            <ui:VisualElement name="auth-panel" class="auth-panel">
+                <ui:Button name="google-auth-button" text="Войти через Google" class="google-auth-button" />
+                <ui:Button name="play-button" text="Играть" class="play-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

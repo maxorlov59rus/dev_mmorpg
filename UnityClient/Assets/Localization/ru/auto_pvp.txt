@@ -1,0 +1,22 @@
+# Auto PvP Localization (Russian)
+auto_pvp.arena_name=Арена Призраков
+auto_pvp.difficulty_easy=Лёгкий
+auto_pvp.difficulty_medium=Средний
+auto_pvp.difficulty_hard=Сложный
+auto_pvp.start_match=Начать бой
+auto_pvp.shop=Обменник
+auto_pvp.close=Закрыть
+auto_pvp.faith_points=Очки веры: {0}
+auto_pvp.clone_info=Множитель статов: {0}x, ИИ: {1}, Награда: {2} очков веры
+auto_pvp.reward=Награда: {0} золота (победа: {1})
+auto_pvp.joining=Присоединение к матчу...
+auto_pvp.match_started=Матч начался!
+auto_pvp.match_won=Победа! Получено {0} очков веры.
+auto_pvp.match_lost=Поражение. Получено {0} очков веры.
+auto_pvp.match_draw=Ничья. Получено {0} очков веры.
+auto_pvp.daily_cap_reached=Дневной лимит очков веры достигнут.
+auto_pvp.not_enough_level=Требуется уровень {0}.
+auto_pvp.not_enough_gold=Недостаточно золота.
+auto_pvp.item_purchased=Предмет куплен: {0}
+auto_pvp.out_of_stock=Предмет закончился.
+auto_pvp.already_owned=Предмет уже куплен.

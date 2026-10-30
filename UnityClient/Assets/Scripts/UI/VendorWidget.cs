@@ -19,7 +19,7 @@ namespace DarkMatter.UI
             moneyLabel = root.Q<Label>("MoneyLabel");
         }
 
-        public void UpdateVendorList(uint npcGuid, (uint itemId, uint price, byte stack)[] items)
+        public void UpdateVendorList(uint npcGuid, VendorItemView[] items)
         {
             itemList.itemsSource = items;
             itemList.makeItem = () => new Label();

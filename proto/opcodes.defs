@@ -457,6 +457,12 @@
     u32 event_id
     u8 type
     u8 min_level
+
+# ---------------------------------------------------------------------
+# v1.11 — Экономика и валюты
+# ---------------------------------------------------------------------
+@opcode SMSG_CURRENCY_UPDATE  0x2070 chan=world dir=s2c { u8 currency_type u32 amount }
+
     u8 max_level
     u32 reward_honor
     u32 reward_item

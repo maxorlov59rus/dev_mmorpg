@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="BossHealthPanel" class="boss-health-panel">
+        <ui:Label name="BossName" text="Boss Name" class="boss-name" />
+        <ui:Label name="PhaseLabel" text="Phase 1" class="phase-label" />
+        <ui:VisualElement name="BossHealthBarBackground" class="health-bar-bg">
+            <ui:VisualElement name="BossHealthBar" class="health-bar" />
+        </ui:VisualElement>
+        <ui:Label name="BossHealth" text="5000 / 5000" class="boss-health-text" />
+    </ui:VisualElement>
+</ui:UXML>

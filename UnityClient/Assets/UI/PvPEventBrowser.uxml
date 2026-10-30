@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="PvPBrowserPanel" class="pvp-browser-panel">
+        <ui:Label name="BrowserTitle" text="PvP События" class="browser-title" />
+        <ui:ListView name="EventList" class="event-list" />
+        <ui:VisualElement name="EventDetails" class="event-details">
+            <ui:Label name="EventName" text="Название события" class="event-name" />
+            <ui:Label name="EventDescription" text="Описание" class="event-description" />
+            <ui:Label name="EventSchedule" text="Расписание" class="event-schedule" />
+            <ui:Label name="EventRewards" text="Награды" class="event-rewards" />
+            <ui:Button name="JoinButton" text="Присоединиться" class="join-button" />
+            <ui:Button name="CloseButton" text="Закрыть" class="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

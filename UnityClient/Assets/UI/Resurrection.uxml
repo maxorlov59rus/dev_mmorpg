@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="DeathScreen" class="death-screen">
+        <ui:Label name="DeathTimer" text="Воскрешение доступно: 60 сек" class="death-timer" />
+        <ui:Button name="ResurrectButton" text="Воскреснуть" class="resurrect-button" />
+        <ui:Button name="ReleaseSpiritButton" text="Освободить дух" class="release-button" />
+    </ui:VisualElement>
+    <ui:VisualElement name="GhostScreen" class="ghost-screen">
+        <ui:Label name="ResurrectInfo" text="Вы в облике духа. Бегите к телу или к духовному целителю." class="ghost-info" />
+        <ui:Button name="ReturnToBodyButton" text="Вернуться к телу" class="return-button" />
+    </ui:VisualElement>
+</ui:UXML>

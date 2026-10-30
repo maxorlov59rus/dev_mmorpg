@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="spirit-root" class="spirit-container">
+        <ui:Label name="spirit-title" text="Духи-питомцы" class="title-label" />
+        
+        <ui:VisualElement name="spirit-section" class="section">
+            <ui:Label text="Мои духи" class="section-title" />
+            <ui:ListView name="spirit-list" class="spirit-list" />
+            <ui:Label name="rolls-remaining" text="Круток осталось: 10/10" class="rolls-label" />
+            <ui:Button name="roll-button" text="Крутить духа" class="action-button" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="detail-section" class="section">
+            <ui:Label name="spirit-name" text="Выберите духа" class="section-title" />
+            <ui:Label name="spirit-quality" text="Качество: --" />
+            <ui:Label name="spirit-class" text="Класс: --" />
+            <ui:Label name="spirit-level" text="Уровень: --" />
+            <ui:Label name="spirit-exp" text="Опыт: --" />
+            <ui:Label text="Навыки:" class="skills-title" />
+            <ui:ListView name="skill-list" class="skill-list" />
+            <ui:VisualElement name="spirit-actions" class="button-row">
+                <ui:Button name="set-active-button" text="Сделать активным" class="action-button" />
+                <ui:Button name="remove-button" text="Удалить" class="action-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

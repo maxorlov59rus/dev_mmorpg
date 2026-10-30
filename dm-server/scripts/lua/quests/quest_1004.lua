@@ -1,0 +1,10 @@
+-- quest_1004.lua — квест «Путь избранного» (выбор специализации)
+quest.on("accept", function(player)
+    player:send_message("Выберите специализацию.")
+end)
+
+quest.on("complete", function(player)
+    player:grant_spec_abilities(player.spec_id)
+    player:add_faction_reputation(2, 150)
+    player:grant_title("Шепчущий")
+end)

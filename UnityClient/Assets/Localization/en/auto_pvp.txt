@@ -1,0 +1,22 @@
+# Auto PvP Localization (English)
+auto_pvp.arena_name=Ghost Arena
+auto_pvp.difficulty_easy=Easy
+auto_pvp.difficulty_medium=Medium
+auto_pvp.difficulty_hard=Hard
+auto_pvp.start_match=Start Match
+auto_pvp.shop=Shop
+auto_pvp.close=Close
+auto_pvp.faith_points=Faith Points: {0}
+auto_pvp.clone_info=Stat Multiplier: {0}x, AI: {1}, Reward: {2} faith points
+auto_pvp.reward=Reward: {0} gold (win: {1})
+auto_pvp.joining=Joining match...
+auto_pvp.match_started=Match started!
+auto_pvp.match_won=Victory! Earned {0} faith points.
+auto_pvp.match_lost=Defeat. Earned {0} faith points.
+auto_pvp.match_draw=Draw. Earned {0} faith points.
+auto_pvp.daily_cap_reached=Daily faith points cap reached.
+auto_pvp.not_enough_level=Requires level {0}.
+auto_pvp.not_enough_gold=Not enough gold.
+auto_pvp.item_purchased=Item purchased: {0}
+auto_pvp.out_of_stock=Item out of stock.
+auto_pvp.already_owned=Item already owned.

@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="SeasonalEventPanel" class="seasonal-event-panel">
+        <ui:Label name="EventName" text="Праздник Рассвета" class="event-name" />
+        <ui:Label name="EventDescription" text="Весенний праздник Ордена Рассвета" class="event-description" />
+        <ui:Label name="CurrencyLabel" text="Сезонная валюта: 0" class="currency-label" />
+        <ui:ListView name="QuestList" class="quest-list" />
+        <ui:ListView name="ShopList" class="shop-list" />
+        <ui:VisualElement name="ButtonRow" class="button-row">
+            <ui:Button name="JoinButton" text="Присоединиться" class="join-button" />
+            <ui:Button name="ShopButton" text="Магазин" class="shop-button" />
+            <ui:Button name="CloseButton" text="Закрыть" class="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

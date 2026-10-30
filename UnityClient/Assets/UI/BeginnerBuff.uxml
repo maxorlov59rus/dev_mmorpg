@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="buff-container" class="buff-container">
+        <ui:VisualElement name="buff-icon" class="buff-icon" />
+        <ui:VisualElement name="buff-info" class="buff-info">
+            <ui:Label name="buff-name" text="Благословение Новичка" class="buff-name" />
+            <ui:Label name="buff-description" text="Бафф для новых игроков" class="buff-description" />
+            <ui:Label name="buff-stats" text="+50% XP, +25% дроп, +25% золото, +10% скорость" class="buff-stats" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

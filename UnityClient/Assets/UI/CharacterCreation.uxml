@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:DropdownField name="TemplateDropdown" label="Template" />
+    <ui:DropdownField name="GenderDropdown" label="Gender" />
+    <ui:TextField name="NameInputField" label="Name" />
+    <ui:Button name="CreateButton" text="Create" />
+    <ui:Button name="CancelButton" text="Cancel" />
+    <ui:Label name="StatusLabel" text="Enter a character name" />
+</ui:UXML>

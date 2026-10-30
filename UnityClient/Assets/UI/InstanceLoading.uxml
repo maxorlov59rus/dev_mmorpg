@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="loading-root" class="loading-container">
+        <ui:VisualElement name="background" class="loading-background" />
+        <ui:VisualElement name="fade-overlay" class="fade-overlay" />
+        <ui:VisualElement name="content" class="loading-content">
+            <ui:Label name="instance-name" text="Loading..." class="instance-name" />
+            <ui:ProgressBar name="progress-bar" value="0" class="progress-bar" />
+            <ui:Label name="progress-label" text="0%" class="progress-label" />
+            <ui:Label name="tip-label" text="Tip: ..." class="tip-label" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

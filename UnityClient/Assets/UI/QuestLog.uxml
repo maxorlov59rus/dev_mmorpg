@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="QuestLogPanel" class="quest-log-panel">
+        <ui:Label name="QuestLogTitle" text="Журнал квестов" class="quest-log-title" />
+        <ui:ListView name="QuestList" class="quest-list" />
+        <ui:VisualElement name="QuestDetails" class="quest-details">
+            <ui:Label name="QuestTitle" text="Название квеста" class="quest-title" />
+            <ui:Label name="QuestDescription" text="Описание квеста" class="quest-description" />
+            <ui:Label name="ObjectiveText" text="Цель: 0 / 5" class="objective-text" />
+            <ui:VisualElement name="ButtonRow" class="button-row">
+                <ui:Button name="TrackButton" text="Отслеживать" class="track-button" />
+                <ui:Button name="AbandonButton" text="Отменить" class="abandon-button" />
+                <ui:Button name="SpecChoiceButton" text="Выбрать специализацию" class="spec-choice-button" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="craft-root" class="craft-container">
+        <ui:Label name="craft-title" text="Крафт" class="title-label" />
+        
+        <ui:VisualElement name="profession-section" class="section">
+            <ui:Label text="Профессии" class="section-title" />
+            <ui:ListView name="profession-list" class="profession-list" />
+            <ui:Button name="learn-profession-button" text="Изучить профессию" class="action-button" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="recipe-section" class="section">
+            <ui:Label name="selected-profession" text="Выберите профессию" class="section-title" />
+            <ui:ListView name="recipe-list" class="recipe-list" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="detail-section" class="section">
+            <ui:Label name="selected-recipe" text="Выберите рецепт" class="section-title" />
+            <ui:Label name="craft-time" text="Время крафта: --" />
+            <ui:Label name="skill-level" text="Навык: --" />
+            <ui:Label text="Материалы:" class="materials-title" />
+            <ui:ListView name="material-list" class="material-list" />
+            <ui:Button name="craft-button" text="Создать" class="action-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

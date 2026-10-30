@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="BossDialoguePanel" class="boss-dialogue-panel">
+        <ui:Label name="BossName" text="Boss Name" class="boss-dialogue-name" />
+        <ui:Label name="BossDialogueText" text="Boss dialogue text..." class="boss-dialogue-text" />
+        <ui:Button name="CloseButton" text="Закрыть" class="boss-dialogue-close" />
+    </ui:VisualElement>
+</ui:UXML>

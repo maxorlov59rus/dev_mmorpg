@@ -11,14 +11,17 @@ class SRPAuth {
 public:
     void Init(const std::string &username, const std::string &password);
     std::vector<uint8_t> GetSalt() const;
-    std::vector<uint8_t> GetPublicKey() const;
+    std::vector<uint8_t> GetPublicKey();
     bool VerifyProof(const std::vector<uint8_t> &clientProof);
     std::vector<uint8_t> ComputeServerProof() const;
 
 private:
     std::string m_username;
+    std::string m_password;
     std::vector<uint8_t> m_salt;
-    std::vector<uint8_t> m_pubkey;
+    std::vector<uint8_t> m_verifier;
+    void *m_privateB{nullptr};
+    void *m_publicB{nullptr};
 };
 
 } // namespace auth

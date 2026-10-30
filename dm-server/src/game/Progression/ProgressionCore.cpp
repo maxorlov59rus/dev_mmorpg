@@ -1,3 +1,25 @@
+#include <vector>
+
+#include "game/Progression/ProgressionCore.h"
+#include "common/Logger.h"
+
+namespace DM {
+
+void ProgressionCore::NotifyLevelUpPassives(uint8_t level, uint64_t playerGuid) {
+    auto& log = dm::common::Logger::Instance();
+    log.Info("Player level up event: playerGuid=" + std::to_string(playerGuid) + ", newLevel=" + std::to_string(level));
+    auto spells = ProgressionCore::SpellsUnlockedAtLevel(level);
+    (void)spells;
+}
+
+std::vector<uint32_t> ProgressionCore::SpellsUnlockedAtLevel(uint8_t level) {
+    std::vector<uint32_t> spells;
+    (void)level;
+    return spells;
+}
+
+} // namespace DM
+
 // =====================================================================
 // «Чёрная Материя» — ProgressionCore.cpp (см. ProgressionCore.h)
 // Детерминированная математика 1–95: статы, XP, DR, ilvl-бюджет.

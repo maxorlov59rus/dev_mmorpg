@@ -1,0 +1,38 @@
+-- Guilds, Auction, Crafting
+CREATE TABLE IF NOT EXISTS `guild` (
+    `guildid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(24) NOT NULL,
+    `leaderguid` BIGINT UNSIGNED NOT NULL,
+    `createdate` INT UNSIGNED NOT NULL,
+    `BankMoney` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`guildid`),
+    UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `guild_member` (
+    `guildid` INT UNSIGNED NOT NULL,
+    `guid` BIGINT UNSIGNED NOT NULL,
+    `rank` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    `pnote` VARCHAR(255) NOT NULL DEFAULT '',
+    `offnote` VARCHAR(255) NOT NULL DEFAULT '',
+    PRIMARY KEY (`guildid`, `guid`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `auctionhouse` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `itemguid` BIGINT UNSIGNED NOT NULL,
+    `item_template` INT UNSIGNED NOT NULL,
+    `owner` BIGINT UNSIGNED NOT NULL,
+    `buyoutprice` BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    `time` INT UNSIGNED NOT NULL,
+    `moneyTime` INT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `character_skills` (
+    `guid` BIGINT UNSIGNED NOT NULL,
+    `skill` SMALLINT UNSIGNED NOT NULL,
+    `value` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    `max` SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (`guid`, `skill`)
+) ENGINE=InnoDB;

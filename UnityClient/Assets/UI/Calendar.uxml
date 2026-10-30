@@ -1,0 +1,23 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="calendar-root" class="calendar-container">
+        <ui:Label name="calendar-title" text="Календарь" class="title-label" />
+        
+        <ui:VisualElement name="date-time-section" class="section">
+            <ui:Label name="current-date-label" text="01.01.2026" class="date-label" />
+            <ui:Label name="current-time-label" text="00:00:00" class="time-label" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="month-nav" class="button-row">
+            <ui:Button name="prev-month-button" text="◀" class="nav-button" />
+            <ui:Label name="month-year-label" text="Январь 2026" class="month-label" />
+            <ui:Button name="next-month-button" text="▶" class="nav-button" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="calendar-grid" class="calendar-grid" />
+
+        <ui:VisualElement name="events-section" class="section">
+            <ui:Label text="События месяца" class="section-title" />
+            <ui:ListView name="event-list" class="event-list" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

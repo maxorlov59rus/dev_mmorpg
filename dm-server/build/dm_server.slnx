@@ -9,7 +9,9 @@
 	</Configurations>
 	<Project Path="ALL_BUILD.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="2c12fc91-2801-3dff-9555-63b45db7a760" DefaultStartup="true">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="dm_authserver.vcxproj"/>
 		<BuildDependency Project="dm_server.vcxproj"/>
+		<BuildDependency Project="lua.vcxproj"/>
 	</Project>
 	<Project Path="INSTALL.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="91eab464-635e-361a-9d97-abaa0cf2e38a">
 		<BuildDependency Project="ALL_BUILD.vcxproj"/>
@@ -20,7 +22,14 @@
 		<Build Solution="RelWithDebInfo|*" Project="false"/>
 	</Project>
 	<Project Path="ZERO_CHECK.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="ac31303e-9b93-37ed-8122-ecc4fd450047"/>
+	<Project Path="dm_authserver.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="98fbce01-8416-3122-b7ed-97634f58d77a">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+	</Project>
 	<Project Path="dm_server.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="05e9d3d6-e7c3-34ed-969f-c8781b17afd9">
+		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
+		<BuildDependency Project="lua.vcxproj"/>
+	</Project>
+	<Project Path="lua.vcxproj" Type="8bc9ceb8-8b4a-11d0-8d11-00a0c91bc942" Id="7d97f5a9-613a-30af-bde1-95734555e1a3">
 		<BuildDependency Project="ZERO_CHECK.vcxproj"/>
 	</Project>
 </Solution>

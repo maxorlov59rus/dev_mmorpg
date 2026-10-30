@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="MistyAnomalyPanel" class="misty-anomaly-panel">
+        <ui:Label name="EventName" text="Туманная Аномалия" class="event-name" />
+        <ui:Label name="EventTimer" text="Время: 60:00" class="event-timer" />
+        <ui:Label name="PlayerScore" text="Ваши очки: 0" class="player-score" />
+        <ui:Label name="FogDensity" text="Плотность тумана: 80%" class="fog-density" />
+        <ui:Label name="Leaderboard" text="Таблица лидеров:" class="leaderboard" />
+        <ui:VisualElement name="ButtonRow" class="button-row">
+            <ui:Button name="JoinButton" text="Присоединиться" class="join-button" />
+            <ui:Button name="LeaveButton" text="Покинуть" class="leave-button" />
+            <ui:Button name="CloseButton" text="Закрыть" class="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -9,7 +9,7 @@ namespace DarkMatter.Network
     {
         public uint id;
         public string name;
-        public byte class;
+        public byte @class;
         public byte faction;
         public byte level;
         public ushort map_id;
@@ -19,7 +19,7 @@ namespace DarkMatter.Network
             var o = new CharInfo();
             o.id = reader.ReadUInt32();
             o.name = reader.ReadString(24);
-            o.class = reader.ReadByte();
+            o.@class = reader.ReadByte();
             o.faction = reader.ReadByte();
             o.level = reader.ReadByte();
             o.map_id = reader.ReadUInt16();
@@ -233,7 +233,7 @@ namespace DarkMatter.Network
         public uint id;
         public string name;
         public byte race;
-        public byte class;
+        public byte @class;
         public byte gender;
         public byte faction;
         public ushort start_map;
@@ -249,7 +249,7 @@ namespace DarkMatter.Network
                 o.id = reader.ReadUInt32();
                 o.name = reader.ReadString(24);
                 o.race = reader.ReadByte();
-                o.class = reader.ReadByte();
+                o.@class = reader.ReadByte();
                 o.gender = reader.ReadByte();
                 o.faction = reader.ReadByte();
                 o.start_map = reader.ReadUInt16();
@@ -715,7 +715,7 @@ namespace DarkMatter.Network
     {
         public const ushort Opcode = 0x0091;
         public uint char_guid;
-        public byte class;
+        public byte @class;
         public byte spec;
         public static SMSG_CLASS_INFO FromBytes(byte[] data)
         {
@@ -724,7 +724,7 @@ namespace DarkMatter.Network
             using (var reader = new BinaryReader(ms))
             {
                 o.char_guid = reader.ReadUInt32();
-                o.class = reader.ReadByte();
+                o.@class = reader.ReadByte();
                 o.spec = reader.ReadByte();
             }
             return o;
@@ -826,7 +826,7 @@ namespace DarkMatter.Network
             using (var ms = new MemoryStream(data))
             using (var reader = new BinaryReader(ms))
             {
-                o.class_id = reader.ReadByte();
+                o.@class_id = reader.ReadByte();
                 o.spec_count = reader.ReadByte();
             }
             return o;

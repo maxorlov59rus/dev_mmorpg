@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:VisualElement name="AutoPvPPanel" class="auto-pvp-panel">
+        <ui:Label name="ArenaName" text="Арена Призраков" class="arena-name" />
+        <ui:ListView name="DifficultyList" class="difficulty-list" />
+        <ui:VisualElement name="DifficultyDetails" class="difficulty-details">
+            <ui:Label name="DifficultyName" text="Сложность" class="difficulty-name" />
+            <ui:Label name="CloneInfo" text="Информация о клоне" class="clone-info" />
+            <ui:Label name="FaithPoints" text="Очки веры: 0" class="faith-points" />
+            <ui:Label name="MatchHistory" text="История матчей" class="match-history" />
+            <ui:Button name="StartMatchButton" text="Начать бой" class="start-match-button" />
+            <ui:Button name="ShopButton" text="Обменник" class="shop-button" />
+            <ui:Button name="CloseButton" text="Закрыть" class="close-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

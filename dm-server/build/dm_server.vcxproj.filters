@@ -1,7 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\Logger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\auth\SRPAuth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\config\Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\database\DbPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\PacketFraming.cpp">
@@ -10,10 +19,34 @@
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\TcpListener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\UdpListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\ikcp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\CreatureAI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Assets\AssetMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Auction\AuctionMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Auth\GoogleAuthMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Classes\PlayerClassMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Crafting\CraftMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Economy\CurrencyMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Economy\SinkMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Entities\CharacterHooks.cpp">
@@ -26,6 +59,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Grids\ZoneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Guilds\GuildMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Icons\ExtendedIconMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Instance\InstanceLoadingMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\EquipmentMgr.cpp">
@@ -46,10 +88,28 @@
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\PvPSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\SpiritBattleMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvPEvents\PvPEventMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Rates\RateMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Social\RelationshipMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Spirit\SpiritMgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Time\RealTimeMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\shared\Database\SQLClient.cpp">
@@ -60,13 +120,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\Logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\auth\SRPAuth.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\config\Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\database\DbPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\PacketFraming.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\TcpListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\UdpListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\common\network\ikcp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\AggressorAI.h">
@@ -78,7 +153,37 @@
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\AI\SmartAI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Assets\AssetMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Auction\AuctionMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Auth\GoogleAuthMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Bosses\BossSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Classes\PlayerClassMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Classes\StatSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Combat\CombatFormula.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Combat\FocusSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Crafting\CraftMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Economy\CurrencyMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Economy\SinkMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Entities\Creature.h">
@@ -93,16 +198,34 @@
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Events\EventMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Events\MistyAnomaly.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Events\SeasonalEvents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Factions\FactionRelationMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Grids\ZoneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Guilds\GuildMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Icons\ExtendedIconMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Instance\InstanceLoadingMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\EquipmentMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Items\ItemTemplate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\LFG\DungeonMatchmaking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\LFG\LFGMgr.h">
@@ -129,10 +252,22 @@
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Progression\ProgressionCore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\AutoPvP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\PvPEvents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\PvPSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvP\SpiritBattleMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\PvPEvents\PvPEventMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestEngine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestGossipHandlers.h">
@@ -144,13 +279,37 @@
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestStateMachine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestSystem_16_26.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestSystem_27_50.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Quests\QuestSystem_Level10.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Rates\RateMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Reputation\ReputationMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Resurrection\ResurrectionSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Scripting\HookMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Social\RelationshipMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Spirit\SpiritMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Time\RealTimeMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="C:\Users\Orel\AppData\Local\Cline\dev_mmorpg\dm-server\src\game\Trade\TradeMgr.h">
