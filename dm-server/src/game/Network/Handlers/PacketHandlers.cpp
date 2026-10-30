@@ -297,5 +297,57 @@ void PacketHandlers::RegisterAll() {
             dm::common::Logger::Instance().Debug("CMSG_DUEL_REQUEST_CHALLENGE received from session " + std::to_string(sessionId));
         });
 
+// Achievement System handlers
+PacketRouter::Instance().Register(
+        0x20E0, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_ACHIEVEMENT_PROGRESS received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x20E2, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_ACHIEVEMENT_COMPLETE received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x20E4, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_ACHIEVEMENT_CLAIM_REWARD received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x20E6, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_FACTION_WAR_STATUS received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x20E8, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_FACTION_CONTRIBUTE received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x20EA, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_SHOP_BUY received from session " + std::to_string(sessionId));
+        });
+
+// Chat System handlers
+PacketRouter::Instance().Register(
+        0x2100, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_CHAT_JOIN received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x2102, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_CHAT_LEAVE received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x2104, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_CHAT_SEND received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x2106, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_WHISPER_SEND received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x2108, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_FRIENDS_LIST received from session " + std::to_string(sessionId));
+        });
+PacketRouter::Instance().Register(
+        0x210A, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
+            dm::common::Logger::Instance().Debug("CMSG_IGNORE_LIST received from session " + std::to_string(sessionId));
+        });
+
 } // namespace net
 } // namespace dm

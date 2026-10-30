@@ -83,11 +83,15 @@ public:
     uint32_t GetCooldownMin() const { return cooldownMin; }
     uint32_t GetRewardSpiritExpWin() const { return rewardSpiritExpWin; }
     uint32_t GetRewardSpiritExpDraw() const { return rewardSpiritExpDraw; }
+    uint8_t scheduleDay = 6;      // Day of week (0=Sun, 6=Sat)
+    uint8_t scheduleHour = 18;    // Start hour
+    uint8_t scheduleMinute = 0;   // Start minute
 
     // Проверки
     bool CanJoin(uint32_t playerGuid, uint8_t playerLevel, uint8_t spiritLevel) const;
     uint32_t GetDuelsToday(uint32_t playerGuid) const;
     void IncrementDuelsToday(uint32_t playerGuid);
+    bool CanScheduleRun() const;
 
 private:
     DuelMgr();

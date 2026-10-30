@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:Uxml xmlns:ui="Unity.UI.Toolkit" class="ChatWidget">
+  <ui:VisualElement class="chat-window">
+    <ui:VisualElement class="header">
+      <ui:Label class="window-title" text="Чат" name="windowTitle" />
+      <ui:Button class="close-button" name="closeButton" click="OnCloseClicked" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="channel-selector">
+      <ui:Toggle class="channel-toggle" name="globalToggle" group="channelGroup" value="global" click="OnChannelClicked" is-on="true" />
+      <ui:Label class="channel-label" text="Глобальный" name="globalLabel" associated-control-name="globalToggle" />
+      <ui:Toggle class="channel-toggle" name="regionToggle" group="channelGroup" value="region" click="OnChannelClicked" />
+      <ui:Label class="channel-label" text="Региональный" name="regionLabel" associated-control-name="regionToggle" />
+      <ui:Toggle class="channel-toggle" name="factionToggle" group="channelGroup" value="faction" click="OnChannelClicked" />
+      <ui:Label class="channel-label" text="Фракционный" name="factionLabel" associated-control-name="factionToggle" />
+      <ui:Toggle class="channel-toggle" name="partyToggle" group="channelGroup" value="party" click="OnChannelClicked" />
+      <ui:Label class="channel-label" text="Партийный" name="partyLabel" associated-control-name="partyToggle" />
+      <ui:Toggle class="channel-toggle" name="whisperToggle" group="channelGroup" value="whisper" click="OnChannelClicked" />
+      <ui:Label class="channel-label" text="Личный (шепот)" name="whisperLabel" associated-control-name="whisperToggle" />
+    </ui:VisualElement>
+    
+    <ui:ScrollView class="chat-scroll">
+      <ui:VisualElement class="chat-messages" name="chatContent" />
+    </ui:ScrollView>
+    
+    <ui:VisualElement class="message-input-area">
+      <ui:InputField class="message-input" name="messageInput" placeholder-text="Введите сообщение..." 
+                     enter-key-submits="true" on-submit="OnMessageSubmitted" />
+      <ui:Button class="send-button" name="sendButton" text="Отправить" click="OnSendClicked" />
+      <ui:InputField class="whisper-target" name="whisperTargetInput" placeholder-text="Игрок..." 
+                     enabled="false" />
+    </ui:VisualElement>
+  </ui:VisualElement>
+
+  <!-- Message Template -->
+  <ui:UxmlTemplate x:Key="messageTemplate">
+    <ui:VisualElement class="message-entry">
+      <ui:VisualElement class="message-wrapper">
+        <ui:VisualElement class="player-info">
+          <ui:Label class="player-name" name="playerName" />
+          <ui:Image class="whisper-icon" sprite-name="whisper" visible="false" name="whisperIcon" />
+        </ui:VisualElement>
+        <ui:Label class="message-text" name="messageText" />
+      </ui:VisualElement>
+      <ui:Label class="channel-tag" name="channelTag" />
+    </ui:VisualElement>
+  </ui:UxmlTemplate>
+</ui:Uxml>

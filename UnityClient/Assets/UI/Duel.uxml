@@ -5,6 +5,7 @@
             <label name="status-label" class="status-label" text="Ожидание Opponenta" />
             <label name="queue-count" class="queue-count" text="В очереди: 0" />
             <label name="timer-label" class="timer-label" text="Время: 5:00" />
+            <label name="schedule-label" class="schedule-label" text="Пн-Пт 18:00" />
         </header>
         <content>
             <button name="join-queue-button" class="battle-button" text="В Дуэль" />

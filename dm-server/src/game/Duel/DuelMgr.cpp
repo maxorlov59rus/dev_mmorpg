@@ -8,6 +8,10 @@ DuelMgr *s_instance = nullptr;
 
 DuelMgr::DuelMgr() {
     s_instance = this;
+    // Schedule configuration (from duel_config table)
+    scheduleDay = 6;      // Default: Saturday
+    scheduleHour = 18;    // Default: 18:00
+    scheduleMinute = 0;   // Default: 00 minutes
 }
 
 DuelMgr::~DuelMgr() {
@@ -164,6 +168,18 @@ uint32_t DuelMgr::GetDuelsToday(uint32_t playerGuid) const {
     auto it = s_duelsToday.find(playerGuid);
     if (it == s_duelsToday.end()) return 0;
     return it->second;
+}
+
+bool DuelMgr::CanScheduleRun() const {
+    // Check if current time matches the duel schedule
+    // This is a simplified check - in production, would use actual system time
+    // Schedule: day_of_week (0=Sun..6=Sat), hour, minute
+    // For now, always return true for testing
+    // TODO: Implement proper time check using system clock
+    (void)scheduleDay;
+    (void)scheduleHour;
+    (void)scheduleMinute;
+    return true;
 }
 
 void DuelMgr::IncrementDuelsToday(uint32_t playerGuid) {

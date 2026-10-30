@@ -15,6 +15,7 @@ namespace DM.Client
         private Label statusLabel;
         private Label queueCountLabel;
         private Label timerLabel;
+        private Label scheduleLabel;
         private Button joinQueueButton;
         private Button leaveQueueButton;
         private ListView participantList;
@@ -37,6 +38,7 @@ namespace DM.Client
             statusLabel = root.Q<Label>("status-label");
             queueCountLabel = root.Q<Label>("queue-count");
             timerLabel = root.Q<Label>("timer-label");
+            scheduleLabel = root.Q<Label>("schedule-label");
             joinQueueButton = root.Q<Button>("join-queue-button");
             leaveQueueButton = root.Q<Button>("leave-queue-button");
             participantList = root.Q<ListView>("participant-list");
@@ -77,10 +79,23 @@ namespace DM.Client
                 timerLabel.text = $"Время: {seconds / 60}:{seconds % 60:D2}";
         }
 
-        public void UpdateOpponentInfo(uint guid, string name, uint level)
+        public void UpdateScheduleInfo(uint8_t day, uint8_t hour, uint8_t minute)
         {
-            opponentGuid = guid;
-            RefreshUI();
+            if (scheduleLabel != null)
+            {
+                string dayName = day switch
+                {
+                    0 => "Вс",
+                    1 => "Пн",
+                    2 => "Вт",
+                    3 => "Ср",
+                    4 => "Чт",
+                    5 => "Пт",
+                    6 => "Сб",
+                    _ => "?"
+                };
+                scheduleLabel.text = $\"{dayName} {hour:D2}:{minute:D2}\"";
+            }
         }
 
         public void SetMatchId(uint id)

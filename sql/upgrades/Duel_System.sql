@@ -24,6 +24,10 @@ INSERT IGNORE INTO duel_config (config_key, config_value, comment) VALUES
 ('entry_fee_gold', '0', 'Вступительный взнос (0=бесплатно)'),
 ('rating_k_factor', '20', 'Фактор рейтинга K'),
 ('rating_initial', '1000', 'Начальный рейтинг');
+INSERT IGNORE INTO duel_config (config_key, config_value, comment) VALUES
+('schedule_day', '6', 'День недели (0=Вс, 6=Сб)'),
+('schedule_hour', '18', 'Частота начала'),
+('schedule_minute', '0', 'Минута начала');
 
 --
 -- ----------------------------------------------------------------------------

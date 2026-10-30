@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:Uxml xmlns:ui="Unity.UI.Toolkit" class="AchievementWidget">
+  <ui:VisualElement class="achievement-window">
+    <ui:VisualElement class="header">
+      <ui:Label class="title" text="Достижения" name="achievementsTitle" />
+      <ui:Button class="close-button" name="closeButton" click="OnCloseClicked" />
+    </ui:VisualElement>
+    
+    <ui:ScrollView class="achievements-scroll">
+      <ui:VisualElement class="achievements-list" name="achievementsContent" />
+    </ui:ScrollView>
+    
+    <ui:VisualElement class="separator" />
+    
+    <ui:VisualElement class="shop-section">
+      <ui:Label class="section-title" text="Магазин достижений" name="shopTitle" />
+      <ui:ScrollView class="shop-scroll">
+        <ui:VisualElement class="shop-list" name="shopContent" />
+      </ui:ScrollView>
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="points-section">
+      <ui:Label text="Очки достижений:" />
+      <ui:Label class="points-display" name="pointsDisplay" />
+      <ui:Label class="points-earned" name="pointsEarnedDisplay" />
+    </ui:VisualElement>
+  </ui:VisualElement>
+
+  <!-- Achievement Template -->
+  <ui:UxmlTemplate x:Key="achievementTemplate">
+    <ui:VisualElement class="achievement-entry">
+      <ui:VisualElement class="achievement-info">
+        <ui:Label class="achievement-name" name="achievementName" />
+        <ui:Label class="achievement-progress" name="achievementProgress" />
+      </ui:VisualElement>
+      <ui:Button class="achievement-claim" name="claimButton" click="OnAchievementClaimed" />
+    </ui:VisualElement>
+  </ui:UxmlTemplate>
+
+  <!-- Shop Template -->
+  <ui:UxmlTemplate x:Key="shopTemplate">
+    <ui:VisualElement class="shop-item">
+      <ui:VisualElement class="item-info">
+        <ui:Label class="item-name" name="itemName" />
+        <ui:Label class="item-cost" name="itemCost" />
+      </ui:VisualElement>
+      <ui:Button class="item-buy" name="buyButton" click="OnBuyClicked" />
+    </ui:VisualElement>
+  </ui:UxmlTemplate>
+</ui:Uxml>
