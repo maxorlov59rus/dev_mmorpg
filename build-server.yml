@@ -1,0 +1,41 @@
+name: Build Server
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-server:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1.14
+      with:
+        cmake-version: '3.28'
+
+    - name: Configure CMake
+      run: cmake -S dm-server -B dm-server/build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build server
+      run: cmake --build dm-server/build --config Release --parallel
+
+    - name: Run server tests
+      run: |
+        if (Test-Path "dm-server/build/Release/dm_server.exe") {
+          Write-Host "Server built successfully"
+        } else {
+          Write-Error "Server build failed"
+          exit 1
+        }
+
+    - name: Upload server artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: dm-server
+        path: dm-server/build/Release/dm_server.exe

@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup CMake
+      uses: jwlawson/actions-setup-cmake@v1.14
+      with:
+        cmake-version: '3.28'
+
+    - name: Build server
+      run: |
+        cmake -S dm-server -B dm-server/build -DCMAKE_BUILD_TYPE=Release
+        cmake --build dm-server/build --config Release --parallel
+
+    - name: Create release archive
+      run: |
+        mkdir release
+        Copy-Item dm-server/build/Release/dm_server.exe release/
+        Copy-Item dm-server/config/worldserver.conf release/
+        Compress-Archive -Path release/* -DestinationPath dm-server-release.zip
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dm-server-release.zip
+        body: |
+          ## MMORPG Framework Release
+          
+          ### Server
+          - dm_server.exe
+          - worldserver.conf
+          
+          ### Database
+          - Run sql/create/*.sql then sql/upgrades/*.sql
+          
+          ### Client
+          - Build in Unity with Tools menu

@@ -1,0 +1,75 @@
+# Build & Test (Windows) — обновлено под миграцию на Unity
+name: Build & Test (Windows)
+
+on:
+  push:
+    branches: [master, main, develop, "release/**"]
+    tags: ["v*"]
+  pull_request:
+    branches: [master, main, develop]
+  workflow_dispatch:
+
+concurrency:
+  group: win-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SERVER_SOURCE_DIR: dm-server
+
+jobs:
+  lint:
+    name: Lint (clang-format / proto / data contracts)
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run clang-format
+        shell: pwsh
+        run: |
+          $files = Get-ChildItem -Recurse -Include *.h,*.cpp -Path dm-server -ErrorAction SilentlyContinue
+          if (-not $files) { Write-Warning "No C++ files"; exit 0 }
+          $fail = 0
+          foreach ($f in $files) {
+            clang-format --dry-run -Werror "$($f.FullName)"
+            if ($LASTEXITCODE -ne 0) { $fail = 1 }
+          }
+          exit $fail
+      - name: Validate opcodes
+        shell: pwsh
+        run: python tools/run_tests.py --suite protocol
+
+  build-server:
+    name: Build Server (CMake + MSVC)
+    needs: lint
+    runs-on: [self-hosted, Windows, msvc2022]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure & Build
+        shell: cmd
+        run: |
+          cd dm-server
+          mkdir build 2>nul
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake --build . --config Release
+      - name: Upload server binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-win-${{ github.sha }}
+          path: dm-server/build/Release/dm_server.exe
+          retention-days: 7
+
+  test:
+    name: Test (protocol / data)
+    needs: build-server
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run tests
+        run: python tools/run_tests.py --suite all
