@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:Uxml xmlns:ui="Unity.UI.Toolkit" class="CampaignsWidget">
+  <ui:VisualElement class="campaigns-window">
+    <ui:VisualElement class="header">
+      <ui:Label class="window-title" text="Кампании 70+" name="campaignsTitle" />
+      <ui:Button class="close-button" name="closeButton" click="OnCloseClicked" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="campaigns-list">
+      <ui:ScrollView class="campaigns-scroll">
+        <ui:VisualElement class="campaigns-content" name="campaignsContent" />
+      </ui:ScrollView>
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="requirements-section">
+      <ui:Label text="Требования:" name="requirementsText" />
+      <ui:Label text="Уровень 70+, сила 150+ и выше" name="requirementsDetail" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="reward-section">
+      <ui:Label text="Награда за победу:" name="rewardText" />
+      <ui:Label text="500 золота, 100 духа, редкий предмет" name="rewardDetail" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="create-campaign">
+      <ui:Button class="create-campaign-button" name="createCampaignButton" text="Создать кампанию" click="OnCreateCampaignClicked" />
+    </ui:VisualElement>
+  </ui:VisualElement>
+
+  <!-- Campaign Template -->
+  <ui:UxmlTemplate x:Key="campaignTemplate">
+    <ui:VisualElement class="campaign-entry">
+      <ui:VisualElement class="campaign-info">
+        <ui:Label class="campaign-name" name="campaignName" />
+        <ui:Label class="campaign-levelrange" name="levelRange" />
+        <ui:Label class="campaign-difficulty" name="difficultyText" />
+        <ui:Label class="campaign-reward" name="rewardText" />
+      </ui:VisualElement>
+      <ui:Button class="campaign-start" name="startButton" click="OnStartCampaignClicked" text="Начать" />
+      <ui:Image class="lock-icon" sprite-name="lock" visible="false" name="lockIcon" />
+    </ui:VisualElement>
+  </ui:UxmlTemplate>
+</ui:Uxml>
