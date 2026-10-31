@@ -236,6 +236,11 @@ void sortInventory(uint64_t player_guid, bool by_quality = false, bool by_count 
     bool setTimeScale(float scale);
     bool broadcastMessage(const std::string& message, int channel); // 0=global, 1=faction, 2=party, 3=whisper
     
+    // Server Settings
+    bool setServerSetting(const std::string& key, const std::string& value);
+    std::string getServerSetting(const std::string& key);
+    std::vector<std::pair<std::string, std::string>> getAllServerSettings();
+    
     // Database Operations
     bool loadNpcsFromDatabase();
     bool loadQuestsFromDatabase();
