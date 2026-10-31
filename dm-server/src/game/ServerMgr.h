@@ -116,7 +116,32 @@ public:
     bool despawnNpc(int npc_id);
     bool updateNpcSpawn(int npc_id, float x, float y, float z);
     
+    // Enhanced NPC Management Functions
+    bool scheduleNpcRespawn(int npc_id, int respawn_time_seconds);
+    bool cancelNpcRespawn(int npc_id);
+    bool isNpcRespawnScheduled(int npc_id);
+    
+    bool updateNpcAI(int npc_id, float delta_time);
+    std::string getNpcAIBehavior(int npc_id);
+    bool setNpcAIBehavior(int npc_id, const std::string& behavior_type);
+    
+    bool setNpcReputation(int npc_id, int faction_id, int reputation_value);
+    int getNpcReputation(int npc_id, int faction_id);
+    std::vector<std::pair<int, int>> getNpcReputationHistory(int npc_id);
+    
+    bool spawnNpcIfConditionsMet(int npc_id, int player_level, int player_faction);
+    bool checkNpcSpawnConditions(int npc_id, int player_level, int player_faction);
+    
+    std::vector<NpcInfo> getNpcGroup(int npc_id);
+    bool addNpcToGroup(int leader_npc_id, int follower_npc_id);
+    void removeNpcFromGroup(int npc_id);
+    
+    NpcInfo scaleNpcLevel(int npc_id, int player_level);
+    
     // Quest Giver Management
+    std::optional<QuestGiverInfo> getQuestGiver(int npc_id) const;
+    std::vector<QuestGiverInfo> getQuestGiversByFaction(int faction_id) const;
+    std::vector<QuestGiverInfo> getAvailableQuests(int player_level, int player_faction) const;
     std::optional<QuestGiverInfo> getQuestGiver(int npc_id) const;
     std::vector<QuestGiverInfo> getQuestGiversByFaction(int faction_id) const;
     std::vector<QuestGiverInfo> getAvailableQuests(int player_level, int player_faction) const;
