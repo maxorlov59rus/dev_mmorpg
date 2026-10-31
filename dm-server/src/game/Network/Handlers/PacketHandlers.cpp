@@ -348,6 +348,7 @@ PacketRouter::Instance().Register(
         0x210A, [](uint32_t sessionId, uint16_t opcode, const std::vector<uint8_t> &payload) {
             dm::common::Logger::Instance().Debug("CMSG_IGNORE_LIST received from session " + std::to_string(sessionId));
         });
+    }
 
 } // namespace net
 } // namespace dm
