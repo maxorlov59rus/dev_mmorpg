@@ -70,6 +70,24 @@ struct QuestGiverInfo {
     bool is_repeatable;
 };
 
+// NPC Quest Data
+struct NpcQuestData {
+    int npc_id;
+    int quest_id;
+    bool is_available;
+    bool is_completed;
+    int progress; // 0 = not started, 1 = in progress, 2 = completed
+};
+
+// Quest Reward Data
+struct QuestReward {
+    int gold;
+    int spirit;
+    int item_entry;
+    int count;
+    bool is_experience;
+};
+
 // Server Manager Class
 class ServerMgr {
 public:
