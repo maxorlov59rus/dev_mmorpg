@@ -138,13 +138,97 @@ public:
     
     NpcInfo scaleNpcLevel(int npc_id, int player_level);
     
-    // Quest Giver Management
-    std::optional<QuestGiverInfo> getQuestGiver(int npc_id) const;
-    std::vector<QuestGiverInfo> getQuestGiversByFaction(int faction_id) const;
-    std::vector<QuestGiverInfo> getAvailableQuests(int player_level, int player_faction) const;
-    std::optional<QuestGiverInfo> getQuestGiver(int npc_id) const;
-    std::vector<QuestGiverInfo> getQuestGiversByFaction(int faction_id) const;
-    std::vector<QuestGiverInfo> getAvailableQuests(int player_level, int player_faction) const;
+    #define MAX_INVENTORY_SIZE 60
+
+// Inventory Slot Structure
+struct InventorySlot {
+    int item_id; // 0 = empty
+    int item_count; // stack count
+    int item_quality; // 0=common, 1=rare, 2=epic, 3=legendary
+    int durability; // current durability
+    int max_durability; // maximum durability
+    int enchant_level; // enchantment level
+    bool is_equipped; // is item equipped
+    int equip_slot; // equipment slot if equipped
+};
+
+// Inventory Structure
+struct PlayerInventory {
+    InventorySlot slots[MAX_INVENTORY_SIZE];
+    uint64_t player_guid;
+    uint32_t gold;
+    uint32_t spirit;
+    
+    PlayerInventory() {
+        // Initialize all slots to empty
+        for (int i = 0; i < MAX_INVENTORY_SIZE; i++) {
+            slots[i].item_id = 0;
+            slots[i].item_count = 0;
+            slots[i].item_quality = 0;
+            slots[i].durability = 0;
+            slots[i].max_durability = 0;
+            slots[i].enchant_level = 0;
+            slots[i].is_equipped = false;
+            slots[i].equip_slot = -1;
+        }
+        gold = 0;
+        spirit = 0;
+    }
+};
+
+// Inventory Functions
+struct InventorySlot getInventorySlot(uint64_t player_guid, int slot_index);
+bool setInventorySlot(uint64_t player_guid, int slot_index, const InventorySlot& slot);
+bool addItemToInventory(uint64_t player_guid, int item_id, int count, int quality, int durability);
+bool removeItemFromInventory(uint64_t player_guid, int item_id, int count);
+bool hasItemInInventory(uint64_t player_guid, int item_id, int count = 1);
+bool updateInventoryDurability(uint64_t player_guid, int item_id, int durability);
+
+// Inventory Equip/Unequip
+bool equipItem(uint64_t player_guid, int slot_index);
+bool unequipItem(uint64_t player_guid, int equip_slot);
+
+// Inventory Gold/Spirit Management
+bool addGold(uint64_t player_guid, uint32_t amount);
+bool removeGold(uint64_t player_guid, uint32_t amount);
+uint32_t getGold(uint64_t player_guid);
+bool addSpirit(uint64_t player_guid, uint32_t amount);
+bool removeSpirit(uint64_t player_guid, uint32_t amount);
+uint32_t getSpirit(uint64_t player_guid);
+
+// Inventory Persistence
+bool saveInventory(uint64_t player_guid);
+bool loadInventory(uint64_t player_guid);
+
+// Inventory Query Functions
+std::vector<InventorySlot> getAllInventoryItems(uint64_t player_guid);
+std::vector<InventorySlot> getEquippedItems(uint64_t player_guid);
+std::vector<InventorySlot> getUsableItems(uint64_t player_guid, int player_level);
+
+// Inventory Search Functions
+int findItemInInventory(uint64_t player_guid, int item_id);
+std::vector<int> findItemsByQuality(uint64_t player_guid, int quality);
+std::vector<int> findItemsByType(uint64_t player_guid, int item_type);
+
+// Inventory Swap
+bool swapInventorySlots(uint64_t player_guid, int slot1, int slot2);
+
+// Inventory Filter Functions
+std::vector<InventorySlot> filterInventoryByLevel(uint64_t player_guid, int min_level, int max_level);
+std::vector<InventorySlot> filterInventoryByType(uint64_t player_guid, int item_type);
+std::vector<InventorySlot> filterInventoryByQuality(uint64_t player_guid, int min_quality, int max_quality);
+
+// Inventory Weight System (if implemented)
+struct ItemWeightInfo {
+    int item_id;
+    int weight;
+};
+float getTotalInventoryWeight(uint64_t player_guid);
+float getMaxCarryWeight(uint64_t player_guid, int strength);
+float calculateEncumbrance(uint64_t player_guid);
+
+// Inventory Sorting
+void sortInventory(uint64_t player_guid, bool by_quality = false, bool by_count = false);
     
     // Server Controls
     bool startCampaign(int campaign_id);
