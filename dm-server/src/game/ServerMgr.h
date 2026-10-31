@@ -241,6 +241,16 @@ void sortInventory(uint64_t player_guid, bool by_quality = false, bool by_count 
     std::string getServerSetting(const std::string& key);
     std::vector<std::pair<std::string, std::string>> getAllServerSettings();
     
+    // Client Settings
+    bool setClientSetting(uint64_t player_guid, const std::string& key, const std::string& value);
+    std::string getClientSetting(uint64_t player_guid, const std::string& key);
+    std::vector<std::pair<std::string, std::string>> getAllClientSettings(uint64_t player_guid);
+    
+    // Database Settings (admin only)
+    bool setDatabaseSetting(const std::string& key, const std::string& value);
+    std::string getDatabaseSetting(const std::string& key);
+    std::vector<std::pair<std::string, std::string>> getAllDatabaseSettings();
+    
     // Database Operations
     bool loadNpcsFromDatabase();
     bool loadQuestsFromDatabase();
