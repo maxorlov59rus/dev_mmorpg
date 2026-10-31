@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:Uxml xmlns:ui="Unity.UI.Toolkit" class="QuestLogWidget">
+  <ui:VisualElement class="quest-log-window">
+    <ui:VisualElement class="header">
+      <ui:Label class="window-title" text="Квестовый журнал" name="questLogTitle" />
+      <ui:Button class="close-button" name="closeButton" click="OnCloseClicked" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="quests-section">
+      <ui:Label class="section-title" text="Квестовый журнал" name="questLogTitle" />
+      <ui:ScrollView class="quests-scroll">
+        <ui:VisualElement class="quests-list" name="questContent" />
+      </ui:ScrollView>
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="empty-state" name="emptyState" >
+      <ui:Label text="У вас нет активных квестов" name="emptyStateText" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="footer">
+      <ui:Button class="close-button" name="closeButton" click="OnCloseClicked" text="Закрыть" />
+    </ui:VisualElement>
+  </ui:VisualElement>
+
+  <!-- Quest Template -->
+  <ui:UxmlTemplate x:Key="questTemplate">
+    <ui:VisualElement class="quest-entry">
+      <ui:VisualElement class="quest-info">
+        <ui:Label class="quest-name" name="questName" />
+        <ui:Label class="quest-description" name="questDescription" />
+        <ui:Label class="quest-progress" name="questProgress" />
+      </ui:VisualElement>
+      <ui:Button class="quest-accept" name="acceptButton" text="Принять" click="OnAcceptQuestClicked" />
+      <ui:GameObject class="completed-mark" name="completedMark" />
+    </ui:VisualElement>
+  </ui:UxmlTemplate>
+</ui:Uxml>
