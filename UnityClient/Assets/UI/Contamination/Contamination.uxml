@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:Uxml xmlns:ui="Unity.UI.Toolkit" class="ContaminationWidget">
+  <ui:VisualElement class="contamination-window">
+    <ui:VisualElement class="header">
+      <ui:Label class="window-title" text="Зараза" name="windowTitle" />
+      <ui:Button class="close-button" name="closeButton" click="OnCloseClicked" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="contamination-info">
+      <ui:Label class="contamination-level" text="Уровень заразы: 0" name="contaminationLevelText" />
+      <ui:Slider class="contamination-slider" name="contaminationSlider" minValue="0" maxValue="100" valueChanged="OnContaminationSliderChanged" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="debuff-info">
+      <ui:Label class="debuff-type" text="Тип дебаффа: --" name="debuffTypeText" />
+      <ui:Label class="debuff-value" text="Сила: --%" name="debuffValueText" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="cure-section">
+      <ui:Label text="Уровень заразы для исцеления:" />
+      <ui:Label class="cure-cost" text="Антидот: 100 золота" name="cureCostText" />
+      <ui:Button class="cure-button" name="cureButton" text="Исцелить" click="OnCureClicked" />
+    </ui:VisualElement>
+    
+    <ui:VisualElement class="zones-list">
+      <ui:Label class="zones-title" text="Зоны заразы:" name="zonesTitle" />
+      <ui:ScrollView class="zones-scroll">
+        <ui:VisualElement class="zones-list-content" name="contaminationContent" />
+      </ui:ScrollView>
+    </ui:VisualElement>
+  </ui:VisualElement>
+
+  <!-- Contamination Entry Template -->
+  <ui:UxmlTemplate x:Key="contaminationEntryTemplate">
+    <ui:VisualElement class="contamination-entry">
+      <ui:VisualElement class="zone-info">
+        <ui:Label class="zone-name" name="zoneName" />
+        <ui:Label class="zone-level" name="zoneLevel" />
+      </ui:VisualElement>
+      <ui:ProgressBar class="contamination-bar" name="contaminationBar" minValue="0" maxValue="100" valueChanged="OnEntryContaminationChanged" />
+    </ui:VisualElement>
+  </ui:UxmlTemplate>
+</ui:Uxml>
