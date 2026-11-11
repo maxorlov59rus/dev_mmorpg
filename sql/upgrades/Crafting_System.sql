@@ -70,7 +70,7 @@ INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_ite
 (4004, 4, 'Стальной щит', 'Steel Shield', 14004, 1, 50, 4000, 'Улучшенный щит.', 'Improved shield.'),
 (4005, 4, 'Мифриловый меч', 'Mithril Sword', 14005, 1, 100, 5000, 'Мощный меч из мифрила.', 'Powerful mithril sword.'),
 (4006, 4, 'Мифриловый щит', 'Mithril Shield', 14006, 1, 100, 5000, 'Мощный щит из мифрила.', 'Powerful mithril shield.'),
-(4007, 4, 'Титановый меч', 'Titanium Sword', 14007, 1, 200, 6000, 'Легендарный меч из титана.', 'Legendary titanium sword.'),
+(4007, 4, 'Титановый меч', 'Titanium Sword', 14007, 1, 200, 6000, 'Легендарный меч из титана.', 'Legendary titanium sword.');
 -- Alchemy recipes
 INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_item_id, result_count, required_skill, craft_time_ms, description_ru, description_en) VALUES
 (5001, 5, 'Зелье исцеления (малое)', 'Small Healing Potion', 14010, 1, 1, 2000, 'Восстанавливает 100 HP.', 'Restores 100 HP.'),
@@ -83,7 +83,7 @@ INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_ite
 (5008, 5, 'Зелье ловкости', 'Agility Potion', 14017, 1, 50, 3000, '+10 ловкости на 30 мин.', '+10 agility for 30 min.'),
 (5009, 5, 'Зелье интеллекта', 'Intellect Potion', 14018, 1, 50, 3000, '+10 интеллекта на 30 мин.', '+10 intellect for 30 min.'),
 (5010, 5, 'Зелье выносливости', 'Vitality Potion', 14019, 1, 50, 3000, '+10 выносливости на 30 мин.', '+10 vitality for 30 min.'),
-(5011, 5, 'Зелье духа', 'Spirit Potion', 14020, 1, 50, 3000, '+10 духа на 30 мин.', '+10 spirit for 30 min.'),
+(5011, 5, 'Зелье духа', 'Spirit Potion', 14020, 1, 50, 3000, '+10 духа на 30 мин.', '+10 spirit for 30 min.');
 -- Tailoring recipes
 INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_item_id, result_count, required_skill, craft_time_ms, description_ru, description_en) VALUES
 (6001, 6, 'Льняная рубаха', 'Linen Shirt', 14030, 1, 1, 2000, 'Базовая тканевая броня.', 'Basic cloth armor.'),
