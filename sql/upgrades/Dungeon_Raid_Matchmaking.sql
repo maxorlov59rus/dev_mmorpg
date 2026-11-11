@@ -39,7 +39,12 @@ INSERT IGNORE INTO dungeon_def (id, name_ru, name_en, map_id, min_level, max_lev
 CREATE TABLE IF NOT EXISTS dungeon_difficulty (
     id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
     name_ru VARCHAR(32) NOT NULL,
--- ---------------------------------------------------------------------------
+    name_en VARCHAR(32) NOT NULL,
+    level_min TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    level_max TINYINT UNSIGNED NOT NULL DEFAULT 60,
+    reward_multiplier FLOAT NOT NULL DEFAULT 1.0,
+    comment VARCHAR(128)
+) ENGINE=InnoDB;
 -- 4. LFG_QUEUE — Очередь поиска группы
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS lfg_queue (
