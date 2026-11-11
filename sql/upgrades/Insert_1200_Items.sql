@@ -1,6 +1,6 @@
--- Insert_1200_Items.sql — сгенерировано tools/Generate_Item_Data.py
--- Предметов: 1200
--- Не редактировать вручную: правьте конфиг и перегенерируйте.
+-- Insert_1200_Items.sql — сгенерировано tools/Generate_Item_Data.py,
+-- Предметов: 1200,
+-- Не редактировать вручную: правьте конфиг и перегенерируйте.,
 
 SET NAMES utf8mb4;
 
@@ -704,7 +704,7 @@ INSERT INTO `item_template` (`entry`, `class`, `subclass`, `name`, `displayid`, 
 (10697,4,3,'Ironwall Runed Gloves',50697,4,10443,7,-1,59,336,0),
 (10698,4,3,'Ironwall Runed Gloves',50698,4,11532,7,-1,62,348,0),
 (10699,4,3,'Ironwall Runed Gloves',50699,4,13068,7,-1,66,364,0),
-(10700,4,3,'Ironwall Runed Gloves',50700,4,14700,7,-1,70,380,0);
+(10700,4,3,'Ironwall Runed Gloves',50700,4,14700,7,-1,70,380,0),
 (10701,4,4,'Aegis Sturdy Helm',50701,2,2880,1,-1,40,260,0),
 (10702,4,4,'Aegis Sturdy Helm',50702,2,3175,1,-1,42,268,0),
 (10703,4,4,'Aegis Sturdy Helm',50703,4,6075,1,-1,45,280,0),
@@ -804,7 +804,7 @@ INSERT INTO `item_template` (`entry`, `class`, `subclass`, `name`, `displayid`, 
 (10797,4,4,'Aegis Aetherium Gloves',50797,5,26625,7,-1,86,444,0),
 (10798,4,4,'Aegis Aetherium Gloves',50798,5,28515,7,-1,89,456,0),
 (10799,4,4,'Aegis Aetherium Gloves',50799,5,30470,7,-1,92,468,0),
-(10800,4,4,'Aegis Aetherium Gloves',50800,5,32490,7,-1,95,480,0);
+(10800,4,4,'Aegis Aetherium Gloves',50800,5,32490,7,-1,95,480,0),
 (10801,1,4,'Hearty Ration (1)',50801,1,4,-1,-1,1,0,0),
 (10802,1,4,'Hearty Ration (2)',50802,1,8,-1,-1,2,0,0),
 (10803,1,4,'Hearty Ration (4)',50803,1,16,-1,-1,4,0,0),
@@ -904,7 +904,7 @@ INSERT INTO `item_template` (`entry`, `class`, `subclass`, `name`, `displayid`, 
 (10897,1,5,'Scroll of Recall',50897,2,50,-1,-1,66,0,0),
 (10898,1,5,'Scroll of Empowerment',50898,2,50,-1,-1,67,0,0),
 (10899,1,5,'Scroll of Recall',50899,2,50,-1,-1,68,0,0),
-(10900,1,5,'Scroll of Empowerment',50900,2,50,-1,-1,69,0,0);
+(10900,1,5,'Scroll of Empowerment',50900,2,50,-1,-1,69,0,0),
 (10901,1,2,'Healing Elixir L5',50901,2,5,-1,-1,5,0,0),
 (10902,1,2,'Mana Elixir L5',50902,2,5,-1,-1,5,0,0),
 (10903,1,2,'Healing Elixir L6',50903,2,6,-1,-1,6,0,0),
@@ -1004,7 +1004,7 @@ INSERT INTO `item_template` (`entry`, `class`, `subclass`, `name`, `displayid`, 
 (10997,1,2,'Healing Elixir L92',50997,4,92,-1,-1,92,0,0),
 (10998,1,2,'Mana Elixir L93',50998,4,93,-1,-1,93,0,0),
 (10999,1,2,'Healing Elixir L94',50999,4,94,-1,-1,94,0,0),
-(11000,1,2,'Mana Elixir L95',51000,4,95,-1,-1,95,0,0);
+(11000,1,2,'Mana Elixir L95',51000,4,95,-1,-1,95,0,0),
 (11001,5,7,'Ore (Rough)',51001,1,1,-1,-1,1,0,0),
 (11002,5,7,'Herb (Rough)',51002,1,1,-1,-1,1,0,0),
 (11003,5,7,'Cloth Scrap (Rough)',51003,1,2,-1,-1,2,0,0),
