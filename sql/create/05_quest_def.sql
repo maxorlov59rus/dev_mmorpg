@@ -116,3 +116,21 @@ CREATE TABLE IF NOT EXISTS resource_table (
     description_ru TEXT,
     description_en TEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS creature_template (
+    entry        MEDIUMINT UNSIGNED NOT NULL PRIMARY KEY,
+    name         VARCHAR(64) NOT NULL,
+    subname      VARCHAR(64) NULL,
+    min_level    TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    max_level    TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    faction_A    SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    faction_H    SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    unit_flags   INT UNSIGNED NOT NULL DEFAULT 0,
+    unit_flags2  INT UNSIGNED NOT NULL DEFAULT 0,
+    type_flags   INT UNSIGNED NOT NULL DEFAULT 0,
+    damage_mult  DECIMAL(6,3) NOT NULL DEFAULT 1.000,
+    health_mult  DECIMAL(6,3) NOT NULL DEFAULT 1.000,
+    lootid       MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+    pickpocketloot MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+    script_name  VARCHAR(64) NOT NULL DEFAULT '',
+    KEY idx_factions (faction_A, faction_H)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
