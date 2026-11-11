@@ -25,3 +25,11 @@ __pycache__/
 logs/
 *.tmp
 *.temp
+*.bak
+*.slnx
+*.vsidx
+tests/contract/*_bin
+Binaries/Win64/
+Build/
+Builds/
+/unity_builds/
