@@ -11,7 +11,7 @@ INSERT IGNORE INTO quest_def (id, title_ru, title_en, description_ru, descriptio
 
 -- === НПЦы уровня 50-60 ===
 
-INSERT IGNORE INTO npc_def (id, name_ru, name_en, title_ru, title_en, npc_type, rank, faction_id, city_id, gender, race, description_ru, description_en, is_quest_giver, is_trainer, is_special_interact) VALUES
+INSERT IGNORE INTO npc_def (id, name_ru, name_en, title_ru, title_en, npc_type, `rank`, faction_id, city_id, gender, race, description_ru, description_en, is_quest_giver, is_trainer, is_special_interact) VALUES
 (201, 'Губитель Гор', 'Mountain Slayer', 'Хранитель гор', 'Mountain Guardian', 0, 2, 1, 101, 0, 'human', 'Ветерана гор, который охраняет пути на вершины', 'Master of the Peaks', 1, 0, 1),
 (202, 'Архивариух', 'Forgotten Archivist', 'Хранитель следов', 'Forgotten Keeper', 0, 2, 2, 102, 1, 'elf', 'Стараяエルフ, которая хранит секреты древнего храма', 'Keeper of Secrets', 1, 0, 1);
 
