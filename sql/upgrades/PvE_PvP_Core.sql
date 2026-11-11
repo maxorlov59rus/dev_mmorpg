@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `graveyard_binding` (
     KEY `idx_zone` (`map_id`, `zone_area_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `graveyard_binding` (`map_id`, `zone_area_id`, `gy_map`, `pos_x`, `pos_y`, `pos_z`) VALUES
+INSERT IGNORE INTO `graveyard_binding` (`map_id`, `zone_area_id`, `gy_map`, `pos_x`, `pos_y`, `pos_z`) VALUES
 (1, 101, 1, -210.0, 45.0, 90.0),
 (1, 102, 1, 830.0, -120.0, 75.0),
 (2, 201, 2, 120.0, 300.0, 40.0);
