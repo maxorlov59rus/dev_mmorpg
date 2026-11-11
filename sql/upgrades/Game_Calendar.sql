@@ -8,6 +8,27 @@ USE dm_world;
 -- ---------------------------------------------------------------------------
 -- 1. CALENDAR_EVENT_DEF — События календаря
 -- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS calendar_event_def (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name_ru VARCHAR(64) NOT NULL,
+    name_en VARCHAR(64) NOT NULL,
+    description_ru TEXT,
+    description_en TEXT,
+    event_type TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    start_month TINYINT UNSIGNED NOT NULL,
+    start_day TINYINT UNSIGNED NOT NULL,
+    end_month TINYINT UNSIGNED NOT NULL,
+    end_day TINYINT UNSIGNED NOT NULL,
+    is_recurring TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    icon_path VARCHAR(128),
+    color_hex VARCHAR(8) NOT NULL DEFAULT '#FFFFFF',
+    reward_type VARCHAR(32),
+    reward_id INT UNSIGNED,
+    reward_count INT UNSIGNED DEFAULT 0,
+    is_active TINYINT UNSIGNED NOT NULL DEFAULT 1
+);
+
+INSERT IGNORE INTO calendar_event_def (id, name_ru, name_en, description_ru, description_en, event_type, start_month, start_day, end_month, end_day, is_recurring, icon_path, color_hex, reward_type, reward_id, reward_count, is_active) VALUES
 (11, 'Подземелье Забытых', 'Dungeon of the Forgotten', 'Ежедневный данж для игроков 10+ уровня.', 'Daily dungeon for players 10+.', 4, 1, 1, 12, 31, 1, 'Icons/Events/dungeon_forgotten', '#8B4513', 'spirit_exp', 0, 200, 1),
 (12, 'Пещеры Теней', 'Caves of Shadows', 'Ежедневный данж для игроков 15+ уровня.', 'Daily dungeon for players 15+.', 4, 1, 1, 12, 31, 1, 'Icons/Events/dungeon_shadows', '#2F4F4F', 'spirit_exp', 0, 250, 1),
 (13, 'Руины Древних', 'Ruins of the Ancients', 'Ежедневный данж для игроков 20+ уровня.', 'Daily dungeon for players 20+.', 4, 1, 1, 12, 31, 1, 'Icons/Events/dungeon_ruins', '#8B0000', 'spirit_exp', 0, 300, 1),
