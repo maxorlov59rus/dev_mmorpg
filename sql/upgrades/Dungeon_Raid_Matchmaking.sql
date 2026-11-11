@@ -136,14 +136,6 @@ INSERT IGNORE INTO dungeon_config (config_key, config_value, comment) VALUES
 ('min_tank_per_group', '1', 'Мин танков в группе'),
 ('min_healer_per_group', '1', 'Мин хилов в группе'),
 ('min_dps_per_group', '3', 'Мин ДПС в группе');
-    name_en VARCHAR(32) NOT NULL,
-    hp_multiplier FLOAT NOT NULL DEFAULT 1.0,
-    dmg_multiplier FLOAT NOT NULL DEFAULT 1.0,
-    loot_multiplier FLOAT NOT NULL DEFAULT 1.0,
-    xp_multiplier FLOAT NOT NULL DEFAULT 1.0,
-    min_item_level TINYINT UNSIGNED NOT NULL DEFAULT 0,
-    is_active TINYINT UNSIGNED NOT NULL DEFAULT 1
-) ENGINE=InnoDB;
 
 INSERT IGNORE INTO dungeon_difficulty (id, name_ru, name_en, hp_multiplier, dmg_multiplier, loot_multiplier, xp_multiplier, min_item_level, is_active) VALUES
 (0, 'Обычный', 'Normal', 1.0, 1.0, 1.0, 1.0, 0, 1),
