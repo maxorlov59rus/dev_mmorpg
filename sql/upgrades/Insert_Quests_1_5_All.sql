@@ -5,7 +5,7 @@ USE dm_world;
 -- ---------------------------------------------------------------------------
 -- 1. QUEST_TEMPLATE — 90 стартовых квестов + 18 переходных
 -- ---------------------------------------------------------------------------
-INSERT IGNORE INTO quest_template (ID, Title, LevelMin, LevelMax, ZoneID, NextQuestId, PrevQuestId, QuestType, SpecialFlags, RewardReputationFaction1, RewardReputationAmount1, RewardMoney, RequiredClass) VALUES
+INSERT IGNORE INTO quest_template (ID, Title, QuestType, SpecialFlags, RewRepFaction1, RewRepValue1, Reward) VALUES
 (1011, 'Первые шаги (Воин/Рассвет)', 1, 0, 1, 50, 20),
 (1012, 'Обучение владению оружием (Воин/Рассвет)', 1, 0, 1, 50, 30),
 (1013, 'Первая кровь (Воин/Рассвет)', 1, 0, 1, 75, 40),
