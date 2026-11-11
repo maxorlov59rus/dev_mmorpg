@@ -6,8 +6,8 @@
 -- === Квесты уровня 50-60 ===
 
 INSERT IGNORE INTO quest_def (id, title_ru, title_en, description_ru, description_en, level_min, level_max, quest_type, quest_category, objectives, reward_type, reward_value, time_limit, is_repeatable, faction_id) VALUES
-(101, 'Путь на Вершину', 'Path to the Summit', 'Покорите 10 горных пиков', 'Climb 10 mountain peaks', 50, 55, 'kill_monsters', 'exploration', 'defend_pass, slay_10_mountain_trolls, retrieve_ancient_artifact', 'gold', '200', 0, 1),
-(102, 'Забытыйхранилище', 'Forgotten Vault', 'Найдите древнийartifact в заброшенном храме', 'Find ancient artifact in abandoned temple', 55, 60, 'collect_items', 'dungeon', 'collect_5_artifact_fragments, defeat_ancient_guardian, retrieve_lost_knowledge', 'spirit', '150', 0, 1);
+(101, 'Путь на Вершину', 'Path to the Summit', 'Покорите 10 горных пиков', 'Climb 10 mountain peaks', 50, 55, 'kill_monsters', 'exploration', 'defend_pass, slay_10_mountain_trolls, retrieve_ancient_artifact', 'gold', '200', 0, 1, 1),
+(102, 'Забытыйхранилище', 'Forgotten Vault', 'Найдите древнийartifact в заброшенном храме', 'Find ancient artifact in abandoned temple', 55, 60, 'collect_items', 'dungeon', 'collect_5_artifact_fragments, defeat_ancient_guardian, retrieve_lost_knowledge', 'spirit', '150', 0, 1, 1);
 
 -- === НПЦы уровня 50-60 ===
 
