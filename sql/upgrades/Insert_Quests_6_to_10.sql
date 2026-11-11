@@ -98,9 +98,9 @@ INSERT IGNORE INTO item_template
 -- «Рупор призыва» — расходный жетон LFG (effect -> CMSG_JOIN_LFG dungeon=1)
 INSERT INTO item_template
   (entry, class, subclass, name, displayid, Quality, ItemLevel, RequiredLevel,
-   AllowableClass, AllowableRace, Bonding, FactionRelated, FactionReqRank, Material, SpellID_1) VALUES
+   AllowableClass, AllowableRace, Bonding, FactionRelated, FactionReqRank, Material) VALUES
   (5120, 4 /*item class: consumable-аналог TRC*, subclass 0*/, 0, 'Рупор призыва', 5120, 3, 10, 10,
-   -1, -1, 1 /*BoP*/, 0, 0, 1, 110501 /*use-effect: join LFG queue*/);
+   -1, -1, 1 /*BoP*/, 0, 0, 1);
 
 -- ---------------------------------------------------------------------
 -- 3) Цепочки и привязка к NPC
