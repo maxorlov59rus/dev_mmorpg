@@ -25,7 +25,7 @@ INSERT IGNORE INTO item_template (entry, class, subclass, name, displayid, quali
 (14018, 0, 0, 'Intellect Potion', 51008, 2, 0, 80, 8, -1, -1, -1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (14019, 0, 0, 'Vitality Potion', 51009, 2, 0, 80, 8, -1, -1, -1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (14020, 0, 0, 'Spirit Potion', 51010, 2, 0, 80, 8, -1, -1, -1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-(14021, 0, 0, 'Elixir of Immortality', 51011, 3, 0, 300, 30, -1, -1, -1, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(14021, 0, 0, 'Elixir of Immortality', 51011, 3, 0, 300, 30, -1, -1, -1, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT IGNORE INTO item_template (entry, class, subclass, name, displayid, quality, flags, BuyPrice, SellPrice, InventoryType, AllowableClass, AllowableRace, ItemLevel, durability, dmg_min, dmg_max, delay, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, socket_count, spellid_1, spelltrigger_1) VALUES
 (14030, 4, 0, 'Linen Shirt', 50010, 1, 0, 30, 3, 25, 37, -1, 5, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 (14031, 4, 0, 'Silk Shirt', 50011, 2, 0, 90, 9, 25, 37, -1, 15, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
