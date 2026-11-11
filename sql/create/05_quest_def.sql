@@ -165,3 +165,13 @@ CREATE TABLE IF NOT EXISTS creature_loot_template (
     Comment VARCHAR(255) NULL,
     PRIMARY KEY (Entry, Item)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS quest_dialogue (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    quest_id INT UNSIGNED NOT NULL,
+    npc_entry INT UNSIGNED NOT NULL,
+    dialogue_type TINYINT UNSIGNED NOT NULL,
+    locale VARCHAR(5) NOT NULL DEFAULT 'ru',
+    text TEXT NOT NULL,
+    INDEX idx_quest (quest_id),
+    INDEX idx_npc (npc_entry)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
