@@ -4,6 +4,6 @@
 namespace dm {
 class Map {
 public:
-    static Map &Instance();
+  static Map &Instance();
 };
 } // namespace dm

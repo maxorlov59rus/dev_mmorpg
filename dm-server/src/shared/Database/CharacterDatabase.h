@@ -6,7 +6,7 @@ namespace shared {
 namespace database {
 class CharacterDatabase {
 public:
-    static CharacterDatabase &Instance();
+  static CharacterDatabase &Instance();
 };
 } // namespace database
 } // namespace shared

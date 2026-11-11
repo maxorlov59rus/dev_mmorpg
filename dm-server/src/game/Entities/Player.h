@@ -5,15 +5,11 @@
 namespace dm {
 class QuestMgr {
 public:
-    void KilledCreature(uint32_t entry, int count) {}
+  void KilledCreature(uint32_t entry, int count) {}
 };
 class Player {
 public:
-    bool IsRenegate() const {
-        return false;
-    }
-    QuestMgr *GetQuestMgr() {
-        return nullptr;
-    }
+  bool IsRenegate() const { return false; }
+  QuestMgr *GetQuestMgr() { return nullptr; }
 };
 } // namespace dm

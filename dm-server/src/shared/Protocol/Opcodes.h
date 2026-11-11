@@ -6,7 +6,7 @@ namespace dm {
 namespace shared {
 namespace protocol {
 enum Opcodes : uint16_t {
-    OPCODE_VENDOR_LIST = 0x2051,
+  OPCODE_VENDOR_LIST = 0x2051,
 };
 } // namespace protocol
 } // namespace shared

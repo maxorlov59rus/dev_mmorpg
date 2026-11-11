@@ -6,18 +6,18 @@ namespace shared {
 namespace database {
 
 SQLClient &SQLClient::Instance() {
-    static SQLClient inst;
-    return inst;
+  static SQLClient inst;
+  return inst;
 }
 
 bool SQLClient::Query(const std::string &sql) {
-    std::cout << "SQL Query: " << sql << std::endl;
-    return true;
+  std::cout << "SQL Query: " << sql << std::endl;
+  return true;
 }
 
 bool SQLClient::Execute(const std::string &sql) {
-    std::cout << "SQL Execute: " << sql << std::endl;
-    return true;
+  std::cout << "SQL Execute: " << sql << std::endl;
+  return true;
 }
 
 } // namespace database
