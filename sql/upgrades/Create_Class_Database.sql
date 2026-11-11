@@ -133,7 +133,7 @@ INSERT INTO class_restrictions (class_id, forbidden_race_id, required_faction, r
 
 -- Стартовая экипировка классов (q_1001/q_1002 награды уже ссылаются на эти
 -- entry; Bonding=1 BoP, FactionRelated см. item_template в DB_Schema.sql):
-INSERT IGNORE INTO items (entry, guid_owner, slot, quantity) VALUES (0,0,0,0); -- no-op guard: schema inventory совместимость
+-- items lives in the dm_characters schema (02_dm_characters.sql); no world-scoped seed needed here
 
 -- ---------------------------------------------------------------------
 -- 6) Валидация консистентности (запускается тем же golden-тестом CI):
