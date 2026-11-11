@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `pvp_zones` (
     UNIQUE KEY `uk_map_area` (`map_id`, `area_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `pvp_zones` (`map_id`, `area_id`, `name`, `ruleset`, `forced_untag`, `auto_resurrect`, `clean_debuffs`, `honor_mult_q16`) VALUES
+INSERT IGNORE INTO `pvp_zones` (`map_id`, `area_id`, `name`, `ruleset`, `forced_untag`, `auto_resurrect`, `clean_debuffs`, `honor_mult_q16`) VALUES
 (1, 101, 'Dawnhold - City of the Order of the Dawn', 1, 1, 0, 0, 65536),
 (1, 102, 'Ashen Reach - Citadel of the Ember Order', 1, 1, 0, 0, 65536),
 (1, 103, 'Threshold Gate - Neutral Trade Hub',       1, 1, 0, 0, 65536),
