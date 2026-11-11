@@ -273,3 +273,8 @@ CREATE TABLE IF NOT EXISTS creature_quest_relation (
     role           VARCHAR(8) NOT NULL DEFAULT 'start',
     PRIMARY KEY (creature_entry, quest_id, role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS broadcast_text (
+    ID MEDIUMINT UNSIGNED NOT NULL PRIMARY KEY,
+    Text0 TEXT NOT NULL,
+    LanguageID TINYINT UNSIGNED NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

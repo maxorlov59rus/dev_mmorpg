@@ -152,7 +152,7 @@ INSERT INTO gossip_menu_option (MenuID, ID, OptionIcon, OptionText, OptionBroadc
   -- LFG-ветка после выбора спеки (menu 110500)
   (110500, 1, 0 /*talk*/, 'Дай мне Рупор призыва.',          90049, 1, 2, 1106);
 
-INSERT INTO broadcast_text VALUES
+INSERT IGNORE INTO broadcast_text VALUES
   (90030, 'Командир Ополчения: «Возвращайся, когда станешь сильнее. Десять зим — и приходи.»', 0),
   (90031, 'Командир Ополчения: «Ты уже в пути. Не сворачивай.»', 0),
   (90032, 'Командир Ополчения: «Звёзды смотрят на тебя.»', 0),
