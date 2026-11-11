@@ -89,7 +89,6 @@ INSERT IGNORE INTO prayer_definitions (name_ru, name_en, description_ru, descrip
 -- Generated for MMORPG Black Materia
 
 -- 1. ZODIAC_SIGNS — Определения зодиакальных знаков
- 
-  
-  
- 
+
+
+
