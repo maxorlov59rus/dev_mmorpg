@@ -161,4 +161,3 @@ INSERT IGNORE INTO asset_config (config_key, config_value, comment) VALUES
 ('lore_enabled', 'true', 'Включить лор'),
 ('default_music_volume', '0.7', 'Громкость музыки'),
 ('default_sfx_volume', '0.8', 'Громкость звуков');
-(16, 'Поражение', 'Defeat', 'Audio/Music/defeat', 'ui', 10, 0, 1.0, 'Музыка поражения.', 'Defeat music.', 1);
