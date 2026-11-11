@@ -221,7 +221,7 @@ INSERT IGNORE INTO area_trigger_state (trigger_id, guid, entered_ms) VALUES
 --    q_1103 + валюту осколков; босс пещеры — синий лут (спеку-токин-нет:
 --    first-clear награда квестом, не лутом — баланс docs/05)
 -- ---------------------------------------------------------------------
-INSERT INTO reference_loot_template (Entry, Item, ChanceOrQuestChance, GroupID, Comment) VALUES
+INSERT INTO reference_loot_template (Entry, Item, Chance, GroupId, Comment) VALUES
   (301, 5001, 20, 0, 'Этерниум со слизня (фарм-база)'),
   (301, 5002, 8, 0, 'Осколок Порога (валюта Гильдии)'),
   (302, 5001, 35, 0, 'Зона Истечения: усиленный дроп для изгоев');
