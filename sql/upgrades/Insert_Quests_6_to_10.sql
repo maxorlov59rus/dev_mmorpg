@@ -136,9 +136,9 @@ INSERT INTO creature_template (entry, name, faction_A, faction_H, minlevel, maxl
 -- Gossip-меню выбора специализации: 110400+class (контракт npc_quest_giver_10.lua).
 -- Опции скрыты до 10 уровня через condition_id (dm_conditions kind='min_level').
 INSERT INTO dm_conditions (id, kind, param1, param2) VALUES
-  (1104, 'min_level', 10, 0),
-  (1105, 'has_spec', 0, 0),    -- spec отсутствует
-  (1106, 'has_spec', 1, 0);    -- spec выбрана (для LFG-ветки)
+  (1104, 'has_spec', 0, 0),    -- spec отсутствует
+  (1105, 'has_spec', 1, 0);    -- spec выбрана (для LFG-ветки)
+  (1106, 'has_spec', 1, 1);
 INSERT INTO gossip_menu_option (MenuID, ID, OptionIcon, OptionText, OptionBroadcastTextID, OptionType, Action, condition_id) VALUES
   (110401, 1, 1 /*quest!*/, 'Покажи мне путь Осадного.',   90040, 1, 2, 1104),
   (110401, 2, 1, 'Я буду стоять стеной — Авангард.',        90041, 1, 2, 1104),
