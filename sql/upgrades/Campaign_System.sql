@@ -7,7 +7,9 @@ USE dm_world;
 -- ----------------------------------------------------------------------------
 -- 1. Добавляем колонку faction_id в таблицу campaign_def
 -- ----------------------------------------------------------------------------
-ALTER TABLE campaign_def ADD COLUMN IF NOT EXISTS faction_id INT UNSIGNED NOT NULL DEFAULT 1 COMMENT '1=Light, 2=Dark, 3=Neutral' AFTER level_range_end;
+SET @c := (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA='dm_world' AND TABLE_NAME='campaign_def' AND COLUMN_NAME='faction_id');
+SET @q := IF(@c=0, 'ALTER TABLE campaign_def ADD COLUMN faction_id INT UNSIGNED NOT NULL DEFAULT 1 COMMENT ''1=Light, 2=Dark, 3=Neutral'' AFTER level_range_end', 'DO 0');
+PREPARE s FROM @q; EXECUTE s; DEALLOCATE PREPARE s;
 
 -- ----------------------------------------------------------------------------
 -- 2. Обновляем существующие кампании набора данных
