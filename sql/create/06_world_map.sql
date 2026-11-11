@@ -129,6 +129,20 @@ INSERT INTO `areatable` (`map_id`,`zone_id`,`name`,`category`,`min_level`,`max_l
 (601, 611, 'Сердце Материи — внешние залы',           6, 92, 95, 0, 1, 0, 0),
 (601, 612, 'Сердце Материи — Престол Истечения',      6, 95, 95, 0, 1, 0, 0);
 
+CREATE TABLE IF NOT EXISTS `pvp_zones` (
+    `zone_id`        INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `map_id`         SMALLINT UNSIGNED NOT NULL,
+    `area_id`        SMALLINT UNSIGNED NOT NULL,
+    `name`           VARCHAR(128) NOT NULL,
+    `ruleset`        TINYINT UNSIGNED NOT NULL,
+    `forced_untag`   TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    `auto_resurrect` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    `clean_debuffs`  TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    `honor_mult_q16` INT UNSIGNED NOT NULL DEFAULT 65536,
+    PRIMARY KEY (`zone_id`),
+    UNIQUE KEY `uk_map_area` (`map_id`, `area_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- -----------------------------------------------------------------------------
 -- 3. Дополнение к pvp_zones (канон в PvE_PvP_Core.sql). Идемпотентно через
 --    uk_map_area. Правила для всех новых зон карты.
