@@ -158,3 +158,10 @@ CREATE TABLE IF NOT EXISTS creature_spawn (
     KEY idx_entry (Entry),
     KEY idx_map (MapId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS creature_loot_template (
+    Entry   MEDIUMINT UNSIGNED NOT NULL,
+    Item    MEDIUMINT UNSIGNED NOT NULL,
+    Chance  FLOAT NOT NULL DEFAULT 0,
+    Comment VARCHAR(255) NULL,
+    PRIMARY KEY (Entry, Item)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
