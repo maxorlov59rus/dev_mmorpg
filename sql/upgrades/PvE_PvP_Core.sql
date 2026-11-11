@@ -151,7 +151,7 @@ INSERT INTO `creature_proto_aggro` (`entry`, `aggro_range`, `leash_range`, `fron
 -- ---------------------------------------------------------------------
 USE dm_items;
 INSERT IGNORE INTO `item_template`
-(`entry`,`class`,`subclass`,`name`,`displayid`,`Quality`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`)
+(`entry`,`class`,`subclass`,`name`,`displayid`,`Quality`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`) VALUES
 (11201, 4, 1, 'Badge of Black Matter (Honor Token)', 51201, 7, 0, 0, 0, -1, -1, 95, 0)
 (11202, 4, 1, 'Duelist Signet (Quest Item)', 51202, 4, 0, 0, 0, -1, -1, 10, 0);
 
