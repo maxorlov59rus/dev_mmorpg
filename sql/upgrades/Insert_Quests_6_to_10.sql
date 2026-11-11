@@ -27,7 +27,7 @@ INSERT INTO quest_template (ID, QuestType, Flags, SpecialFlags, Title, Details, 
    RewRepFaction1, RewRepValue1, RewRepFaction2, RewRepValue2,
    RewItemId1, RewItemCount1,
    RequiredCreatureKill1, RequiredCreatureKillCount1,
-   MinLevel, ZoneId) VALUES
+   RequiredNpcOrGo1, MinLevel, ZoneId) VALUES
   (1101, 0, 0, 0, 'Первые испытания',
    'Шестеро слизней у кромки Истечения — это уже не протечка, а вторжение. Командир ополчения считает иначе: зачисти берег, и он посмотрит на тебя как на солдата.',
    'Убейте: Слизень Истечения (5)',
