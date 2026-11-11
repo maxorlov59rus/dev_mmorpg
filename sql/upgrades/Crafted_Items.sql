@@ -7,13 +7,13 @@ USE dm_world;
 
 INSERT IGNORE INTO item_template (entry, class, subclass, name, displayid, Quality, BuyPrice, SellPrice, ItemLevel, AllowableClass, AllowableRace, Bonding, BuyCount, Material, dmg_min, dmg_max, delay, durability, InventoryType) VALUES
 (14001, 2, 0, 'Iron Sword', 50001, 1, 50, 5, 5, 37, -1, 0, 1, 4, 5, 8, 2700, 40, 0),
-(14002, 4, 0, 'Iron Shield', 50002, 1, 40, 4, 5, 37, -1, 0, 1, 4),
-(14003, 2, 0, 'Steel Sword', 50003, 2, 150, 15, 15, 37, -1, 0, 1, 4),
-(14004, 4, 0, 'Steel Shield', 50004, 2, 120, 12, 15, 37, -1, 0, 1, 4),
-(14005, 2, 0, 'Mithril Sword', 50005, 3, 400, 40, 30, 37, -1, 0, 1, 4),
-(14006, 4, 0, 'Mithril Shield', 50006, 3, 320, 32, 30, 37, -1, 0, 1, 4),
-(14007, 2, 0, 'Titanium Sword', 50007, 4, 1000, 100, 50, 37, -1, 0, 1, 4),
-(14008, 4, 0, 'Titanium Shield', 50008, 4, 800, 80, 50, 37, -1, 0, 1, 4);
+(14002, 4, 0, 'Iron Shield', 50002, 1, 40, 4, 5, 37, -1, 0, 1, 4, 0, 0, 0, 60, 0),
+(14003, 2, 0, 'Steel Sword', 50003, 2, 150, 15, 15, 37, -1, 0, 1, 4, 10, 15, 2700, 50, 0),
+(14004, 4, 0, 'Steel Shield', 50004, 2, 120, 12, 15, 37, -1, 0, 1, 4, 0, 0, 0, 80, 0),
+(14005, 2, 0, 'Mithril Sword', 50005, 3, 400, 40, 30, 37, -1, 0, 1, 4, 20, 30, 2700, 60, 0),
+(14006, 4, 0, 'Mithril Shield', 50006, 3, 320, 32, 30, 37, -1, 0, 1, 4, 0, 0, 0, 100, 0),
+(14007, 2, 0, 'Titanium Sword', 50007, 4, 1000, 100, 50, 37, -1, 0, 1, 4, 40, 60, 2700, 70, 0),
+(14008, 4, 0, 'Titanium Shield', 50008, 4, 800, 80, 50, 37, -1, 0, 1, 4, 0, 0, 0, 120, 0);
 
 INSERT IGNORE INTO item_template (entry, class, subclass, name, displayid, Quality, BuyPrice, SellPrice, ItemLevel, AllowableClass, AllowableRace, Bonding, BuyCount, Material) VALUES
 (14010, 0, 0, 'Small Healing Potion', 51000, 1, 20, 2, 1, -1, -1, 0, 1, 0),
