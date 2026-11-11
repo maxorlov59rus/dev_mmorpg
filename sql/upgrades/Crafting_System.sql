@@ -108,11 +108,8 @@ INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_ite
 (8005, 8, 'Амулет духа', 'Amulet of Spirit', 14054, 1, 25, 3000, 'Амулет +10 духа.', 'Amulet +10 spirit.'),
 (8006, 8, 'Кольцо мощи', 'Ring of Power', 14055, 1, 100, 5000, 'Кольцо +15 ко всем статам.', 'Ring +15 to all stats.'),
 (8007, 8, 'Амулет бессмертия', 'Amulet of Immortality', 14056, 1, 200, 6000, 'Амулет +30 выносливости.', 'Amulet +30 vitality.');
-
-(5012, 5, 'Эликсир бессмертия', 'Elixir of Immortality', 14021, 1, 150, 5000, 'Восстанавливает 50% HP при смерти.', 'Restores 50% HP on death.'),
+(5012, 5, 'Эликсир бессмертия', 'Elixir of Immortality', 14021, 1, 150, 5000, 'Восстанавливает здоровье полностью.', 'Fully restores health.'),
 (5013, 5, 'Эликсир поглощения', 'Elixir of Absorption', 14022, 1, 150, 5000, '+20% к сопротивлению тьме на 1 час.', '+20% dark resistance for 1 hour.');
-
-(4008, 4, 'Титановый щит', 'Titanium Shield', 14008, 1, 200, 6000, 'Легендарный щит из титана.', 'Legendary titanium shield.');
 
 CREATE TABLE IF NOT EXISTS craft_recipe_material (
     recipe_id INT UNSIGNED NOT NULL,
