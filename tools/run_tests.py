@@ -174,6 +174,11 @@ def suite_protocol() -> Suite:
         "DUEL_ACCEPT": ["SMSG_DUEL_STARTED"],
         "LFG_LEAVE": ["SMSG_LFG_QUEUE_STATE"],
         "ZONE_MAP_REQUEST": ["SMSG_ZONE_MAP"],
+        "VENDOR_LIST_REQUEST": ["SMSG_VENDOR_LIST"],
+        "BUY_ITEM": ["SMSG_BUY_RESULT"],
+        "SELL_ITEM": ["SMSG_SELL_RESULT"],
+        "TRADE_ACCEPT": ["SMSG_TRADE_UPDATE", "SMSG_TRADE_COMPLETE"],
+        "TRADE_CONFIRM": ["SMSG_TRADE_COMPLETE"],
     }
     missing = []
     for n in names:
