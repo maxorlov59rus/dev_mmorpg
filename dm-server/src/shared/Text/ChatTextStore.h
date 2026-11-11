@@ -6,7 +6,7 @@ namespace shared {
 namespace text {
 class ChatTextStore {
 public:
-    static ChatTextStore &Instance();
+  static ChatTextStore &Instance();
 };
 } // namespace text
 } // namespace shared

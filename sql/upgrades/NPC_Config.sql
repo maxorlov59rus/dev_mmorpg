@@ -96,7 +96,7 @@ INSERT INTO zone_loot_rule (zone_id, owner_faction, loot_group) VALUES
   (1100, 0, 300), (1100, 1, 311), (1100, 2, 310);
 
 -- Привязка групп к мобам (lootid уже выставлен; 301/302 — общие, 303 — голем):
-INSERT INTO reference_loot_template (Entry, Item, Chance, Comment) VALUES
+INSERT IGNORE INTO reference_loot_template (Entry, Item, Chance, Comment) VALUES
   (301, 5001, 15.00, 'Фракционный моб — этерниум'),
   (302, 5001, 20.00, 'Жрица — этерниум x2 шанс'),
   (303, 5001, 30.00, 'Голем — жирный дроп');

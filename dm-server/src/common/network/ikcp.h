@@ -1,10 +1,9 @@
 //=====================================================================
 
-
 //
 // KCP - A Better ARQ Protocol Implementation
 // skywind3000 (at) gmail.com, 2010-2011
-//  
+//
 // Features:
 // + Average RTT reduce 30% - 40% vs traditional ARQ like tcp.
 // + Maximum RTT reduce three times vs tcp.
@@ -14,49 +13,47 @@
 #ifndef _IKCP_H_
 #define _IKCP_H_
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <assert.h>
-
 
 //=====================================================================
-// 32BIT INTEGER DEFINITION 
+// 32BIT INTEGER DEFINITION
 //=====================================================================
 #ifndef __INTEGER_32_BITS__
 #define __INTEGER_32_BITS__
-#if defined(_WIN64) || defined(WIN64) || defined(__amd64__) || \
-	defined(__x86_64) || defined(__x86_64__) || defined(_M_IA64) || \
-	defined(_M_AMD64)
-	typedef unsigned int ISTDUINT32;
-	typedef int ISTDINT32;
-#elif defined(_WIN32) || defined(WIN32) || defined(__i386__) || \
-	defined(__i386) || defined(_M_X86)
-	typedef unsigned long ISTDUINT32;
-	typedef long ISTDINT32;
+#if defined(_WIN64) || defined(WIN64) || defined(__amd64__) ||                 \
+    defined(__x86_64) || defined(__x86_64__) || defined(_M_IA64) ||            \
+    defined(_M_AMD64)
+typedef unsigned int ISTDUINT32;
+typedef int ISTDINT32;
+#elif defined(_WIN32) || defined(WIN32) || defined(__i386__) ||                \
+    defined(__i386) || defined(_M_X86)
+typedef unsigned long ISTDUINT32;
+typedef long ISTDINT32;
 #elif defined(__MACOS__)
-	typedef UInt32 ISTDUINT32;
-	typedef SInt32 ISTDINT32;
+typedef UInt32 ISTDUINT32;
+typedef SInt32 ISTDINT32;
 #elif defined(__APPLE__) && defined(__MACH__)
-	#include <sys/types.h>
-	typedef u_int32_t ISTDUINT32;
-	typedef int32_t ISTDINT32;
+#include <sys/types.h>
+typedef u_int32_t ISTDUINT32;
+typedef int32_t ISTDINT32;
 #elif defined(__BEOS__)
-	#include <sys/inttypes.h>
-	typedef u_int32_t ISTDUINT32;
-	typedef int32_t ISTDINT32;
+#include <sys/inttypes.h>
+typedef u_int32_t ISTDUINT32;
+typedef int32_t ISTDINT32;
 #elif (defined(_MSC_VER) || defined(__BORLANDC__)) && (!defined(__MSDOS__))
-	typedef unsigned __int32 ISTDUINT32;
-	typedef __int32 ISTDINT32;
+typedef unsigned __int32 ISTDUINT32;
+typedef __int32 ISTDINT32;
 #elif defined(__GNUC__)
-	#include <stdint.h>
-	typedef uint32_t ISTDUINT32;
-	typedef int32_t ISTDINT32;
-#else 
-	typedef unsigned long ISTDUINT32; 
-	typedef long ISTDINT32;
+#include <stdint.h>
+typedef uint32_t ISTDUINT32;
+typedef int32_t ISTDINT32;
+#else
+typedef unsigned long ISTDUINT32;
+typedef long ISTDINT32;
 #endif
 #endif
-
 
 //=====================================================================
 // Integer Definition
@@ -113,15 +110,15 @@ typedef unsigned long long IUINT64;
 #if defined(__GNUC__)
 
 #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1))
-#define INLINE         __inline__ __attribute__((always_inline))
+#define INLINE __inline__ __attribute__((always_inline))
 #else
-#define INLINE         __inline__
+#define INLINE __inline__
 #endif
 
 #elif (defined(_MSC_VER) || defined(__BORLANDC__) || defined(__WATCOMC__))
 #define INLINE __inline
 #else
-#define INLINE 
+#define INLINE
 #endif
 #endif
 
@@ -129,139 +126,139 @@ typedef unsigned long long IUINT64;
 #define inline INLINE
 #endif
 
-
 //=====================================================================
-// QUEUE DEFINITION                                                  
+// QUEUE DEFINITION
 //=====================================================================
 #ifndef __IQUEUE_DEF__
 #define __IQUEUE_DEF__
 
 struct IQUEUEHEAD {
-	struct IQUEUEHEAD *next, *prev;
+  struct IQUEUEHEAD *next, *prev;
 };
 
 typedef struct IQUEUEHEAD iqueue_head;
 
-
 //---------------------------------------------------------------------
-// queue init                                                         
+// queue init
 //---------------------------------------------------------------------
-#define IQUEUE_HEAD_INIT(name) { &(name), &(name) }
-#define IQUEUE_HEAD(name) \
-	struct IQUEUEHEAD name = IQUEUE_HEAD_INIT(name)
+#define IQUEUE_HEAD_INIT(name) {&(name), &(name)}
+#define IQUEUE_HEAD(name) struct IQUEUEHEAD name = IQUEUE_HEAD_INIT(name)
 
-#define IQUEUE_INIT(ptr) ( \
-	(ptr)->next = (ptr), (ptr)->prev = (ptr))
+#define IQUEUE_INIT(ptr) ((ptr)->next = (ptr), (ptr)->prev = (ptr))
 
-#define IOFFSETOF(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
+#define IOFFSETOF(TYPE, MEMBER) ((size_t)&((TYPE *)0)->MEMBER)
 
-#define ICONTAINEROF(ptr, type, member) ( \
-		(type*)( ((char*)((type*)ptr)) - IOFFSETOF(type, member)) )
+#define ICONTAINEROF(ptr, type, member)                                        \
+  ((type *)(((char *)((type *)ptr)) - IOFFSETOF(type, member)))
 
 #define IQUEUE_ENTRY(ptr, type, member) ICONTAINEROF(ptr, type, member)
 
-
 //---------------------------------------------------------------------
-// queue operation                     
+// queue operation
 //---------------------------------------------------------------------
-#define IQUEUE_ADD(node, head) ( \
-	(node)->prev = (head), (node)->next = (head)->next, \
-	(head)->next->prev = (node), (head)->next = (node))
+#define IQUEUE_ADD(node, head)                                                 \
+  ((node)->prev = (head), (node)->next = (head)->next,                         \
+   (head)->next->prev = (node), (head)->next = (node))
 
-#define IQUEUE_ADD_TAIL(node, head) ( \
-	(node)->prev = (head)->prev, (node)->next = (head), \
-	(head)->prev->next = (node), (head)->prev = (node))
+#define IQUEUE_ADD_TAIL(node, head)                                            \
+  ((node)->prev = (head)->prev, (node)->next = (head),                         \
+   (head)->prev->next = (node), (head)->prev = (node))
 
 #define IQUEUE_DEL_BETWEEN(p, n) ((n)->prev = (p), (p)->next = (n))
 
-#define IQUEUE_DEL(entry) (\
-	(entry)->next->prev = (entry)->prev, \
-	(entry)->prev->next = (entry)->next, \
-	(entry)->next = 0, (entry)->prev = 0)
+#define IQUEUE_DEL(entry)                                                      \
+  ((entry)->next->prev = (entry)->prev, (entry)->prev->next = (entry)->next,   \
+   (entry)->next = 0, (entry)->prev = 0)
 
-#define IQUEUE_DEL_INIT(entry) do { \
-	IQUEUE_DEL(entry); IQUEUE_INIT(entry); } while (0)
+#define IQUEUE_DEL_INIT(entry)                                                 \
+  do {                                                                         \
+    IQUEUE_DEL(entry);                                                         \
+    IQUEUE_INIT(entry);                                                        \
+  } while (0)
 
 #define IQUEUE_IS_EMPTY(entry) ((entry) == (entry)->next)
 
-#define iqueue_init		IQUEUE_INIT
-#define iqueue_entry	IQUEUE_ENTRY
-#define iqueue_add		IQUEUE_ADD
-#define iqueue_add_tail	IQUEUE_ADD_TAIL
-#define iqueue_del		IQUEUE_DEL
-#define iqueue_del_init	IQUEUE_DEL_INIT
+#define iqueue_init IQUEUE_INIT
+#define iqueue_entry IQUEUE_ENTRY
+#define iqueue_add IQUEUE_ADD
+#define iqueue_add_tail IQUEUE_ADD_TAIL
+#define iqueue_del IQUEUE_DEL
+#define iqueue_del_init IQUEUE_DEL_INIT
 #define iqueue_is_empty IQUEUE_IS_EMPTY
 
-#define IQUEUE_FOREACH(iterator, head, TYPE, MEMBER) \
-	for ((iterator) = iqueue_entry((head)->next, TYPE, MEMBER); \
-		&((iterator)->MEMBER) != (head); \
-		(iterator) = iqueue_entry((iterator)->MEMBER.next, TYPE, MEMBER))
+#define IQUEUE_FOREACH(iterator, head, TYPE, MEMBER)                           \
+  for ((iterator) = iqueue_entry((head)->next, TYPE, MEMBER);                  \
+       &((iterator)->MEMBER) != (head);                                        \
+       (iterator) = iqueue_entry((iterator)->MEMBER.next, TYPE, MEMBER))
 
-#define iqueue_foreach(iterator, head, TYPE, MEMBER) \
-	IQUEUE_FOREACH(iterator, head, TYPE, MEMBER)
+#define iqueue_foreach(iterator, head, TYPE, MEMBER)                           \
+  IQUEUE_FOREACH(iterator, head, TYPE, MEMBER)
 
-#define iqueue_foreach_entry(pos, head) \
-	for( (pos) = (head)->next; (pos) != (head) ; (pos) = (pos)->next )
-	
+#define iqueue_foreach_entry(pos, head)                                        \
+  for ((pos) = (head)->next; (pos) != (head); (pos) = (pos)->next)
 
-#define __iqueue_splice(list, head) do {	\
-		iqueue_head *first = (list)->next, *last = (list)->prev; \
-		iqueue_head *at = (head)->next; \
-		(first)->prev = (head), (head)->next = (first);		\
-		(last)->next = (at), (at)->prev = (last); }	while (0)
+#define __iqueue_splice(list, head)                                            \
+  do {                                                                         \
+    iqueue_head *first = (list)->next, *last = (list)->prev;                   \
+    iqueue_head *at = (head)->next;                                            \
+    (first)->prev = (head), (head)->next = (first);                            \
+    (last)->next = (at), (at)->prev = (last);                                  \
+  } while (0)
 
-#define iqueue_splice(list, head) do { \
-	if (!iqueue_is_empty(list)) __iqueue_splice(list, head); } while (0)
+#define iqueue_splice(list, head)                                              \
+  do {                                                                         \
+    if (!iqueue_is_empty(list))                                                \
+      __iqueue_splice(list, head);                                             \
+  } while (0)
 
-#define iqueue_splice_init(list, head) do {	\
-	iqueue_splice(list, head);	iqueue_init(list); } while (0)
-
+#define iqueue_splice_init(list, head)                                         \
+  do {                                                                         \
+    iqueue_splice(list, head);                                                 \
+    iqueue_init(list);                                                         \
+  } while (0)
 
 #ifdef _MSC_VER
-#pragma warning(disable:4311)
-#pragma warning(disable:4312)
-#pragma warning(disable:4996)
+#pragma warning(disable : 4311)
+#pragma warning(disable : 4312)
+#pragma warning(disable : 4996)
 #endif
 
 #endif
-
 
 //---------------------------------------------------------------------
 // BYTE ORDER & ALIGNMENT
 //---------------------------------------------------------------------
 #ifndef IWORDS_BIG_ENDIAN
-    #ifdef _BIG_ENDIAN_
-        #if _BIG_ENDIAN_
-            #define IWORDS_BIG_ENDIAN 1
-        #endif
-    #endif
-    #ifndef IWORDS_BIG_ENDIAN
-        #if defined(__hppa__) || \
-            defined(__m68k__) || defined(mc68000) || defined(_M_M68K) || \
-            (defined(__MIPS__) && defined(__MIPSEB__)) || \
-            defined(__ppc__) || defined(__POWERPC__) || defined(_M_PPC) || \
-            defined(__sparc__) || defined(__powerpc__) || \
-            defined(__mc68000__) || defined(__s390x__) || defined(__s390__)
-            #define IWORDS_BIG_ENDIAN 1
-        #endif
-    #endif
-    #ifndef IWORDS_BIG_ENDIAN
-        #define IWORDS_BIG_ENDIAN  0
-    #endif
+#ifdef _BIG_ENDIAN_
+#if _BIG_ENDIAN_
+#define IWORDS_BIG_ENDIAN 1
+#endif
+#endif
+#ifndef IWORDS_BIG_ENDIAN
+#if defined(__hppa__) || defined(__m68k__) || defined(mc68000) ||              \
+    defined(_M_M68K) || (defined(__MIPS__) && defined(__MIPSEB__)) ||          \
+    defined(__ppc__) || defined(__POWERPC__) || defined(_M_PPC) ||             \
+    defined(__sparc__) || defined(__powerpc__) || defined(__mc68000__) ||      \
+    defined(__s390x__) || defined(__s390__)
+#define IWORDS_BIG_ENDIAN 1
+#endif
+#endif
+#ifndef IWORDS_BIG_ENDIAN
+#define IWORDS_BIG_ENDIAN 0
+#endif
 #endif
 
 #ifndef IWORDS_MUST_ALIGN
-	#if defined(__i386__) || defined(__i386) || defined(_i386_)
-		#define IWORDS_MUST_ALIGN 0
-	#elif defined(_M_IX86) || defined(_X86_) || defined(__x86_64__)
-		#define IWORDS_MUST_ALIGN 0
-	#elif defined(__amd64) || defined(__amd64__)
-		#define IWORDS_MUST_ALIGN 0
-	#else
-		#define IWORDS_MUST_ALIGN 1
-	#endif
+#if defined(__i386__) || defined(__i386) || defined(_i386_)
+#define IWORDS_MUST_ALIGN 0
+#elif defined(_M_IX86) || defined(_X86_) || defined(__x86_64__)
+#define IWORDS_MUST_ALIGN 0
+#elif defined(__amd64) || defined(__amd64__)
+#define IWORDS_MUST_ALIGN 0
+#else
+#define IWORDS_MUST_ALIGN 1
 #endif
-
+#endif
 
 //=====================================================================
 // Predefine struct
@@ -269,103 +266,96 @@ typedef struct IQUEUEHEAD iqueue_head;
 struct IKCPCB;
 typedef struct IKCPCB ikcpcb;
 
-
 //=====================================================================
 // SEGMENT
 //=====================================================================
-struct IKCPSEG
-{
-	struct IQUEUEHEAD node;
-	IUINT32 conv;
-	IUINT32 cmd;
-	IUINT32 frg;
-	IUINT32 wnd;
-	IUINT32 ts;
-	IUINT32 sn;
-	IUINT32 una;
-	IUINT32 len;
-	IUINT32 resendts;
-	IUINT32 rto;
-	IUINT32 fastack;
-	IUINT32 xmit;
-	char data[1];
+struct IKCPSEG {
+  struct IQUEUEHEAD node;
+  IUINT32 conv;
+  IUINT32 cmd;
+  IUINT32 frg;
+  IUINT32 wnd;
+  IUINT32 ts;
+  IUINT32 sn;
+  IUINT32 una;
+  IUINT32 len;
+  IUINT32 resendts;
+  IUINT32 rto;
+  IUINT32 fastack;
+  IUINT32 xmit;
+  char data[1];
 };
-
 
 //---------------------------------------------------------------------
 // IKCPOPS - pluggable congestion control operations
 //---------------------------------------------------------------------
-struct IKCPOPS
-{
-	const char *name;
-	int (*init)(ikcpcb *kcp);
-	void (*release)(ikcpcb *kcp);
-	void (*on_ack)(ikcpcb *kcp, IUINT32 acked_segs, IUINT32 acked_bytes,
-			IUINT32 prior_in_flight);
-	void (*on_fast_retransmit)(ikcpcb *kcp, IUINT32 fast_retrans,
-				IUINT32 inflight, IUINT32 prior_cwnd);
-	void (*on_timeout)(ikcpcb *kcp, IUINT32 prior_cwnd);
-	void (*on_tick)(ikcpcb *kcp);
-	void (*on_app_limited)(ikcpcb *kcp, IUINT32 inflight);
-	void (*on_rtt)(ikcpcb *kcp, IINT32 rtt);
-	void (*on_pkt_sent)(ikcpcb *kcp, IUINT32 sn, IUINT32 ts,
-				IUINT32 len, IUINT32 inflight, IUINT32 xmit);
-	void (*on_pkt_acked)(ikcpcb *kcp, IUINT32 sn, IUINT32 ts,
-				IUINT32 len, IINT32 rtt, IUINT32 xmit);
-	IUINT32 (*get_info)(ikcpcb *kcp, void *buf, IUINT32 bufsize);
-	IUINT32 (*pacing_rate)(ikcpcb *kcp);
+struct IKCPOPS {
+  const char *name;
+  int (*init)(ikcpcb *kcp);
+  void (*release)(ikcpcb *kcp);
+  void (*on_ack)(ikcpcb *kcp, IUINT32 acked_segs, IUINT32 acked_bytes,
+                 IUINT32 prior_in_flight);
+  void (*on_fast_retransmit)(ikcpcb *kcp, IUINT32 fast_retrans,
+                             IUINT32 inflight, IUINT32 prior_cwnd);
+  void (*on_timeout)(ikcpcb *kcp, IUINT32 prior_cwnd);
+  void (*on_tick)(ikcpcb *kcp);
+  void (*on_app_limited)(ikcpcb *kcp, IUINT32 inflight);
+  void (*on_rtt)(ikcpcb *kcp, IINT32 rtt);
+  void (*on_pkt_sent)(ikcpcb *kcp, IUINT32 sn, IUINT32 ts, IUINT32 len,
+                      IUINT32 inflight, IUINT32 xmit);
+  void (*on_pkt_acked)(ikcpcb *kcp, IUINT32 sn, IUINT32 ts, IUINT32 len,
+                       IINT32 rtt, IUINT32 xmit);
+  IUINT32 (*get_info)(ikcpcb *kcp, void *buf, IUINT32 bufsize);
+  IUINT32 (*pacing_rate)(ikcpcb *kcp);
 };
-
 
 //---------------------------------------------------------------------
 // IKCPCB
 //---------------------------------------------------------------------
-struct IKCPCB
-{
-	IUINT32 conv, mtu, mss, state;
-	IUINT32 snd_una, snd_nxt, rcv_nxt;
-	IUINT32 ts_recent, ts_lastack, ssthresh;
-	IINT32 rx_rttval, rx_srtt, rx_rto, rx_minrto;
-	IUINT32 snd_wnd, rcv_wnd, rmt_wnd, cwnd, probe;
-	IUINT32 current, interval, ts_flush, xmit;
-	IUINT32 nrcv_buf, nsnd_buf;
-	IUINT32 nrcv_que, nsnd_que;
-	IUINT32 nodelay, updated;
-	IUINT32 ts_probe, probe_wait;
-	IUINT32 dead_link, incr;
-	struct IQUEUEHEAD snd_queue;
-	struct IQUEUEHEAD rcv_queue;
-	struct IQUEUEHEAD snd_buf;
-	struct IQUEUEHEAD rcv_buf;
-	IUINT32 *acklist;
-	IUINT32 ackcount;
-	IUINT32 ackblock;
-	IUINT32 ackedlen;
-	void *user;
-	char *buffer;
-	int fastresend;
-	int fastlimit;
-	int nocwnd, stream;
-	const struct IKCPOPS *ccops;
-	void *congest;
-	int logmask;
-	int (*output)(const char *buf, int len, struct IKCPCB *kcp, void *user);
-	void (*writelog)(const char *log, struct IKCPCB *kcp, void *user);
+struct IKCPCB {
+  IUINT32 conv, mtu, mss, state;
+  IUINT32 snd_una, snd_nxt, rcv_nxt;
+  IUINT32 ts_recent, ts_lastack, ssthresh;
+  IINT32 rx_rttval, rx_srtt, rx_rto, rx_minrto;
+  IUINT32 snd_wnd, rcv_wnd, rmt_wnd, cwnd, probe;
+  IUINT32 current, interval, ts_flush, xmit;
+  IUINT32 nrcv_buf, nsnd_buf;
+  IUINT32 nrcv_que, nsnd_que;
+  IUINT32 nodelay, updated;
+  IUINT32 ts_probe, probe_wait;
+  IUINT32 dead_link, incr;
+  struct IQUEUEHEAD snd_queue;
+  struct IQUEUEHEAD rcv_queue;
+  struct IQUEUEHEAD snd_buf;
+  struct IQUEUEHEAD rcv_buf;
+  IUINT32 *acklist;
+  IUINT32 ackcount;
+  IUINT32 ackblock;
+  IUINT32 ackedlen;
+  void *user;
+  char *buffer;
+  int fastresend;
+  int fastlimit;
+  int nocwnd, stream;
+  const struct IKCPOPS *ccops;
+  void *congest;
+  int logmask;
+  int (*output)(const char *buf, int len, struct IKCPCB *kcp, void *user);
+  void (*writelog)(const char *log, struct IKCPCB *kcp, void *user);
 };
 
-
-#define IKCP_LOG_OUTPUT			1
-#define IKCP_LOG_INPUT			2
-#define IKCP_LOG_SEND			4
-#define IKCP_LOG_RECV			8
-#define IKCP_LOG_IN_DATA		16
-#define IKCP_LOG_IN_ACK			32
-#define IKCP_LOG_IN_PROBE		64
-#define IKCP_LOG_IN_WINS		128
-#define IKCP_LOG_OUT_DATA		256
-#define IKCP_LOG_OUT_ACK		512
-#define IKCP_LOG_OUT_PROBE		1024
-#define IKCP_LOG_OUT_WINS		2048
+#define IKCP_LOG_OUTPUT 1
+#define IKCP_LOG_INPUT 2
+#define IKCP_LOG_SEND 4
+#define IKCP_LOG_RECV 8
+#define IKCP_LOG_IN_DATA 16
+#define IKCP_LOG_IN_ACK 32
+#define IKCP_LOG_IN_PROBE 64
+#define IKCP_LOG_IN_WINS 128
+#define IKCP_LOG_OUT_DATA 256
+#define IKCP_LOG_OUT_ACK 512
+#define IKCP_LOG_OUT_PROBE 1024
+#define IKCP_LOG_OUT_WINS 2048
 
 #ifdef __cplusplus
 extern "C" {
@@ -378,14 +368,14 @@ extern "C" {
 // create a new kcp control object, 'conv' must be equal in both endpoints
 // of the same connection. 'user' will be passed to the output callback.
 // output callback can be set up like this: 'kcp->output = my_udp_output'
-ikcpcb* ikcp_create(IUINT32 conv, void *user);
+ikcpcb *ikcp_create(IUINT32 conv, void *user);
 
 // release kcp control object
 void ikcp_release(ikcpcb *kcp);
 
 // set output callback, which will be invoked by kcp
-void ikcp_setoutput(ikcpcb *kcp, int (*output)(const char *buf, int len, 
-	ikcpcb *kcp, void *user));
+void ikcp_setoutput(ikcpcb *kcp, int (*output)(const char *buf, int len,
+                                               ikcpcb *kcp, void *user));
 
 // user/upper level recv: returns size, returns below zero for EAGAIN
 int ikcp_recv(ikcpcb *kcp, char *buffer, int len);
@@ -393,9 +383,9 @@ int ikcp_recv(ikcpcb *kcp, char *buffer, int len);
 // user/upper level send, returns below zero for error
 int ikcp_send(ikcpcb *kcp, const char *buffer, int len);
 
-// update state (call it repeatedly, every 10ms-100ms), or you can ask 
+// update state (call it repeatedly, every 10ms-100ms), or you can ask
 // ikcp_check when to call it again (without ikcp_input/_send calling).
-// 'current' - current timestamp in millisec. 
+// 'current' - current timestamp in millisec.
 void ikcp_update(ikcpcb *kcp, IUINT32 current);
 
 // Determines when you should invoke ikcp_update next:
@@ -439,16 +429,13 @@ int ikcp_setcc(ikcpcb *kcp, const struct IKCPOPS *ops);
 void ikcp_log(ikcpcb *kcp, int mask, const char *fmt, ...);
 
 // setup allocator
-void ikcp_allocator(void* (*new_malloc)(size_t), void (*new_free)(void*));
+void ikcp_allocator(void *(*new_malloc)(size_t), void (*new_free)(void *));
 
 // read conv
 IUINT32 ikcp_getconv(const void *ptr);
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-
-

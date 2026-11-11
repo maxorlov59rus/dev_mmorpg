@@ -9,9 +9,9 @@ namespace database {
 
 class SQLClient {
 public:
-    static SQLClient &Instance();
-    bool Query(const std::string &sql);
-    bool Execute(const std::string &sql);
+  static SQLClient &Instance();
+  bool Query(const std::string &sql);
+  bool Execute(const std::string &sql);
 };
 
 } // namespace database

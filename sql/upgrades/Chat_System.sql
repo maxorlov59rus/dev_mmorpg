@@ -57,9 +57,9 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     target_player_guid BIGINT UNSIGNED DEFAULT NULL,
     is_system TINYINT UNSIGNED NOT NULL DEFAULT 0,
     INDEX idx_channel (channel_id),
-    idx_player (player_guid),
-    idx_target (target_player_guid),
-    idx_timestamp (message_timestamp)
+    INDEX idx_player (player_guid),
+    INDEX idx_target (target_player_guid),
+    INDEX idx_timestamp (message_timestamp)
 ) ENGINE=InnoDB;
 
 -- ----------------------------------------------------------------------------

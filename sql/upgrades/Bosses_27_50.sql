@@ -31,13 +31,22 @@ INSERT IGNORE INTO creature_loot_template (Entry, Item, Chance, Comment) VALUES
 (60003, 13006, 15.0,  'Корона Лича (Epic, Helm)'),
 (60003, 11032, 100.0, 'Эссенция Некромантии x5'),
 (60003, 10862, 8.0,   'Зелье воскрешения (большое)'),
+(60004, 13007, 100.0, 'Меч Древних (Epic, 1H Sword)'),
+(60004, 13008, 25.0,  'Щит Древних (Epic, Shield)'),
+(60004, 11033, 100.0, 'Эссенция Древних x8'),
+(60004, 10863, 5.0,   'Зелье бессмертия'),
+(60005, 13009, 100.0, 'Клинок Пустоты (Legendary, 2H Sword)'),
+(60005, 13010, 100.0, 'Доспехи Пустоты (Legendary, Chest)'),
+(60005, 13011, 50.0,  'Кольцо Пустоты (Legendary, Ring)'),
+(60005, 11034, 100.0, 'Кристалл Чёрной Материи x10'),
+(60005, 10864, 100.0, 'Зелье поглощения (Legendary)');
 -- ---------------------------------------------------------------------------
 -- ---------------------------------------------------------------------------
 -- 6. BOSS_ABILITIES — Способности боссов (детали)
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS boss_ability (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    boss_entry INT UNSIGNED NOT NULL,
+    boss_entry MEDIUMINT UNSIGNED NOT NULL,
     spell_id INT UNSIGNED NOT NULL,
     name VARCHAR(64) NOT NULL,
     damage_type TINYINT UNSIGNED NOT NULL,
@@ -74,7 +83,7 @@ INSERT IGNORE INTO boss_ability (boss_entry, spell_id, name, damage_type, base_d
 -- 3. BOSS_MECHANICS — Механики боссов
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS boss_mechanic (
-    boss_entry INT UNSIGNED NOT NULL PRIMARY KEY,
+    boss_entry MEDIUMINT UNSIGNED NOT NULL PRIMARY KEY,
     name VARCHAR(64) NOT NULL,
     ability_1 VARCHAR(64) NOT NULL,
     ability_1_cd INT UNSIGNED NOT NULL,
@@ -128,7 +137,7 @@ INSERT IGNORE INTO quest_dialogue (quest_id, npc_entry, dialogue_type, locale, t
 -- 5. BOSS_SPAWN — Локации спавна боссов
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS boss_spawn (
-    boss_entry INT UNSIGNED NOT NULL PRIMARY KEY,
+    boss_entry MEDIUMINT UNSIGNED NOT NULL PRIMARY KEY,
     map_id SMALLINT UNSIGNED NOT NULL,
     zone_id TINYINT UNSIGNED NOT NULL,
     pos_x FLOAT NOT NULL,
@@ -146,12 +155,3 @@ INSERT IGNORE INTO boss_spawn (boss_entry, map_id, zone_id, pos_x, pos_y, pos_z,
 (60003, 13, 13, 400.0, 200.0, 20.0, 3600, 0, 'Мёртвые Пределы: алтарь нежити'),
 (60004, 14, 14, 600.0, 300.0, 25.0, 3600, 0, 'Руины Древних: центральный храм'),
 (60005, 15, 15, 800.0, 400.0, 35.0, 86400, 1, 'Глотка: финальная арена (рейд)');
-(60004, 13007, 100.0, 'Меч Древних (Epic, 1H Sword)'),
-(60004, 13008, 25.0,  'Щит Древних (Epic, Shield)'),
-(60004, 11033, 100.0, 'Эссенция Древних x8'),
-(60004, 10863, 5.0,   'Зелье бессмертия'),
-(60005, 13009, 100.0, 'Клинок Пустоты (Legendary, 2H Sword)'),
-(60005, 13010, 100.0, 'Доспехи Пустоты (Legendary, Chest)'),
-(60005, 13011, 50.0,  'Кольцо Пустоты (Legendary, Ring)'),
-(60005, 11034, 100.0, 'Кристалл Чёрной Материи x10'),
-(60005, 10864, 100.0, 'Зелье поглощения (Legendary)');

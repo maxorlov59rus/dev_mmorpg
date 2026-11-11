@@ -3,6 +3,6 @@
 namespace dm {
 class WorldSession {
 public:
-    void SendPacket(int opcode);
+  void SendPacket(int opcode);
 };
 } // namespace dm

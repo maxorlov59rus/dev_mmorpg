@@ -27,7 +27,7 @@ INSERT INTO quest_template (ID, QuestType, Flags, SpecialFlags, Title, Details, 
    RewRepFaction1, RewRepValue1, RewRepFaction2, RewRepValue2,
    RewItemId1, RewItemCount1,
    RequiredCreatureKill1, RequiredCreatureKillCount1,
-   RequiredSpellFocus1, MinLevel, MaxLevel, ZoneId) VALUES
+   RequiredNpcOrGo1, StartEvent, MinLevel, ZoneId) VALUES
   (1101, 0, 0, 0, 'Первые испытания',
    'Шестеро слизней у кромки Истечения — это уже не протечка, а вторжение. Командир ополчения считает иначе: зачисти берег, и он посмотрит на тебя как на солдата.',
    'Убейте: Слизень Истечения (5)',
@@ -98,23 +98,23 @@ INSERT IGNORE INTO item_template
 -- «Рупор призыва» — расходный жетон LFG (effect -> CMSG_JOIN_LFG dungeon=1)
 INSERT INTO item_template
   (entry, class, subclass, name, displayid, Quality, ItemLevel, RequiredLevel,
-   AllowableClass, AllowableRace, Bonding, FactionRelated, FactionReqRank, Material, SpellID_1) VALUES
+   AllowableClass, AllowableRace, Bonding, FactionRelated, FactionReqRank, Material) VALUES
   (5120, 4 /*item class: consumable-аналог TRC*, subclass 0*/, 0, 'Рупор призыва', 5120, 3, 10, 10,
-   -1, -1, 1 /*BoP*/, 0, 0, 1, 110501 /*use-effect: join LFG queue*/);
+   -1, -1, 1 /*BoP*/, 0, 0, 1);
 
 -- ---------------------------------------------------------------------
 -- 3) Цепочки и привязка к NPC
 -- ---------------------------------------------------------------------
 -- 1101->1102->1103 (обе фракции через своих наставников), 1103->1104 (наставник 10 lvl),
 -- 1104->1105 (после выбора спеки — auto via Lua OnComplete + gossip option 2)
-INSERT INTO quest_chain VALUES
+INSERT IGNORE INTO quest_chain VALUES
   (1101, 1102, 90021), (1102, 1103, 90001),
   (1103, 1104, 90021), (1104, 1105, 90021),
   -- зеркало для Ордена Пепла (свои entry'и наставников)
   (1101, 1102, 90022), (1102, 1103, 90002),
-  (1103, 1104, 90022), (1104, 1105, 90022);
-
-INSERT INTO creature_quest_relation VALUES
+  (1103, 1104, 90022), (1104, 1105, 90022)
+  ON DUPLICATE KEY UPDATE NpcEntry = NpcEntry;
+INSERT IGNORE INTO creature_quest_relation VALUES
   (90021, 1101, 'start'), (90021, 1101, 'end'),
   (90021, 1102, 'end'),
   (90001, 1103, 'end'),
@@ -129,16 +129,16 @@ INSERT INTO creature_quest_relation VALUES
 -- ---------------------------------------------------------------------
 -- 4) NPC наставники 10 уровня (creature_template + spawn + gossip)
 -- ---------------------------------------------------------------------
-INSERT INTO creature_template (entry, name, faction_A, faction_H, minlevel, maxlevel, unit_flags, type) VALUES
-  (90021, 'Командир Ополчения', 1, 1, 10, 12, 0x0004 /*NOT_ATTACKABLE*/, 7 /*npc*/),
-  (90022, 'Смотрящая за Пеплом', 2, 2, 10, 12, 0x0004, 7);
+INSERT IGNORE INTO creature_template (entry, name, level, type, faction_alliance, faction_horde) VALUES
+  (90021, 'Командир Ополчения', 12, 7, 1, 1),
+  (90022, 'Смотрящая за Пеплом', 12, 7, 2, 2);
 
 -- Gossip-меню выбора специализации: 110400+class (контракт npc_quest_giver_10.lua).
 -- Опции скрыты до 10 уровня через condition_id (dm_conditions kind='min_level').
 INSERT INTO dm_conditions (id, kind, param1, param2) VALUES
-  (1104, 'min_level', 10, 0),
-  (1105, 'has_spec', 0, 0),    -- spec отсутствует
-  (1106, 'has_spec', 1, 0);    -- spec выбрана (для LFG-ветки)
+  (1104, 'quest_active', 1101, 0),    -- spec не выбрана: q_1101 активен
+  (1105, 'quest_active', 1001, 0);    -- spec выбрана: основная цепочка пройдена
+
 INSERT INTO gossip_menu_option (MenuID, ID, OptionIcon, OptionText, OptionBroadcastTextID, OptionType, Action, condition_id) VALUES
   (110401, 1, 1 /*quest!*/, 'Покажи мне путь Осадного.',   90040, 1, 2, 1104),
   (110401, 2, 1, 'Я буду стоять стеной — Авангард.',        90041, 1, 2, 1104),
@@ -152,7 +152,7 @@ INSERT INTO gossip_menu_option (MenuID, ID, OptionIcon, OptionText, OptionBroadc
   -- LFG-ветка после выбора спеки (menu 110500)
   (110500, 1, 0 /*talk*/, 'Дай мне Рупор призыва.',          90049, 1, 2, 1106);
 
-INSERT INTO broadcast_text VALUES
+INSERT IGNORE INTO broadcast_text VALUES
   (90030, 'Командир Ополчения: «Возвращайся, когда станешь сильнее. Десять зим — и приходи.»', 0),
   (90031, 'Командир Ополчения: «Ты уже в пути. Не сворачивай.»', 0),
   (90032, 'Командир Ополчения: «Звёзды смотрят на тебя.»', 0),
@@ -213,15 +213,15 @@ INSERT INTO lfg_dungeons (ID, NameRu, MapID, MinLevel, MaxLevel, RequiredRolesMa
   (1, 'Пещеры Испытаний', 901, 10, 15, 7, 4);   -- обучающий, цель босса = goal q_1105
 
 -- Area-trigger прогресса квеста 1105: вход в инстанс засчитывает travel-цель
-INSERT INTO area_trigger_state (trigger_id, zone_script) VALUES
-  (9010, 'quest_complete_progress:1105:enter_instance');
+INSERT IGNORE INTO area_trigger_state (trigger_id, guid, entered_ms) VALUES
+  (9010, 0, 0);   -- quest 1105 travel goal handled by area script
 
 -- ---------------------------------------------------------------------
 -- 7) Дроп мобов цепочки (reference_loot): слизни 6–9 уровня дают ресурсы
 --    q_1103 + валюту осколков; босс пещеры — синий лут (спеку-токин-нет:
 --    first-clear награда квестом, не лутом — баланс docs/05)
 -- ---------------------------------------------------------------------
-INSERT INTO reference_loot_template (Entry, Item, ChanceOrQuestChance, GroupID, Comment) VALUES
+INSERT INTO reference_loot_template (Entry, Item, Chance, GroupId, Comment) VALUES
   (301, 5001, 20, 0, 'Этерниум со слизня (фарм-база)'),
   (301, 5002, 8, 0, 'Осколок Порога (валюта Гильдии)'),
   (302, 5001, 35, 0, 'Зона Истечения: усиленный дроп для изгоев');

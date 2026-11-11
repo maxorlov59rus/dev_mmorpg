@@ -7,7 +7,7 @@ namespace net {
 
 class PacketHandlers {
 public:
-    static void RegisterAll();
+  static void RegisterAll();
 };
 
 } // namespace net

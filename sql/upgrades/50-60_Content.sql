@@ -6,12 +6,12 @@
 -- === Квесты уровня 50-60 ===
 
 INSERT IGNORE INTO quest_def (id, title_ru, title_en, description_ru, description_en, level_min, level_max, quest_type, quest_category, objectives, reward_type, reward_value, time_limit, is_repeatable, faction_id) VALUES
-(101, 'Путь на Вершину', 'Path to the Summit', 'Покорите 10 горных пиков', 'Climb 10 mountain peaks', 50, 55, 'kill_monsters', 'exploration', 'defend_pass, slay_10_mountain_trolls, retrieve_ancient_artifact', 'gold', '200', 0, 1),
-(102, 'Забытыйхранилище', 'Forgotten Vault', 'Найдите древнийartifact в заброшенном храме', 'Find ancient artifact in abandoned temple', 55, 60, 'collect_items', 'dungeon', 'collect_5_artifact_fragments, defeat_ancient_guardian, retrieve_lost_knowledge', 'spirit', '150', 0, 1);
+(101, 'Путь на Вершину', 'Path to the Summit', 'Покорите 10 горных пиков', 'Climb 10 mountain peaks', 50, 55, 'kill_monsters', 'exploration', 'defend_pass, slay_10_mountain_trolls, retrieve_ancient_artifact', 'gold', '200', 0, 1, 1),
+(102, 'Забытыйхранилище', 'Forgotten Vault', 'Найдите древнийartifact в заброшенном храме', 'Find ancient artifact in abandoned temple', 55, 60, 'collect_items', 'dungeon', 'collect_5_artifact_fragments, defeat_ancient_guardian, retrieve_lost_knowledge', 'spirit', '150', 0, 1, 1);
 
 -- === НПЦы уровня 50-60 ===
 
-INSERT IGNORE INTO npc_def (id, name_ru, name_en, title_ru, title_en, npc_type, rank, faction_id, city_id, gender, race, description_ru, description_en, is_quest_giver, is_trainer, is_special_interact) VALUES
+INSERT IGNORE INTO npc_def (id, name_ru, name_en, title_ru, title_en, npc_type, `rank`, faction_id, city_id, gender, race, description_ru, description_en, is_quest_giver, is_trainer, is_special_interact) VALUES
 (201, 'Губитель Гор', 'Mountain Slayer', 'Хранитель гор', 'Mountain Guardian', 0, 2, 1, 101, 0, 'human', 'Ветерана гор, который охраняет пути на вершины', 'Master of the Peaks', 1, 0, 1),
 (202, 'Архивариух', 'Forgotten Archivist', 'Хранитель следов', 'Forgotten Keeper', 0, 2, 2, 102, 1, 'elf', 'Стараяエルフ, которая хранит секреты древнего храма', 'Keeper of Secrets', 1, 0, 1);
 

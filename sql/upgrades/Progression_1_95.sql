@@ -198,7 +198,7 @@ INSERT INTO talents (tree_id,row_idx,col_idx,max_rank,type,req_points,aura_spell
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS item_tier_matrix (
   tier        TINYINT UNSIGNED NOT NULL,      -- ItemTier enum ProgressionCore.h
-  name        VARCHAR(32) NOT NULL,
+  name        VARCHAR(64) NOT NULL,
   min_ilvl    SMALLINT UNSIGNED NOT NULL,
   max_ilvl    SMALLINT UNSIGNED NOT NULL,
   armor_mult  DECIMAL(4,2) NOT NULL DEFAULT 1.20, -- Armor = ilvl * mult

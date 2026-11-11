@@ -4,6 +4,6 @@
 namespace dm {
 class QuestMgr {
 public:
-    void KilledCreature(uint32_t entry, int count) {}
+  void KilledCreature(uint32_t entry, int count) {}
 };
 } // namespace dm

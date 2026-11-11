@@ -70,7 +70,7 @@ INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_ite
 (4004, 4, 'Стальной щит', 'Steel Shield', 14004, 1, 50, 4000, 'Улучшенный щит.', 'Improved shield.'),
 (4005, 4, 'Мифриловый меч', 'Mithril Sword', 14005, 1, 100, 5000, 'Мощный меч из мифрила.', 'Powerful mithril sword.'),
 (4006, 4, 'Мифриловый щит', 'Mithril Shield', 14006, 1, 100, 5000, 'Мощный щит из мифрила.', 'Powerful mithril shield.'),
-(4007, 4, 'Титановый меч', 'Titanium Sword', 14007, 1, 200, 6000, 'Легендарный меч из титана.', 'Legendary titanium sword.'),
+(4007, 4, 'Титановый меч', 'Titanium Sword', 14007, 1, 200, 6000, 'Легендарный меч из титана.', 'Legendary titanium sword.');
 -- Alchemy recipes
 INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_item_id, result_count, required_skill, craft_time_ms, description_ru, description_en) VALUES
 (5001, 5, 'Зелье исцеления (малое)', 'Small Healing Potion', 14010, 1, 1, 2000, 'Восстанавливает 100 HP.', 'Restores 100 HP.'),
@@ -83,7 +83,7 @@ INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_ite
 (5008, 5, 'Зелье ловкости', 'Agility Potion', 14017, 1, 50, 3000, '+10 ловкости на 30 мин.', '+10 agility for 30 min.'),
 (5009, 5, 'Зелье интеллекта', 'Intellect Potion', 14018, 1, 50, 3000, '+10 интеллекта на 30 мин.', '+10 intellect for 30 min.'),
 (5010, 5, 'Зелье выносливости', 'Vitality Potion', 14019, 1, 50, 3000, '+10 выносливости на 30 мин.', '+10 vitality for 30 min.'),
-(5011, 5, 'Зелье духа', 'Spirit Potion', 14020, 1, 50, 3000, '+10 духа на 30 мин.', '+10 spirit for 30 min.'),
+(5011, 5, 'Зелье духа', 'Spirit Potion', 14020, 1, 50, 3000, '+10 духа на 30 мин.', '+10 spirit for 30 min.');
 -- Tailoring recipes
 INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_item_id, result_count, required_skill, craft_time_ms, description_ru, description_en) VALUES
 (6001, 6, 'Льняная рубаха', 'Linen Shirt', 14030, 1, 1, 2000, 'Базовая тканевая броня.', 'Basic cloth armor.'),
@@ -107,11 +107,9 @@ INSERT IGNORE INTO craft_recipe (id, profession_id, name_ru, name_en, result_ite
 (8004, 8, 'Амулет выносливости', 'Amulet of Vitality', 14053, 1, 25, 3000, 'Амулет +10 выносливости.', 'Amulet +10 vitality.'),
 (8005, 8, 'Амулет духа', 'Amulet of Spirit', 14054, 1, 25, 3000, 'Амулет +10 духа.', 'Amulet +10 spirit.'),
 (8006, 8, 'Кольцо мощи', 'Ring of Power', 14055, 1, 100, 5000, 'Кольцо +15 ко всем статам.', 'Ring +15 to all stats.'),
-(8007, 8, 'Амулет бессмертия', 'Amulet of Immortality', 14056, 1, 200, 6000, 'Амулет +30 выносливости.', 'Amulet +30 vitality.');
-
-(5012, 5, 'Эликсир бессмертия', 'Elixir of Immortality', 14021, 1, 150, 5000, 'Восстанавливает 50% HP при смерти.', 'Restores 50% HP on death.'),
-(5013, 5, 'Эликсир поглощения', 'Elixir of Absorption', 14022, 1, 150, 5000, '+20% к сопротивлению тьме на 1 час.', '+20% dark resistance for 1 hour.');
-
+(8007, 8, 'Амулет бессмертия', 'Amulet of Immortality', 14056, 1, 200, 6000, 'Амулет +30 выносливости.', 'Amulet +30 vitality.'),
+(5012, 5, 'Эликсир бессмертия', 'Elixir of Immortality', 14021, 1, 150, 5000, 'Восстанавливает здоровье полностью.', 'Fully restores health.'),
+(5013, 5, 'Эликсир поглощения', 'Elixir of Absorption', 14022, 1, 150, 5000, '+20% к сопротивлению тьме на 1 час.', '+20% dark resistance for 1 hour.'),
 (4008, 4, 'Титановый щит', 'Titanium Shield', 14008, 1, 200, 6000, 'Легендарный щит из титана.', 'Legendary titanium shield.');
 
 CREATE TABLE IF NOT EXISTS craft_recipe_material (
@@ -216,20 +214,6 @@ INSERT IGNORE INTO craft_resource_drop (mob_entry, item_id, chance, min_count, m
 (50010, 11011, 50.0, 1, 2, 'Теневая шкура'),
 (50011, 11012, 40.0, 1, 2, 'Кость нежити'),
 (50012, 11013, 30.0, 1, 2, 'Кровь демона'),
-
--- ---------------------------------------------------------------------------
--- 7. CREATURE_SPAWN — Расстановка трейнеров по миру
--- ---------------------------------------------------------------------------
-INSERT IGNORE INTO creature_spawn (Entry, MapId, X, Y, Z, SpawnsMask) VALUES
-(91001, 1, 65536*200, 65536*100, 65536*10, 0x5),
-(91002, 1, 65536*210, 65536*105, 65536*10, 0x5),
-(91003, 1, 65536*220, 65536*110, 65536*10, 0x5),
-(91004, 1, 65536*230, 65536*115, 65536*10, 0x5),
-(91005, 1, 65536*240, 65536*120, 65536*10, 0x5),
-(91006, 1, 65536*250, 65536*125, 65536*10, 0x5),
-(91007, 1, 65536*260, 65536*130, 65536*10, 0x5),
-(91008, 1, 65536*270, 65536*135, 65536*10, 0x5);
-
 (50013, 11014, 100.0, 2, 4, 'Эссенция тьмы'),
 (50014, 11015, 100.0, 3, 6, 'Кристалл тьмы'),
 (50015, 11016, 45.0, 1, 2, 'Паучий шёлк'),

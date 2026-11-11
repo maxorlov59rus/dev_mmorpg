@@ -4,7 +4,7 @@
 namespace dm {
 class HookMgr {
 public:
-    static HookMgr &Instance();
-    void CallVoid(const char *name);
+  static HookMgr &Instance();
+  void CallVoid(const char *name);
 };
 } // namespace dm

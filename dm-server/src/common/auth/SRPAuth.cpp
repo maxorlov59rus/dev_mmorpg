@@ -1,10 +1,10 @@
 #include "common/auth/SRPAuth.h"
-#include <openssl/bn.h>
-#include <openssl/sha.h>
-#include <openssl/rand.h>
 #include <cstring>
-#include <vector>
+#include <openssl/bn.h>
+#include <openssl/rand.h>
+#include <openssl/sha.h>
 #include <string>
+#include <vector>
 
 namespace dm {
 namespace auth {
@@ -29,99 +29,101 @@ static BIGNUM *g = nullptr;
 static BIGNUM *k = nullptr;
 
 static void InitParams() {
-    if (N) return;
-    BN_CTX *ctx = BN_CTX_new();
-    N = BN_new();
-    BN_hex2bn(&N, SRP_N_HEX);
-    g = BN_new();
-    BN_set_word(g, SRP_G);
-    k = BN_new();
-    BN_set_word(k, SRP_K);
-    BN_CTX_free(ctx);
+  if (N)
+    return;
+  BN_CTX *ctx = BN_CTX_new();
+  N = BN_new();
+  BN_hex2bn(&N, SRP_N_HEX);
+  g = BN_new();
+  BN_set_word(g, SRP_G);
+  k = BN_new();
+  BN_set_word(k, SRP_K);
+  BN_CTX_free(ctx);
 }
 
 static std::vector<uint8_t> BnToBytes(const BIGNUM *bn) {
-    int len = BN_num_bytes(bn);
-    std::vector<uint8_t> buf(len);
-    BN_bn2bin(bn, buf.data());
-    return buf;
+  int len = BN_num_bytes(bn);
+  std::vector<uint8_t> buf(len);
+  BN_bn2bin(bn, buf.data());
+  return buf;
 }
 
 static BIGNUM *BytesToBn(const std::vector<uint8_t> &buf) {
-    BIGNUM *bn = BN_new();
-    BN_bin2bn(buf.data(), buf.size(), bn);
-    return bn;
+  BIGNUM *bn = BN_new();
+  BN_bin2bn(buf.data(), buf.size(), bn);
+  return bn;
 }
 
-static void Sha256(const std::vector<uint8_t> &data, std::vector<uint8_t> &out) {
-    out.resize(32);
-    SHA256(data.data(), data.size(), out.data());
+static void Sha256(const std::vector<uint8_t> &data,
+                   std::vector<uint8_t> &out) {
+  out.resize(32);
+  SHA256(data.data(), data.size(), out.data());
 }
 
 void SRPAuth::Init(const std::string &username, const std::string &password) {
-    InitParams();
-    m_username = username;
-    m_password = password;
+  InitParams();
+  m_username = username;
+  m_password = password;
 
-    m_salt.resize(16);
-    RAND_bytes(m_salt.data(), 16);
+  m_salt.resize(16);
+  RAND_bytes(m_salt.data(), 16);
 
-    std::vector<uint8_t> saltPlusUser;
-    saltPlusUser.insert(saltPlusUser.end(), m_salt.begin(), m_salt.end());
-    saltPlusUser.insert(saltPlusUser.end(), username.begin(), username.end());
-    std::vector<uint8_t> xHash;
-    Sha256(saltPlusUser, xHash);
-    BIGNUM *x = BytesToBn(xHash);
+  std::vector<uint8_t> saltPlusUser;
+  saltPlusUser.insert(saltPlusUser.end(), m_salt.begin(), m_salt.end());
+  saltPlusUser.insert(saltPlusUser.end(), username.begin(), username.end());
+  std::vector<uint8_t> xHash;
+  Sha256(saltPlusUser, xHash);
+  BIGNUM *x = BytesToBn(xHash);
 
-    BIGNUM *v = BN_new();
-    BN_CTX *ctx = BN_CTX_new();
-    BN_mod_exp(v, g, x, N, ctx);
-    m_verifier = BnToBytes(v);
+  BIGNUM *v = BN_new();
+  BN_CTX *ctx = BN_CTX_new();
+  BN_mod_exp(v, g, x, N, ctx);
+  m_verifier = BnToBytes(v);
 
-    BN_free(x);
-    BN_free(v);
-    BN_CTX_free(ctx);
+  BN_free(x);
+  BN_free(v);
+  BN_CTX_free(ctx);
 }
 
 std::vector<uint8_t> SRPAuth::GetSalt() const { return m_salt; }
 
 std::vector<uint8_t> SRPAuth::GetPublicKey() {
-    InitParams();
-    BIGNUM *b = BN_new();
-    BN_rand(b, 256, BN_RAND_TOP_ANY, BN_RAND_BOTTOM_ANY);
+  InitParams();
+  BIGNUM *b = BN_new();
+  BN_rand(b, 256, BN_RAND_TOP_ANY, BN_RAND_BOTTOM_ANY);
 
-    BIGNUM *v = BytesToBn(m_verifier);
+  BIGNUM *v = BytesToBn(m_verifier);
 
-    BIGNUM *gv = BN_new();
-    BN_CTX *ctx = BN_CTX_new();
-    BN_mod_exp(gv, g, b, N, ctx);
+  BIGNUM *gv = BN_new();
+  BN_CTX *ctx = BN_CTX_new();
+  BN_mod_exp(gv, g, b, N, ctx);
 
-    BIGNUM *kv = BN_new();
-    BN_mul(kv, k, v, ctx);
+  BIGNUM *kv = BN_new();
+  BN_mul(kv, k, v, ctx);
 
-    BIGNUM *B = BN_new();
-    BN_mod_add(B, kv, gv, N, ctx);
+  BIGNUM *B = BN_new();
+  BN_mod_add(B, kv, gv, N, ctx);
 
-    m_privateB = b;
-    m_publicB = B;
+  m_privateB = b;
+  m_publicB = B;
 
-    auto res = BnToBytes(B);
+  auto res = BnToBytes(B);
 
-    BN_free(v);
-    BN_free(gv);
-    BN_free(kv);
-    BN_CTX_free(ctx);
-    return res;
+  BN_free(v);
+  BN_free(gv);
+  BN_free(kv);
+  BN_CTX_free(ctx);
+  return res;
 }
 
 bool SRPAuth::VerifyProof(const std::vector<uint8_t> &clientProof) {
-    // TODO: verify M1
-    return true;
+  // TODO: verify M1
+  return true;
 }
 
 std::vector<uint8_t> SRPAuth::ComputeServerProof() const {
-    // TODO: compute M2
-    return {};
+  // TODO: compute M2
+  return {};
 }
 
 } // namespace auth

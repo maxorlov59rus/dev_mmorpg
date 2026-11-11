@@ -102,7 +102,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10097,50097,'/Game/Items/Weapons/Staff/SM_staff_50097','/Game/Items/Icons/T_staff_50097'),
 (10098,50098,'/Game/Items/Weapons/Staff/SM_staff_50098','/Game/Items/Icons/T_staff_50098'),
 (10099,50099,'/Game/Items/Weapons/Staff/SM_staff_50099','/Game/Items/Icons/T_staff_50099'),
-(10100,50100,'/Game/Items/Weapons/Staff/SM_staff_50100','/Game/Items/Icons/T_staff_50100');
+(10100,50100,'/Game/Items/Weapons/Staff/SM_staff_50100','/Game/Items/Icons/T_staff_50100'),
 (10101,50101,'/Game/Items/Weapons/Dagger/SM_dagger_50101','/Game/Items/Icons/T_dagger_50101'),
 (10102,50102,'/Game/Items/Weapons/Dagger/SM_dagger_50102','/Game/Items/Icons/T_dagger_50102'),
 (10103,50103,'/Game/Items/Weapons/Dagger/SM_dagger_50103','/Game/Items/Icons/T_dagger_50103'),
@@ -202,7 +202,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10197,50197,'/Game/Items/Weapons/Staff/SM_staff_50197','/Game/Items/Icons/T_staff_50197'),
 (10198,50198,'/Game/Items/Weapons/Staff/SM_staff_50198','/Game/Items/Icons/T_staff_50198'),
 (10199,50199,'/Game/Items/Weapons/Staff/SM_staff_50199','/Game/Items/Icons/T_staff_50199'),
-(10200,50200,'/Game/Items/Weapons/Staff/SM_staff_50200','/Game/Items/Icons/T_staff_50200');
+(10200,50200,'/Game/Items/Weapons/Staff/SM_staff_50200','/Game/Items/Icons/T_staff_50200'),
 (10201,50201,'/Game/Items/Weapons/Staff/SM_staff_50201','/Game/Items/Icons/T_staff_50201'),
 (10202,50202,'/Game/Items/Weapons/Staff/SM_staff_50202','/Game/Items/Icons/T_staff_50202'),
 (10203,50203,'/Game/Items/Weapons/Staff/SM_staff_50203','/Game/Items/Icons/T_staff_50203'),
@@ -302,7 +302,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10297,50297,'/Game/Items/Weapons/Mace/SM_mace_50297','/Game/Items/Icons/T_mace_50297'),
 (10298,50298,'/Game/Items/Weapons/Mace/SM_mace_50298','/Game/Items/Icons/T_mace_50298'),
 (10299,50299,'/Game/Items/Weapons/Mace/SM_mace_50299','/Game/Items/Icons/T_mace_50299'),
-(10300,50300,'/Game/Items/Weapons/Mace/SM_mace_50300','/Game/Items/Icons/T_mace_50300');
+(10300,50300,'/Game/Items/Weapons/Mace/SM_mace_50300','/Game/Items/Icons/T_mace_50300'),
 (10301,50301,'/Game/Items/Weapons/Sword/SM_sword_50301','/Game/Items/Icons/T_sword_50301'),
 (10302,50302,'/Game/Items/Weapons/Sword/SM_sword_50302','/Game/Items/Icons/T_sword_50302'),
 (10303,50303,'/Game/Items/Weapons/Sword/SM_sword_50303','/Game/Items/Icons/T_sword_50303'),
@@ -402,7 +402,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10397,50397,'/Game/Items/Weapons/Mace/SM_mace_50397','/Game/Items/Icons/T_mace_50397'),
 (10398,50398,'/Game/Items/Weapons/Mace/SM_mace_50398','/Game/Items/Icons/T_mace_50398'),
 (10399,50399,'/Game/Items/Weapons/Mace/SM_mace_50399','/Game/Items/Icons/T_mace_50399'),
-(10400,50400,'/Game/Items/Weapons/Mace/SM_mace_50400','/Game/Items/Icons/T_mace_50400');
+(10400,50400,'/Game/Items/Weapons/Mace/SM_mace_50400','/Game/Items/Icons/T_mace_50400'),
 (10401,50401,'/Game/Items/Armor/Cloth/HE_cloth_head_50401','/Game/Items/Icons/T_armor_head_50401'),
 (10402,50402,'/Game/Items/Armor/Cloth/HE_cloth_head_50402','/Game/Items/Icons/T_armor_head_50402'),
 (10403,50403,'/Game/Items/Armor/Cloth/HE_cloth_head_50403','/Game/Items/Icons/T_armor_head_50403'),
@@ -502,7 +502,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10497,50497,'/Game/Items/Armor/Cloth/HA_cloth_hands_50497','/Game/Items/Icons/T_armor_hands_50497'),
 (10498,50498,'/Game/Items/Armor/Cloth/HA_cloth_hands_50498','/Game/Items/Icons/T_armor_hands_50498'),
 (10499,50499,'/Game/Items/Armor/Cloth/HA_cloth_hands_50499','/Game/Items/Icons/T_armor_hands_50499'),
-(10500,50500,'/Game/Items/Armor/Cloth/HA_cloth_hands_50500','/Game/Items/Icons/T_armor_hands_50500');
+(10500,50500,'/Game/Items/Armor/Cloth/HA_cloth_hands_50500','/Game/Items/Icons/T_armor_hands_50500'),
 (10501,50501,'/Game/Items/Armor/Leather/HE_leather_head_50501','/Game/Items/Icons/T_armor_head_50501'),
 (10502,50502,'/Game/Items/Armor/Leather/HE_leather_head_50502','/Game/Items/Icons/T_armor_head_50502'),
 (10503,50503,'/Game/Items/Armor/Leather/HE_leather_head_50503','/Game/Items/Icons/T_armor_head_50503'),
@@ -602,7 +602,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10597,50597,'/Game/Items/Armor/Leather/HA_leather_hands_50597','/Game/Items/Icons/T_armor_hands_50597'),
 (10598,50598,'/Game/Items/Armor/Leather/HA_leather_hands_50598','/Game/Items/Icons/T_armor_hands_50598'),
 (10599,50599,'/Game/Items/Armor/Leather/HA_leather_hands_50599','/Game/Items/Icons/T_armor_hands_50599'),
-(10600,50600,'/Game/Items/Armor/Leather/HA_leather_hands_50600','/Game/Items/Icons/T_armor_hands_50600');
+(10600,50600,'/Game/Items/Armor/Leather/HA_leather_hands_50600','/Game/Items/Icons/T_armor_hands_50600'),
 (10601,50601,'/Game/Items/Armor/Mail/HE_mail_head_50601','/Game/Items/Icons/T_armor_head_50601'),
 (10602,50602,'/Game/Items/Armor/Mail/HE_mail_head_50602','/Game/Items/Icons/T_armor_head_50602'),
 (10603,50603,'/Game/Items/Armor/Mail/HE_mail_head_50603','/Game/Items/Icons/T_armor_head_50603'),
@@ -702,7 +702,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10697,50697,'/Game/Items/Armor/Mail/HA_mail_hands_50697','/Game/Items/Icons/T_armor_hands_50697'),
 (10698,50698,'/Game/Items/Armor/Mail/HA_mail_hands_50698','/Game/Items/Icons/T_armor_hands_50698'),
 (10699,50699,'/Game/Items/Armor/Mail/HA_mail_hands_50699','/Game/Items/Icons/T_armor_hands_50699'),
-(10700,50700,'/Game/Items/Armor/Mail/HA_mail_hands_50700','/Game/Items/Icons/T_armor_hands_50700');
+(10700,50700,'/Game/Items/Armor/Mail/HA_mail_hands_50700','/Game/Items/Icons/T_armor_hands_50700'),
 (10701,50701,'/Game/Items/Armor/Plate/HE_plate_head_50701','/Game/Items/Icons/T_armor_head_50701'),
 (10702,50702,'/Game/Items/Armor/Plate/HE_plate_head_50702','/Game/Items/Icons/T_armor_head_50702'),
 (10703,50703,'/Game/Items/Armor/Plate/HE_plate_head_50703','/Game/Items/Icons/T_armor_head_50703'),
@@ -802,7 +802,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10797,50797,'/Game/Items/Armor/Plate/HA_plate_hands_50797','/Game/Items/Icons/T_armor_hands_50797'),
 (10798,50798,'/Game/Items/Armor/Plate/HA_plate_hands_50798','/Game/Items/Icons/T_armor_hands_50798'),
 (10799,50799,'/Game/Items/Armor/Plate/HA_plate_hands_50799','/Game/Items/Icons/T_armor_hands_50799'),
-(10800,50800,'/Game/Items/Armor/Plate/HA_plate_hands_50800','/Game/Items/Icons/T_armor_hands_50800');
+(10800,50800,'/Game/Items/Armor/Plate/HA_plate_hands_50800','/Game/Items/Icons/T_armor_hands_50800'),
 (10801,50801,'','/Game/Items/Icons/T_food_50801'),
 (10802,50802,'','/Game/Items/Icons/T_food_50802'),
 (10803,50803,'','/Game/Items/Icons/T_food_50803'),
@@ -902,7 +902,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10897,50897,'','/Game/Items/Icons/T_scroll_50897'),
 (10898,50898,'','/Game/Items/Icons/T_scroll_50898'),
 (10899,50899,'','/Game/Items/Icons/T_scroll_50899'),
-(10900,50900,'','/Game/Items/Icons/T_scroll_50900');
+(10900,50900,'','/Game/Items/Icons/T_scroll_50900'),
 (10901,50901,'','/Game/Items/Icons/T_potion_50901'),
 (10902,50902,'','/Game/Items/Icons/T_potion_50902'),
 (10903,50903,'','/Game/Items/Icons/T_potion_50903'),
@@ -1002,7 +1002,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (10997,50997,'','/Game/Items/Icons/T_potion_50997'),
 (10998,50998,'','/Game/Items/Icons/T_potion_50998'),
 (10999,50999,'','/Game/Items/Icons/T_potion_50999'),
-(11000,51000,'','/Game/Items/Icons/T_potion_51000');
+(11000,51000,'','/Game/Items/Icons/T_potion_51000'),
 (11001,51001,'','/Game/Items/Icons/T_mat_ore_51001'),
 (11002,51002,'','/Game/Items/Icons/T_mat_herb_51002'),
 (11003,51003,'','/Game/Items/Icons/T_mat_cloth_51003'),
@@ -1102,7 +1102,7 @@ INSERT INTO `displayid_map` (`item_id`,`display_id`,`mesh_path`,`icon_path`) VAL
 (11097,51097,'','/Game/Items/Icons/T_mat_herb_51097'),
 (11098,51098,'','/Game/Items/Icons/T_mat_cloth_51098'),
 (11099,51099,'','/Game/Items/Icons/T_mat_essence_51099'),
-(11100,51100,'','/Game/Items/Icons/T_mat_eternium_51100');
+(11100,51100,'','/Game/Items/Icons/T_mat_eternium_51100'),
 (11101,51101,'','/Game/Items/Icons/T_key_51101'),
 (11102,51102,'','/Game/Items/Icons/T_key_51102'),
 (11103,51103,'','/Game/Items/Icons/T_key_51103'),

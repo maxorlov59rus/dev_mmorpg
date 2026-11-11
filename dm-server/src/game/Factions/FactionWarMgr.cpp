@@ -1,2 +1,2 @@
--- Faction War Manager Implementation
--- This file will be created by the build system
+--Faction War Manager Implementation-- This file will be created by the
+    build system

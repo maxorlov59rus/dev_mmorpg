@@ -21,8 +21,7 @@ CREATE TABLE IF NOT EXISTS `character_flags` (
     `wanted_level`      TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'PvP Bounty 0..5',
     `dishonor_expire`   INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Dishonorable Death: запрет групп до unix-time (2ч)',
     `duel_id`           BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '>0 => активная дуэль (сбрасывается при reload)',
-    PRIMARY KEY (`guid`),
-    CONSTRAINT `fk_cf_char` FOREIGN KEY (`guid`) REFERENCES `characters` (`guid`) ON DELETE CASCADE
+    PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ---------------------------------------------------------------------
@@ -66,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `pvp_zones` (
     UNIQUE KEY `uk_map_area` (`map_id`, `area_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `pvp_zones` (`map_id`, `area_id`, `name`, `ruleset`, `forced_untag`, `auto_resurrect`, `clean_debuffs`, `honor_mult_q16`) VALUES
+INSERT IGNORE INTO `pvp_zones` (`map_id`, `area_id`, `name`, `ruleset`, `forced_untag`, `auto_resurrect`, `clean_debuffs`, `honor_mult_q16`) VALUES
 (1, 101, 'Dawnhold - City of the Order of the Dawn', 1, 1, 0, 0, 65536),
 (1, 102, 'Ashen Reach - Citadel of the Ember Order', 1, 1, 0, 0, 65536),
 (1, 103, 'Threshold Gate - Neutral Trade Hub',       1, 1, 0, 0, 65536),
@@ -88,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `graveyard_binding` (
     KEY `idx_zone` (`map_id`, `zone_area_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `graveyard_binding` (`map_id`, `zone_area_id`, `gy_map`, `pos_x`, `pos_y`, `pos_z`) VALUES
+INSERT IGNORE INTO `graveyard_binding` (`map_id`, `zone_area_id`, `gy_map`, `pos_x`, `pos_y`, `pos_z`) VALUES
 (1, 101, 1, -210.0, 45.0, 90.0),
 (1, 102, 1, 830.0, -120.0, 75.0),
 (2, 201, 2, 120.0, 300.0, 40.0);
@@ -152,9 +151,8 @@ INSERT INTO `creature_proto_aggro` (`entry`, `aggro_range`, `leash_range`, `fron
 -- ---------------------------------------------------------------------
 USE dm_items;
 INSERT IGNORE INTO `item_template`
-(`entry`,`class`,`subclass`,`name`,`displayid`,`quality`,`flags`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`,`StatsCount`,`bonding`)
-VALUES
-(11201, 4, 1, 'Badge of Black Matter (Honor Token)', 51201, 7, 0, 0, 0, 0, -1, -1, 95, 0, 0),
-(11202, 4, 1, 'Duelist Signet (Quest Item)',         51202, 4, 0, 0, 0, 0, -1, -1, 10, 0, 0);
+(`entry`,`class`,`subclass`,`name`,`displayid`,`Quality`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`) VALUES
+(11201, 4, 1, 'Badge of Black Matter (Honor Token)', 51201, 7, 0, 0, 0, -1, -1, 95, 0)
+(11202, 4, 1, 'Duelist Signet (Quest Item)', 51202, 4, 0, 0, 0, -1, -1, 10, 0);
 
 -- Миграция обратно совместима: IF NOT EXISTS / INSERT IGNORE.

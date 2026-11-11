@@ -28,7 +28,8 @@ jobs:
       - name: Run clang-format
         shell: pwsh
         run: |
-          $files = Get-ChildItem -Recurse -Include *.h,*.cpp -Path dm-server -ErrorAction SilentlyContinue
+          $files = Get-ChildItem -Recurse -Include *.h,*.cpp -Path dm-server -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -notmatch '\\thirdparty\\' -and $_.FullName -notmatch '\\build\\' }
           if (-not $files) { Write-Warning "No C++ files"; exit 0 }
           $fail = 0
           foreach ($f in $files) {

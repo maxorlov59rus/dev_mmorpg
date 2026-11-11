@@ -37,7 +37,7 @@ INSERT IGNORE INTO music_track_def (id, name_ru, name_en, file_path, category, d
 (12, 'PvP: Битва Духов', 'PvP: Spirit Battle', 'Audio/Music/pvp_spirit_battle', 'event', 120, 1, 0.9, 'Динамичная PvP музыка.', 'Dynamic PvP music.', 1),
 (13, 'Событие: Туманная Аномалия', 'Event: Misty', 'Audio/Music/event_misty', 'event', 180, 1, 0.8, 'Атмосферная музыка.', 'Atmospheric music.', 1),
 (14, 'Событие: Сезонное', 'Event: Seasonal', 'Audio/Music/event_seasonal', 'event', 150, 1, 0.7, 'Праздничная музыка.', 'Festive music.', 1),
-(15, 'Победа', 'Victory', 'Audio/Music/victory_fanfare', 'ui', 15, 0, 1.0, 'Фанфары победы.', 'Victory fanfare.', 1),
+(15, 'Победа', 'Victory', 'Audio/Music/victory_fanfare', 'ui', 15, 0, 1.0, 'Фанфары победы.', 'Victory fanfare.', 1);
 
 -- ---------------------------------------------------------------------------
 -- 2. MODEL_DEF — 3D модели
@@ -161,4 +161,3 @@ INSERT IGNORE INTO asset_config (config_key, config_value, comment) VALUES
 ('lore_enabled', 'true', 'Включить лор'),
 ('default_music_volume', '0.7', 'Громкость музыки'),
 ('default_sfx_volume', '0.8', 'Громкость звуков');
-(16, 'Поражение', 'Defeat', 'Audio/Music/defeat', 'ui', 10, 0, 1.0, 'Музыка поражения.', 'Defeat music.', 1);
