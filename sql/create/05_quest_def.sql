@@ -229,3 +229,11 @@ CREATE TABLE IF NOT EXISTS npc_quest_giver (
     quest_direction TINYINT UNSIGNED NOT NULL DEFAULT 0,
     PRIMARY KEY (npc_entry, quest_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS instance_template (
+    mapid        SMALLINT UNSIGNED NOT NULL,
+    max_players  TINYINT UNSIGNED NOT NULL DEFAULT 5,
+    difficulty   TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    reset_hours  SMALLINT UNSIGNED NOT NULL DEFAULT 24,
+    note         VARCHAR(255) NULL,
+    PRIMARY KEY (mapid, difficulty)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
