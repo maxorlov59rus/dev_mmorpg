@@ -175,3 +175,12 @@ CREATE TABLE IF NOT EXISTS quest_dialogue (
     INDEX idx_quest (quest_id),
     INDEX idx_npc (npc_entry)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS campaign_def (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(96) NOT NULL,
+    description TEXT NULL,
+    faction_id TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    level_range_start TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    level_range_end TINYINT UNSIGNED NOT NULL DEFAULT 10,
+    INDEX idx_faction_level (faction_id, level_range_start)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
