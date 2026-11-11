@@ -3126,7 +3126,7 @@ GameObject:
   - component: {fileID: 911000002}
   - component: {fileID: 911000003}
   m_Layer: 0
-  m_Name: UIClientBootstrap
+  m_Name: ClientUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3156,12 +3156,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 911000001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4c1a0e2288cdde4bbd450fb08812948, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d97dc97755307041a796a1097ac866f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  background: {r: 0.06, g: 0.05, b: 0.08, a: 1}
-  panel: {r: 0.11, g: 0.1, b: 0.14, a: 0.97}
-  accent: {r: 0.72, g: 0.22, b: 0.28, a: 1}
-  accentLight: {r: 0.94, g: 0.8, b: 0.55, a: 1}
-  textPrimary: {r: 0.93, g: 0.92, b: 0.95, a: 1}
-  textMuted: {r: 0.62, g: 0.6, b: 0.66, a: 1}
+  m_EditorClassIdentifier:

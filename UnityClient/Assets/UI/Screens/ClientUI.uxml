@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles/DarkMatterGlobal.uss" />
+
+    <!-- ============ MAIN MENU ============ -->
+    <ui:VisualElement name="main-menu" class="screen-menu">
+        <ui:VisualElement class="menu-glow" />
+        <ui:VisualElement class="menu-center">
+            <ui:Label text="ЧЁРНАЯ МАТЕРИЯ" class="menu-title" name="menuTitle" />
+            <ui:Label text="BLACK MATTER  ·  MMORPG" class="menu-subtitle" name="menuSubtitle" />
+            <ui:Label text="Три силы. Один раскол. Мир на грани Заражения." class="menu-tagline" name="menuTagline" />
+            <ui:VisualElement class="menu-buttons">
+                <ui:Button text="Играть" class="menu-button menu-button-primary" name="playButton" />
+                <ui:Button text="О мире" class="menu-button" name="worldInfoButton" />
+                <ui:Button text="Настройки" class="menu-button" name="settingsButton" />
+                <ui:Button text="Выход" class="menu-button menu-button-ghost" name="quitButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Label text="v0.2 · прототип клиента · Unity 7" class="menu-footer" name="menuFooter" />
+    </ui:VisualElement>
+
+    <!-- ============ CHARACTER SELECT ============ -->
+    <ui:VisualElement name="char-select" class="screen-panel">
+        <ui:VisualElement class="panel-header">
+            <ui:Label text="Выбор персонажа" class="panel-title" />
+            <ui:Button text="×" class="close-button" name="charBackButton" />
+        </ui:VisualElement>
+        <ui:VisualElement class="char-body">
+            <ui:VisualElement class="char-list" name="charList" />
+            <ui:VisualElement class="char-create">
+                <ui:Label text="Новый персонаж" class="section-title" />
+                <ui:TextField label="Имя" name="charNameField" max-length="16" />
+                <ui:DropdownField label="Раса" name="charRaceDropdown" />
+                <ui:DropdownField label="Класс" name="charClassDropdown" />
+                <ui:DropdownField label="Фракция" name="charFactionDropdown" />
+                <ui:Button text="Создать и войти" class="button-primary" name="charCreateButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+    <!-- ============ HUD ============ -->
+    <ui:VisualElement name="hud" class="hud-root">
+        <ui:VisualElement class="hud-topbar">
+            <ui:VisualElement class="topbar-left">
+                <ui:Label text="Странник" class="topbar-name" name="hudName" />
+                <ui:Label text="70 ур." class="topbar-chip" name="hudLevel" />
+                <ui:Label text="Орден Света" class="topbar-chip topbar-faction" name="hudFaction" />
+            </ui:VisualElement>
+            <ui:VisualElement class="topbar-center">
+                <ui:Label text="Ательгард" class="topbar-zone" name="hudZone" />
+            </ui:VisualElement>
+            <ui:VisualElement class="topbar-right">
+                <ui:Label text="12:00" class="topbar-clock" name="hudClock" />
+                <ui:Label text="Ясно" class="topbar-weather" name="hudWeather" />
+                <ui:Label text="1 250" class="topbar-gold" name="hudGold" />
+                <ui:Label text="40" class="topbar-spirit" name="hudSpirit" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="hud-vitals">
+            <ui:Label text="HP 820 / 1000" class="vitals-label" name="hpLabel" />
+            <ui:VisualElement class="bar">
+                <ui:VisualElement class="bar-fill bar-hp" name="hpFill" />
+            </ui:VisualElement>
+            <ui:Label text="MP 640 / 1000" class="vitals-label" name="mpLabel" />
+            <ui:VisualElement class="bar">
+                <ui:VisualElement class="bar-fill bar-mp" name="mpFill" />
+            </ui:VisualElement>
+            <ui:Label text="XP 4 200 / 9 000" class="vitals-label vitals-xp-label" name="xpLabel" />
+            <ui:VisualElement class="bar bar-thin">
+                <ui:VisualElement class="bar-fill bar-xp" name="xpFill" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="hud-chat">
+            <ui:VisualElement class="chat-header">
+                <ui:Label text="Общий" class="chat-channel" name="chatChannel" />
+                <ui:Button text="канал" class="chat-channel-button" name="chatChannelButton" />
+                <ui:Button text="×" class="close-button" name="chatCloseButton" />
+            </ui:VisualElement>
+            <ui:ScrollView class="chat-scroll" name="chatScroll">
+                <ui:VisualElement class="chat-content" name="chatContent" />
+            </ui:ScrollView>
+            <ui:VisualElement class="chat-input-row">
+                <ui:TextField class="chat-input" name="chatInput" max-length="256">
+                    <ui:Label text="Написать сообщение…" class="chat-placeholder" />
+                </ui:TextField>
+                <ui:Button text="➤" class="chat-send" name="chatSendButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="hud-hotkeys">
+            <ui:Button text="L · Квесты" class="hotkey" name="hotkeyQuests" />
+            <ui:Button text="I · Сумка" class="hotkey" name="hotkeyInventory" />
+            <ui:Button text="C · Профиль" class="hotkey" name="hotkeyProfile" />
+            <ui:Button text="K · Кампании" class="hotkey" name="hotkeyCampaigns" />
+            <ui:Button text="M · Карта" class="hotkey" name="hotkeyMap" />
+            <ui:Button text="G · Гильдия" class="hotkey" name="hotkeyGuild" />
+            <ui:Button text="O · Настройки" class="hotkey" name="hotkeySettings" />
+            <ui:Button text="Меню" class="hotkey hotkey-exit" name="hotkeyMenu" />
+        </ui:VisualElement>
+
+        <!-- QUESTS -->
+        <ui:VisualElement name="panel-quests" class="window">
+            <ui:VisualElement class="panel-header">
+                <ui:Label text="Журнал квестов" class="panel-title" />
+                <ui:Button text="×" class="close-button" name="questsCloseButton" />
+            </ui:VisualElement>
+            <ui:ScrollView class="window-scroll">
+                <ui:VisualElement class="quest-list" name="questList" />
+            </ui:ScrollView>
+            <ui:Label text="У вас нет активных квестов" class="empty-state" name="questEmpty" />
+        </ui:VisualElement>
+
+        <!-- INVENTORY -->
+        <ui:VisualElement name="panel-inventory" class="window window-wide">
+            <ui:VisualElement class="panel-header">
+                <ui:Label text="Сумка" class="panel-title" />
+                <ui:Label text="12 / 24 слотов" class="panel-subtitle" name="inventoryCount" />
+                <ui:Button text="×" class="close-button" name="inventoryCloseButton" />
+            </ui:VisualElement>
+            <ui:VisualElement class="inventory-head">
+                <ui:Label text="Золото: 1 250" class="inventory-money" name="inventoryGold" />
+                <ui:Label text="Дух: 40" class="inventory-money" name="inventorySpirit" />
+            </ui:VisualElement>
+            <ui:VisualElement class="inventory-grid" name="inventoryGrid" />
+        </ui:VisualElement>
+
+        <!-- PROFILE -->
+        <ui:VisualElement name="panel-profile" class="window">
+            <ui:VisualElement class="panel-header">
+                <ui:Label text="Профиль" class="panel-title" />
+                <ui:Button text="×" class="close-button" name="profileCloseButton" />
+            </ui:VisualElement>
+            <ui:ScrollView class="window-scroll">
+                <ui:VisualElement class="profile-top">
+                    <ui:VisualElement class="profile-avatar">
+                        <ui:Label text="◈" class="profile-avatar-glyph" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="profile-id">
+                        <ui:Label text="Странник" class="profile-name" name="profileName" />
+                        <ui:Label text="Уровень 70 · Жрец Света" class="profile-sub" name="profileClass" />
+                        <ui:Label text="Человек · Орден Света" class="profile-sub" name="profileRace" />
+                        <ui:Label text="Титул: Кающийся" class="profile-sub" name="profileTitle" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="Характеристики" class="section-title" />
+                <ui:VisualElement class="stats-list" name="statsList" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+
+        <!-- CAMPAIGNS -->
+        <ui:VisualElement name="panel-campaigns" class="window window-wide">
+            <ui:VisualElement class="panel-header">
+                <ui:Label text="Кампании 70+" class="panel-title" />
+                <ui:Button text="×" class="close-button" name="campaignsCloseButton" />
+            </ui:VisualElement>
+            <ui:ScrollView class="window-scroll">
+                <ui:VisualElement class="campaign-list" name="campaignList" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+
+        <!-- MAP -->
+        <ui:VisualElement name="panel-map" class="window window-wide">
+            <ui:VisualElement class="panel-header">
+                <ui:Label text="Карта мира" class="panel-title" />
+                <ui:Button text="×" class="close-button" name="mapCloseButton" />
+            </ui:VisualElement>
+            <ui:VisualElement class="map-canvas" name="mapCanvas">
+                <ui:VisualElement class="map-region map-region-light" name="regionLight">
+                    <ui:Label text="Ательгард" class="map-region-label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="map-region map-region-dark" name="regionDark">
+                    <ui:Label text="Умбра" class="map-region-label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="map-region map-region-neutral" name="regionNeutral">
+                    <ui:Label text="Грейвхейвен" class="map-region-label" />
+                </ui:VisualElement>
+                <ui:VisualElement class="map-player" name="mapPlayer" />
+            </ui:VisualElement>
+            <ui:VisualElement class="map-legend">
+                <ui:Label text="◆ Орден Света" class="map-legend-item legend-light" />
+                <ui:Label text="◆ Тёмный Орден" class="map-legend-item legend-dark" />
+                <ui:Label text="◆ Нейтральные" class="map-legend-item legend-neutral" />
+                <ui:Label text="● Вы здесь" class="map-legend-item legend-player" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- GUILD -->
+        <ui:VisualElement name="panel-guild" class="window">
+            <ui:VisualElement class="panel-header">
+                <ui:Label text="Гильдия" class="panel-title" />
+                <ui:Button text="×" class="close-button" name="guildCloseButton" />
+            </ui:VisualElement>
+            <ui:ScrollView class="window-scroll">
+                <ui:Label text="Клинок Рассвета" class="section-title" name="guildName" />
+                <ui:Label text="Уровень гильдии: 4 · Участников: 12 / 40" class="muted" name="guildMeta" />
+                <ui:Label text="Активные войны" class="section-title" />
+                <ui:VisualElement class="guild-war-list" name="guildWarList" />
+                <ui:Label text="Союзники" class="section-title" />
+                <ui:VisualElement class="guild-ally-list" name="guildAllyList" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+
+        <!-- SETTINGS -->
+        <ui:VisualElement name="panel-settings" class="window">
+            <ui:VisualElement class="panel-header">
+                <ui:Label text="Настройки" class="panel-title" />
+                <ui:Button text="×" class="close-button" name="settingsCloseButton" />
+            </ui:VisualElement>
+            <ui:ScrollView class="window-scroll">
+                <ui:Label text="Графика" class="section-title" />
+                <ui:Slider label="Качество" name="qualitySlider" low-value="0" high-value="3" value="2" />
+                <ui:Toggle label="Показывать FPS" name="fpsToggle" value="true" />
+                <ui:Toggle label="Вертикальная синхронизация" name="vsyncToggle" />
+                <ui:Label text="Интерфейс" class="section-title" />
+                <ui:Slider label="Масштаб UI" name="uiScaleSlider" low-value="80" high-value="130" value="100" />
+                <ui:DropdownField label="Язык" name="languageDropdown" />
+                <ui:Label text="Сеть" class="section-title" />
+                <ui:TextField label="Сервер" name="serverField" value="127.0.0.1:8093" />
+                <ui:Button text="Применить" class="button-primary" name="settingsApplyButton" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+
+        <!-- TOAST -->
+        <ui:VisualElement class="toast" name="toast">
+            <ui:Label text="" class="toast-text" name="toastText" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
