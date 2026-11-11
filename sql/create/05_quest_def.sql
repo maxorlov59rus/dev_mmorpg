@@ -260,3 +260,16 @@ CREATE TABLE IF NOT EXISTS quest_special_reward (
     comment          VARCHAR(255) NULL,
     PRIMARY KEY (quest_id, specialreward_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS quest_chain (
+    PrevQuest MEDIUMINT UNSIGNED NOT NULL,
+    NextQuest MEDIUMINT UNSIGNED NOT NULL,
+    NpcEntry  MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (PrevQuest, NextQuest)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS creature_quest_relation (
+    creature_entry MEDIUMINT UNSIGNED NOT NULL,
+    quest_id       MEDIUMINT UNSIGNED NOT NULL,
+    role           VARCHAR(8) NOT NULL DEFAULT 'start',
+    PRIMARY KEY (creature_entry, quest_id, role)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
