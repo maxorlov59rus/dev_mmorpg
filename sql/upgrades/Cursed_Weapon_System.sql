@@ -37,23 +37,16 @@ INSERT IGNORE INTO cursed_weapon_definitions (name_ru, name_en, description_ru, 
     bonus_damage, bonus_crit, bonus_accuracy, bonus_soul_drain, curse_type, curse_value, curse_duration, curse_frequency, 
     chance_to_curse, curse_duration_ticks, curse_removable, allowed_factions, restricted_classes, soul_bound, bind_on_pickup, visual_effect, sound_equip, sound_unequip) VALUES
 -- Common cursed weapons
-('Проклятый клинок', 'Cursed Blade', 'О оружии, portato душой нечестивых воинов', 'Cursed blade for wicked warriors', 'sword', 'unusual', 10, 'weapon', 
-    10, 5, 3, 0, 'speed_reduction', 10, 600, 10, 30, 3, 1, '{"1,2}", "{}', 0, 0, 'glow_red', 'curse_equip', 'curse_unequip'),
-('Тусклый кинжал', 'Dull Dagger', 'Кинжал, передающий часть здоровья врагу', 'Dagger that drains health on hit', 'dagger', 'unusual', 15, 'weapon', 
-    5, 2, 1, 5, 'health_drain', 5, 120, 15, 20, 3, 1, '{"1,3}", "{}', 0, 0, 'glow_green', 'curse_equip', 'curse_unequip'),
--- Rare cursed weapons
-('Клык Назила', 'Nasira\'s Fang', 'Оружие Темного Ордера, требующее жертв', 'Fang of Nasira, Dark Order weapon requiring sacrifices', 'sword', 'rare', 40, 'weapon', 
-    25, 15, 10, 15, 'mana_drain', 15, 300, 20, 40, 5, 1, '{"2}', '{}', 1, 0, 'glow_purple', 'curse_equip', 'curse_unequip'),
--- Epic cursed weapons
-('Шип Теней', 'Serpent of Shadows', 'О оружии, питающегося болью врагов', 'Shadow-serpent weapon that feeds on enemy pain', 'dagger', 'epic', 60, 'weapon', 
-    35, 20, 15, 20, 'health_drain', 20, 500, 25, 50, 5, 1, '{"1,2,3}", "{}', 1, 0, 'glow_black', 'curse_equip', 'curse_unequip'),
--- Legendary cursed weapons
-('Проклятый Молоть', 'Cursed Cleaver', 'О оружии, несущее вечное низчество его владельцу', 'Cleaver that brings eternal misfortune to its wielder', 'axe', 'legendary', 80, 'two_hand', 
-    50, 30, 20, 25, 'speed_reduction', 25, 0, 30, 50, 0, 0, '{"1,2,3}", "{}', 1, 1, 'glow_white', 'curse_equip', 'curse_unequip');
-"
-��ECHO is on.
-
--- Curse Weapons Players Table
+('Проклятый клинок', 'Cursed Blade', 'Оружие, порождённое душами нечестивых воинов', 'Cursed blade for wicked warriors', 'sword', 'unusual', 10, 'weapon',
+    10, 5, 3, 0, 'speed_reduction', 10, 600, 10, 30, 3, 1, '{"1,2"}', '{}', 0, 0, 'glow_red', 'curse_equip', 'curse_unequip'),
+('Тусклый кинжал', 'Dull Dagger', 'Кинжал, передающий часть здоровья врагу', 'Dagger that drains health on hit', 'dagger', 'unusual', 15, 'weapon',
+    5, 2, 1, 5, 'health_drain', 5, 120, 15, 20, 3, 1, '{"1,3"}', '{}', 0, 0, 'glow_green', 'curse_equip', 'curse_unequip'),
+('Клык Назила', 'Nasira''s Fang', 'Оружие Тёмного Ордена, требующее жертв', 'Fang of Nasira, Dark Order weapon requiring sacrifices', 'sword', 'rare', 40, 'weapon',
+    25, 15, 10, 15, 'mana_drain', 15, 300, 20, 40, 5, 1, '{"2"}', '{}', 1, 0, 'glow_purple', 'curse_equip', 'curse_unequip'),
+('Шип Теней', 'Serpent of Shadows', 'Оружие, питающееся болью врагов', 'Shadow-serpent weapon that feeds on enemy pain', 'dagger', 'epic', 60, 'weapon',
+    35, 20, 15, 20, 'health_drain', 20, 500, 25, 50, 5, 1, '{"1,2,3"}', '{}', 1, 0, 'glow_black', 'curse_equip', 'curse_unequip'),
+('Проклятый Колун', 'Cursed Cleaver', 'Оружие, несущее вечное несчастье владельцу', 'Cleaver that brings eternal misfortune to its wielder', 'axe', 'legendary', 80, 'two_hand',
+    50, 30, 20, 25, 'speed_reduction', 25, 0, 30, 50, 0, 0, '{"1,2,3"}', '{}', 1, 1, 'glow_white', 'curse_equip', 'curse_unequip');
 CREATE TABLE IF NOT EXISTS cursed_weapons_players (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     player_guid BIGINT UNSIGNED NOT NULL,
