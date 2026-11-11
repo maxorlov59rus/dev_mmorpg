@@ -46,7 +46,7 @@ INSERT IGNORE INTO creature_loot_template (Entry, Item, Chance, Comment) VALUES
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS boss_ability (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    boss_entry INT UNSIGNED NOT NULL,
+    boss_entry MEDIUMINT UNSIGNED NOT NULL,
     spell_id INT UNSIGNED NOT NULL,
     name VARCHAR(64) NOT NULL,
     damage_type TINYINT UNSIGNED NOT NULL,
@@ -83,7 +83,7 @@ INSERT IGNORE INTO boss_ability (boss_entry, spell_id, name, damage_type, base_d
 -- 3. BOSS_MECHANICS — Механики боссов
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS boss_mechanic (
-    boss_entry INT UNSIGNED NOT NULL PRIMARY KEY,
+    boss_entry MEDIUMINT UNSIGNED NOT NULL PRIMARY KEY,
     name VARCHAR(64) NOT NULL,
     ability_1 VARCHAR(64) NOT NULL,
     ability_1_cd INT UNSIGNED NOT NULL,
@@ -137,7 +137,7 @@ INSERT IGNORE INTO quest_dialogue (quest_id, npc_entry, dialogue_type, locale, t
 -- 5. BOSS_SPAWN — Локации спавна боссов
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS boss_spawn (
-    boss_entry INT UNSIGNED NOT NULL PRIMARY KEY,
+    boss_entry MEDIUMINT UNSIGNED NOT NULL PRIMARY KEY,
     map_id SMALLINT UNSIGNED NOT NULL,
     zone_id TINYINT UNSIGNED NOT NULL,
     pos_x FLOAT NOT NULL,
