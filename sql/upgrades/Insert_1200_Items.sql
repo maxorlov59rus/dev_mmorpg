@@ -604,7 +604,7 @@ INSERT INTO `item_template` (`entry`, `class`, `subclass`, `name`, `displayid`, 
 (10597,4,1,'Shadow Aetherium Gloves',50597,5,23040,7,-1,80,420,0),
 (10598,4,1,'Shadow Aetherium Gloves',50598,5,26010,7,-1,85,440,0),
 (10599,4,1,'Shadow Aetherium Gloves',50599,5,29160,7,-1,90,460,0),
-(10600,4,1,'Shadow Aetherium Gloves',50600,5,32490,7,-1,95,480,0);
+(10600,4,1,'Shadow Aetherium Gloves',50600,5,32490,7,-1,95,480,0),
 (10601,4,3,'Ironwall Worn Helm',50601,1,1,1,-1,1,104,0),
 (10602,4,3,'Ironwall Worn Helm',50602,1,19,1,-1,4,116,0),
 (10603,4,3,'Ironwall Worn Helm',50603,1,76,1,-1,8,132,0),
