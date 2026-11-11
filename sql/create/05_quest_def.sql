@@ -254,3 +254,9 @@ CREATE TABLE IF NOT EXISTS quest_objective (
     ObjectiveText VARCHAR(255) NULL,
     PRIMARY KEY (ID, ObjIndex)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS quest_special_reward (
+    quest_id         MEDIUMINT UNSIGNED NOT NULL,
+    specialreward_id TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    comment          VARCHAR(255) NULL,
+    PRIMARY KEY (quest_id, specialreward_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
