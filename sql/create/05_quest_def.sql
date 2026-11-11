@@ -145,3 +145,16 @@ CREATE TABLE IF NOT EXISTS creature_template (
     script_name        VARCHAR(64) NOT NULL DEFAULT '',
     KEY idx_factions (faction_A, faction_H)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS creature_spawn (
+    Guid        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    Entry       MEDIUMINT UNSIGNED NOT NULL,
+    MapId       SMALLINT UNSIGNED NOT NULL,
+    X           FLOAT NOT NULL,
+    Y           FLOAT NOT NULL,
+    Z           FLOAT NOT NULL,
+    Orientation FLOAT NOT NULL DEFAULT 0,
+    SpawnsMask  INT UNSIGNED NOT NULL DEFAULT 1,
+    RespawnTime INT UNSIGNED NOT NULL DEFAULT 300,
+    KEY idx_entry (Entry),
+    KEY idx_map (MapId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
