@@ -21,8 +21,7 @@ CREATE TABLE IF NOT EXISTS `character_flags` (
     `wanted_level`      TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'PvP Bounty 0..5',
     `dishonor_expire`   INT UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Dishonorable Death: запрет групп до unix-time (2ч)',
     `duel_id`           BIGINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '>0 => активная дуэль (сбрасывается при reload)',
-    PRIMARY KEY (`guid`),
-    CONSTRAINT `fk_cf_char` FOREIGN KEY (`guid`) REFERENCES `characters` (`guid`) ON DELETE CASCADE
+    PRIMARY KEY (`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ---------------------------------------------------------------------
