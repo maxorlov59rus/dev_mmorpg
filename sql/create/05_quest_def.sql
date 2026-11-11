@@ -204,3 +204,22 @@ CREATE TABLE IF NOT EXISTS item_template (
   Material     TINYINT NOT NULL DEFAULT 0,
   KEY idx_faction (FactionRelated, FactionReqRank)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS gameobject_template (
+    entry          MEDIUMINT UNSIGNED NOT NULL PRIMARY KEY,
+    type           TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    name           VARCHAR(96) NOT NULL,
+    displayid      MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+    required_skill SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    lootid         MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+    zone           SMALLINT UNSIGNED NOT NULL DEFAULT 0,
+    spawn_note     VARCHAR(255) NULL,
+    INDEX idx_zone (zone)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS gameobject_loot_template (
+    Entry   MEDIUMINT UNSIGNED NOT NULL,
+    Item    MEDIUMINT UNSIGNED NOT NULL,
+    Chance  FLOAT NOT NULL DEFAULT 100.0,
+    Comment VARCHAR(128) NULL,
+    PRIMARY KEY (Entry, Item)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
