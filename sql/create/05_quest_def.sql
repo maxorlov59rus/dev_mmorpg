@@ -223,3 +223,9 @@ CREATE TABLE IF NOT EXISTS gameobject_loot_template (
     Comment VARCHAR(128) NULL,
     PRIMARY KEY (Entry, Item)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS npc_quest_giver (
+    npc_entry      MEDIUMINT UNSIGNED NOT NULL,
+    quest_id       MEDIUMINT UNSIGNED NOT NULL,
+    quest_direction TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (npc_entry, quest_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
