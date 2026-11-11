@@ -4,7 +4,7 @@
 
 SET NAMES utf8mb4;
 
-INSERT INTO `item_template` (`entry`, `class`, `subclass`, `name`, `displayid`, `quality`, `BuyPrice`, `SellPrice`, `AllowableClass`, `AllowableRace`, `ItemLevel`, `RequiredLevel`) VALUES
+INSERT IGNORE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `displayid`, `Quality`, `BuyPrice`, `SellPrice`, `AllowableClass`, `AllowableRace`, `ItemLevel`, `RequiredLevel`) VALUES
 (10001,2,0,'Sword I',50001,0,1,25,-1,1,93,0),
 (10002,2,0,'Sword I',50002,0,4,25,-1,2,96,0),
 (10003,2,0,'Sword I',50003,0,9,25,-1,3,99,0),

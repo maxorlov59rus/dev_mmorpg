@@ -5,8 +5,8 @@
 
 USE dm_world;
 
-INSERT IGNORE INTO item_template (entry, class, subclass, name, displayid, Quality, BuyPrice, SellPrice, ItemLevel, AllowableClass, AllowableRace, Bonding, BuyCount, Material) VALUES
-(14001, 2, 0, 'Iron Sword', 50001, 1, 50, 5, 5, 37, -1, 0, 1, 4),
+INSERT IGNORE INTO item_template (entry, class, subclass, name, displayid, Quality, BuyPrice, SellPrice, ItemLevel, AllowableClass, AllowableRace, Bonding, BuyCount, Material, dmg_min, dmg_max, delay, durability, InventoryType) VALUES
+(14001, 2, 0, 'Iron Sword', 50001, 1, 50, 5, 5, 37, -1, 0, 1, 4, 5, 8, 2700, 40, 0),
 (14002, 4, 0, 'Iron Shield', 50002, 1, 40, 4, 5, 37, -1, 0, 1, 4),
 (14003, 2, 0, 'Steel Sword', 50003, 2, 150, 15, 15, 37, -1, 0, 1, 4),
 (14004, 4, 0, 'Steel Shield', 50004, 2, 120, 12, 15, 37, -1, 0, 1, 4),

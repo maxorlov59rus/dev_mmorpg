@@ -11,7 +11,7 @@ USE dm_world;
 -- ---------------------------------------------------------------------------
 -- 1. QUEST_TEMPLATE — 11 квестов (16-26)
 -- ---------------------------------------------------------------------------
-INSERT IGNORE INTO quest_template (ID, Title, QuestType, SpecialFlags, RewRepFaction1, RewRepValue1, Reward) VALUES
+INSERT IGNORE INTO quest_template (ID, Title, QuestType, SpecialFlags, RewRepFaction1, RewRepValue1, Reward, MinLevel, ZoneId) VALUES
 (1016, 'Тёмные предгорья', 1, 0, 2, 300, 800),
 (1017, 'Разведка заброшенной шахты', 1, 0, 2, 300, 900),
 (1018, 'Очистка от нежити', 1, 0, 2, 350, 1000),
