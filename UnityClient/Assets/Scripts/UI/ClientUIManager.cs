@@ -506,32 +506,24 @@ public class ClientUIManager : MonoBehaviour
         var listPanel = MakePanel(root, "List", PANEL_ALT,
             new Vector2(0, 0), new Vector2(0.58f, 1), new Vector2(20, 20), new Vector2(-10, -80));
 
-        var cards = new[]
-        {
-            ("Странник", "70 · Жрец · Орден Света"),
-            ("Таллон", "48 · Маг · Тёмный Орден"),
-            ("Вилл", "12 · Плут · Нейтральные"),
-        };
-
         float y = -20f;
-        foreach (var c in cards)
+        foreach (var slot in GameData.Instance.Characters)
         {
             var row = MakePanel(listPanel, "Card", new Color(0.16f, 0.14f, 0.19f, 1f),
                 new Vector2(0, 1), new Vector2(1, 1), new Vector2(12, y - 74), new Vector2(-12, y));
 
-            MakeText(row, "Name", c.Item1, 22, TEXT, TextAnchor.MiddleLeft,
+            MakeText(row, "Name", slot.name, 22, TEXT, TextAnchor.MiddleLeft,
                 new Vector2(0, 0.5f), new Vector2(1, 1), new Vector2(18, 0), new Vector2(-18, 0));
-            MakeText(row, "Meta", c.Item2, 16, MUTED, TextAnchor.MiddleLeft,
+            MakeText(row, "Meta", slot.level + " · " + slot.cls + " · " + slot.faction, 16, MUTED, TextAnchor.MiddleLeft,
                 new Vector2(0, 0), new Vector2(1, 0.5f), new Vector2(18, 0), new Vector2(-18, 0));
 
-            string charName = c.Item1;
+            var captured = slot;
             var btn = row.gameObject.AddComponent<Button>();
             btn.targetGraphic = row.GetComponent<Image>();
-            btn.onClick.AddListener(() => SelectCharacter(charName));
+            btn.onClick.AddListener(() => SelectCharacter(captured));
 
             y -= 86f;
         }
-
         // create form
         var form = MakePanel(root, "CreateForm", PANEL_ALT,
             new Vector2(0.58f, 0), new Vector2(1, 1), new Vector2(10, 20), new Vector2(-20, -80));
@@ -567,12 +559,29 @@ public class ClientUIManager : MonoBehaviour
             ACCENT, TEXT, CreateCharacter);
     }
 
-    private void SelectCharacter(string charName)
+    private void SelectCharacter(CharacterSlot slot)
     {
-        if (_hudName != null) _hudName.text = charName;
-        if (_profileName != null) _profileName.text = charName;
+        if (slot == null) return;
+
+        GameData.Instance.SelectCharacter(slot);
+        ApplyProfileToHud();
+
         ShowHud();
-        ShowToast($"Вход за «{charName}»");
+        ShowToast($"Вход за «{slot.name}»");
+    }
+
+    private void ApplyProfileToHud()
+    {
+        var profile = GameData.Instance.Profile;
+
+        if (_hudName != null) _hudName.text = profile.name;
+        if (_hudLevel != null) _hudLevel.text = profile.level + " ур.";
+        if (_hudGold != null) _hudGold.text = profile.gold.ToString("N0");
+        if (_hudSpirit != null) _hudSpirit.text = profile.spirit.ToString();
+
+        if (_profileName != null) _profileName.text = profile.name;
+        if (_profileClass != null) _profileClass.text = $"Уровень {profile.level}";
+        if (_profileRace != null) _profileRace.text = FactionName(profile.faction_id);
     }
 
     private void CreateCharacter()
@@ -871,7 +880,8 @@ public class ClientUIManager : MonoBehaviour
 
         var fitter = _questList.gameObject.AddComponent<ContentSizeFitter>();
         fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-    }
+
+        BuildQuestDetail(body);    }
 
     private void BuildInventoryPanel(Transform root)
     {
@@ -1068,52 +1078,85 @@ public class ClientUIManager : MonoBehaviour
         BuildGuildRows();
     }
 
+    private GameObject _questDetail;
+    private Text _questDetailTitle, _questDetailDesc, _questDetailReward;
+
     private void BuildQuestRows()
     {
         if (_questList == null) return;
 
-        var quests = new[]
-        {
-            ("Очищение окраин", "Очистите заражённые земли Ательгарда от скверны.", "3 / 8 зон"),
-            ("Свет над руинами", "Восстановите солнечный храм на востоке.", "1 / 3 реликвии"),
-            ("Голос Умбры", "Выслушайте Великого Мага Таллона.", "Готово к сдаче"),
-        };
+        foreach (Transform child in _questList) Destroy(child.gameObject);
 
-        foreach (var q in quests)
+        foreach (var q in GameData.Instance.Quests)
         {
             var row = MakePanel(_questList, "QuestRow", new Color(0.13f, 0.115f, 0.155f, 1f),
                 Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             var le = row.gameObject.AddComponent<LayoutElement>();
             le.minHeight = 74;
 
-            var accent = MakePanel(row, "Accent", ACCENT,
+            MakePanel(row, "Accent", ACCENT,
                 new Vector2(0, 0), new Vector2(0, 1), Vector2.zero, new Vector2(3, 0));
 
-            MakeText(row, "Name", q.Item1, 18, TEXT, TextAnchor.UpperLeft,
+            MakeText(row, "Name", q.title_ru, 18, TEXT, TextAnchor.UpperLeft,
                 new Vector2(0, 0.62f), new Vector2(1, 1), new Vector2(16, 0), new Vector2(-14, -8));
-            MakeText(row, "Desc", q.Item2, 14, MUTED, TextAnchor.UpperLeft,
+            MakeText(row, "Desc", q.description_ru, 14, MUTED, TextAnchor.UpperLeft,
                 new Vector2(0, 0.30f), new Vector2(1, 0.62f), new Vector2(16, 0), new Vector2(-14, 0));
-            MakeText(row, "Progress", q.Item3, 14, GOLD, TextAnchor.LowerLeft,
+            MakeText(row, "Progress", $"Награда: {q.reward_value} {q.reward_type} · {q.level_min}–{q.level_max} ур.",
+                14, GOLD, TextAnchor.LowerLeft,
                 new Vector2(0, 0), new Vector2(1, 0.30f), new Vector2(16, 6), new Vector2(-14, 0));
+
+            var quest = q;
+            var btn = row.gameObject.AddComponent<Button>();
+            btn.targetGraphic = row.GetComponent<Image>();
+            btn.onClick.AddListener(() => ShowQuestDetail(quest));
         }
+
+        if (GameData.Instance.Quests.Count == 0)
+            MakeText(_questList, "Empty", "У вас нет активных квестов", 16, MUTED, TextAnchor.MiddleCenter,
+                Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
     }
 
-    private static readonly (string name, int count, string slot)[] Items =
+    private void BuildQuestDetail(Transform parent)
     {
-        ("Клинок Света", 1, "Оружие"),
-        ("Щит Рассвета", 1, "Щит"),
-        ("Зелье лечения", 5, "Расходник"),
-        ("Свиток возврата", 2, "Расходник"),
-        ("Кольцо силы", 1, "Аксессуар"),
-        ("Руда мифрила", 12, "Ресурс"),
-        ("Кожа волка", 8, "Ресурс"),
-        ("Ключ подземелья", 1, "Ключ"),
-        ("Осколок духа", 3, "Дух"),
-        ("Карта Ательгарда", 1, "Документ"),
-        ("Эликсир стойкости", 4, "Расходник"),
-        ("Амулет духа", 1, "Аксессуар"),
-    };
+        var win = MakePanel(parent, "QuestDetail", new Color(0.10f, 0.09f, 0.125f, 0.99f),
+            new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(-360, -150), new Vector2(-14, 150));
+        _questDetail = win.gameObject;
 
+        _questDetailTitle = MakeText(win, "Title", "", 20, GOLD, TextAnchor.UpperLeft,
+            new Vector2(0, 0.78f), new Vector2(1, 1), new Vector2(16, 0), new Vector2(-16, -10));
+        _questDetailDesc = MakeText(win, "Desc", "", 14, TEXT, TextAnchor.UpperLeft,
+            new Vector2(0, 0.30f), new Vector2(1, 0.78f), new Vector2(16, 0), new Vector2(-16, 0));
+        _questDetailReward = MakeText(win, "Reward", "", 14, GOLD, TextAnchor.UpperLeft,
+            new Vector2(0, 0.18f), new Vector2(1, 0.30f), new Vector2(16, 0), new Vector2(-16, 0));
+
+        MakeButton(win, "Accept", "Принять", new Vector2(-32, 40), new Vector2(0, -100),
+            ACCENT, TEXT, AcceptShownQuest);
+
+        _questDetail.SetActive(false);
+    }
+
+    private QuestInfo _shownQuest;
+
+    private void ShowQuestDetail(QuestInfo quest)
+    {
+        _shownQuest = quest;
+        if (_questDetail == null) return;
+
+        _questDetail.SetActive(true);
+        if (_questDetailTitle != null) _questDetailTitle.text = quest.title_ru;
+        if (_questDetailDesc != null) _questDetailDesc.text = quest.description_ru;
+        if (_questDetailReward != null)
+            _questDetailReward.text = $"Награда: {quest.reward_value} {quest.reward_type}";
+    }
+
+    private void AcceptShownQuest()
+    {
+        if (_shownQuest == null) return;
+
+        GameData.Instance.AcceptQuest(_shownQuest);
+        ShowToast($"Квест «{_shownQuest.title_ru}» принят");
+        if (_questDetail != null) _questDetail.SetActive(false);
+    }
     private void BuildInventoryGrid()
     {
         if (_inventoryGrid == null) return;
@@ -1124,17 +1167,17 @@ public class ClientUIManager : MonoBehaviour
             var slot = MakePanel(_inventoryGrid, "Slot", new Color(0.13f, 0.115f, 0.155f, 1f),
                 new Vector2(0, 1), new Vector2(0, 1), Vector2.zero, Vector2.zero);
 
-            if (i < Items.Length)
+            if (i < GameData.Instance.Inventory.Count)
             {
-                MakeText(slot, "Name", Items[i].name, 11, MUTED, TextAnchor.LowerCenter,
+                MakeText(slot, "Name", GameData.Instance.Inventory[i].name, 11, MUTED, TextAnchor.LowerCenter,
                     Vector2.zero, Vector2.one, new Vector2(4, 4), new Vector2(-4, -20));
 
-                if (Items[i].count > 1)
-                    MakeText(slot, "Count", "x" + Items[i].count, 13, GOLD, TextAnchor.UpperRight,
+                if (GameData.Instance.Inventory[i].count > 1)
+                    MakeText(slot, "Count", "x" + GameData.Instance.Inventory[i].count, 13, GOLD, TextAnchor.UpperRight,
                         Vector2.zero, Vector2.one, new Vector2(4, 4), new Vector2(-6, -4));
 
-                string itemName = Items[i].name;
-                string slotName = Items[i].slot;
+                string itemName = GameData.Instance.Inventory[i].name;
+                string slotName = GameData.Instance.Inventory[i].slot;
                 var btn = slot.gameObject.AddComponent<Button>();
                 btn.targetGraphic = slot.GetComponent<Image>();
                 btn.onClick.AddListener(() => ShowToast($"{itemName} · {slotName}"));
@@ -1145,7 +1188,7 @@ public class ClientUIManager : MonoBehaviour
             }
         }
 
-        if (_inventoryCount != null) _inventoryCount.text = $"{Items.Length} / {slots} слотов";
+        if (_inventoryCount != null) _inventoryCount.text = $"{GameData.Instance.Inventory.Count} / {slots} слотов";
     }
 
     private void BuildStatRows()
@@ -1180,38 +1223,58 @@ public class ClientUIManager : MonoBehaviour
     {
         if (_campaignList == null) return;
 
-        var campaigns = new[]
-        {
-            ("Очищение", "70–75", "Орден Света", "★☆☆☆"),
-            ("Восхождение Света", "75–80", "Орден Света", "★★☆☆"),
-            ("Восхождение Тьмы", "70–75", "Тёмный Орден", "★★☆☆"),
-            ("Путь Баланса", "70–75", "Нейтральные", "★★☆☆"),
-            ("Финальное пророчество", "90–99", "Нейтральные", "★★★★"),
-        };
+        foreach (Transform child in _campaignList) Destroy(child.gameObject);
 
-        foreach (var c in campaigns)
+        foreach (var c in GameData.Instance.Campaigns)
         {
             var row = MakePanel(_campaignList, "CampaignRow", new Color(0.13f, 0.115f, 0.155f, 1f),
                 new Vector2(0, 1), new Vector2(1, 1), Vector2.zero, Vector2.zero);
             var le = row.gameObject.AddComponent<LayoutElement>();
             le.minHeight = 54;
 
-            MakeText(row, "Name", c.Item1, 18, TEXT, TextAnchor.MiddleLeft,
+            MakeText(row, "Name", c.name_ru, 18, TEXT, TextAnchor.MiddleLeft,
                 new Vector2(0, 0), new Vector2(0.46f, 1), new Vector2(14, 0), Vector2.zero);
-            MakeText(row, "Levels", c.Item2, 15, GOLD, TextAnchor.MiddleLeft,
+            MakeText(row, "Levels", c.level_start + "–" + c.level_end, 15, GOLD, TextAnchor.MiddleLeft,
                 new Vector2(0.46f, 0), new Vector2(0.62f, 1), Vector2.zero, Vector2.zero);
-            MakeText(row, "Faction", c.Item3, 14, MUTED, TextAnchor.MiddleLeft,
+            MakeText(row, "Faction", FactionName(c.faction_id), 14, MUTED, TextAnchor.MiddleLeft,
                 new Vector2(0.62f, 0), new Vector2(0.86f, 1), Vector2.zero, Vector2.zero);
-            MakeText(row, "Diff", c.Item4, 14, GOLD, TextAnchor.MiddleRight,
+            MakeText(row, "Diff", new string('*', Mathf.Clamp(c.difficulty, 1, 4)).PadRight(4, '·'), 14, GOLD, TextAnchor.MiddleRight,
                 new Vector2(0.86f, 0), new Vector2(1, 1), Vector2.zero, new Vector2(-14, 0));
 
-            string campaignName = c.Item1;
+            var id = c.id;
             var btn = row.gameObject.AddComponent<Button>();
             btn.targetGraphic = row.GetComponent<Image>();
-            btn.onClick.AddListener(() => ShowToast($"Кампания «{campaignName}» — требуется 70+ уровень"));
+            btn.onClick.AddListener(() => OpenCampaign(id));
         }
     }
 
+    private static string FactionName(int factionId)
+    {
+        switch (factionId)
+        {
+            case 1: return "Орден Света";
+            case 2: return "Тёмный Орден";
+            default: return "Нейтральные";
+        }
+    }
+
+    private void OpenCampaign(int campaignId)
+    {
+        var campaign = GameData.Instance.Campaigns.Find(x => x.id == campaignId);
+        if (campaign == null) return;
+
+        if (!campaign.available)
+        {
+            ShowToast($"«{campaign.name_ru}» — требуется уровень {campaign.level_start}+");
+            return;
+        }
+
+        var quests = GameData.Instance.Quests;
+        if (quests.Count > 0)
+            ShowToast($"Кампания «{campaign.name_ru}»: доступно квестов — {quests.Count}");
+        else
+            ShowToast($"Кампания «{campaign.name_ru}» запущена");
+    }
     private void BuildGuildRows()
     {
         if (_guildWarList != null)
