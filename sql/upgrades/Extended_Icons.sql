@@ -132,4 +132,3 @@ INSERT IGNORE INTO extended_icon_config (config_key, config_value, comment) VALU
 ('default_size', '64', 'Размер по умолчанию'),
 ('quality_borders', 'true', 'Рамки качества'),
 ('tooltip_enabled', 'true', 'Тултипы');
-(18, 'icon_skill_drain_life', 'Icons/Skills/drain_life', 'skill', 'magical', 64, 0, 'Вытягивание жизни', 'Drain Life', 1);
