@@ -3,28 +3,17 @@
 namespace dm {
 namespace common {
 
-enum class WeatherType {
-    CLEAR,
-    RAIN,
-    THUNDER,
-    SNOW,
-    FOG,
-    SANDSTORM
-};
+enum class WeatherType { CLEAR, RAIN, THUNDER, SNOW, FOG, SANDSTORM };
 
-enum class WeatherSeverity {
-    LIGHT,
-    MEDIUM,
-    HEAVY
-};
+enum class WeatherSeverity { LIGHT, MEDIUM, HEAVY };
 
 struct WeatherData {
-    WeatherType type;
-    WeatherSeverity severity;
-    float duration;      // seconds until weather changes
-    float elapsed;       // seconds weather has been active
-    int radius;          // influence radius in units
-    bool player_visible; // true if weather affects the player
+  WeatherType type;
+  WeatherSeverity severity;
+  float duration;      // seconds until weather changes
+  float elapsed;       // seconds weather has been active
+  int radius;          // influence radius in units
+  bool player_visible; // true if weather affects the player
 };
 
 // Generates weather based on map coordinates and game time
