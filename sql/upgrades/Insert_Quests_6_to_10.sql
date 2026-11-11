@@ -112,8 +112,8 @@ INSERT IGNORE INTO quest_chain VALUES
   (1103, 1104, 90021), (1104, 1105, 90021),
   -- зеркало для Ордена Пепла (свои entry'и наставников)
   (1101, 1102, 90022), (1102, 1103, 90002),
-  (1103, 1104, 90022), (1104, 1105, 90022);
-
+  (1103, 1104, 90022), (1104, 1105, 90022)
+  ON DUPLICATE KEY UPDATE NpcEntry = NpcEntry;
 INSERT IGNORE INTO creature_quest_relation VALUES
   (90021, 1101, 'start'), (90021, 1101, 'end'),
   (90021, 1102, 'end'),
@@ -129,9 +129,9 @@ INSERT IGNORE INTO creature_quest_relation VALUES
 -- ---------------------------------------------------------------------
 -- 4) NPC наставники 10 уровня (creature_template + spawn + gossip)
 -- ---------------------------------------------------------------------
-INSERT INTO creature_template (entry, name, faction_A, faction_H, minlevel, maxlevel, unit_flags, type) VALUES
-  (90021, 'Командир Ополчения', 1, 1, 10, 12, 0x0004 /*NOT_ATTACKABLE*/, 7 /*npc*/),
-  (90022, 'Смотрящая за Пеплом', 2, 2, 10, 12, 0x0004, 7);
+INSERT IGNORE INTO creature_template (entry, name, level, type, faction_alliance, faction_horde) VALUES
+  (90021, 'Командир Ополчения', 12, 7, 1, 1),
+  (90022, 'Смотрящая за Пеплом', 12, 7, 2, 2);
 
 -- Gossip-меню выбора специализации: 110400+class (контракт npc_quest_giver_10.lua).
 -- Опции скрыты до 10 уровня через condition_id (dm_conditions kind='min_level').
