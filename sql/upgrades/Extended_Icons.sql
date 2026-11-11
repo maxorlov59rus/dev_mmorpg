@@ -36,7 +36,7 @@ INSERT IGNORE INTO extended_icon_def (id, name, file_path, category, subcategory
 (14, 'icon_skill_shadow_step', 'Icons/Skills/shadow_step', 'skill', 'physical', 64, 0, 'Шаг тени', 'Shadow Step', 1),
 (15, 'icon_skill_aimed_shot', 'Icons/Skills/aimed_shot', 'skill', 'physical', 64, 0, 'Прицельный выстрел', 'Aimed Shot', 1),
 (16, 'icon_skill_multishot', 'Icons/Skills/multishot', 'skill', 'physical', 64, 0, 'Мульти-выстрел', 'Multishot', 1),
-(17, 'icon_skill_shadow_bolt', 'Icons/Skills/shadow_bolt', 'skill', 'magical', 64, 0, 'Стрела тьмы', 'Shadow Bolt', 1),
+(17, 'icon_skill_shadow_bolt', 'Icons/Skills/shadow_bolt', 'skill', 'magical', 64, 0, 'Стрела тьмы', 'Shadow Bolt', 1);
 
 -- Пассивные навыки
 INSERT IGNORE INTO extended_icon_def (id, name, file_path, category, subcategory, size_px, quality, description_ru, description_en, is_active) VALUES
