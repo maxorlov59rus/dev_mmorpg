@@ -213,8 +213,8 @@ INSERT INTO lfg_dungeons (ID, NameRu, MapID, MinLevel, MaxLevel, RequiredRolesMa
   (1, 'Пещеры Испытаний', 901, 10, 15, 7, 4);   -- обучающий, цель босса = goal q_1105
 
 -- Area-trigger прогресса квеста 1105: вход в инстанс засчитывает travel-цель
-INSERT INTO area_trigger_state (trigger_id, zone_script) VALUES
-  (9010, 'quest_complete_progress:1105:enter_instance');
+INSERT IGNORE INTO area_trigger_state (trigger_id, guid, entered_ms) VALUES
+  (9010, 0, 0);   -- quest 1105 travel goal handled by area script
 
 -- ---------------------------------------------------------------------
 -- 7) Дроп мобов цепочки (reference_loot): слизни 6–9 уровня дают ресурсы
