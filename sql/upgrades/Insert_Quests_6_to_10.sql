@@ -107,14 +107,14 @@ INSERT INTO item_template
 -- ---------------------------------------------------------------------
 -- 1101->1102->1103 (обе фракции через своих наставников), 1103->1104 (наставник 10 lvl),
 -- 1104->1105 (после выбора спеки — auto via Lua OnComplete + gossip option 2)
-INSERT INTO quest_chain VALUES
+INSERT IGNORE INTO quest_chain VALUES
   (1101, 1102, 90021), (1102, 1103, 90001),
   (1103, 1104, 90021), (1104, 1105, 90021),
   -- зеркало для Ордена Пепла (свои entry'и наставников)
   (1101, 1102, 90022), (1102, 1103, 90002),
   (1103, 1104, 90022), (1104, 1105, 90022);
 
-INSERT INTO creature_quest_relation VALUES
+INSERT IGNORE INTO creature_quest_relation VALUES
   (90021, 1101, 'start'), (90021, 1101, 'end'),
   (90021, 1102, 'end'),
   (90001, 1103, 'end'),
