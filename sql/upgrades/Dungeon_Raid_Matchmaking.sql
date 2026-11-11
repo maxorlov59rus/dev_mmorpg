@@ -40,16 +40,6 @@ CREATE TABLE IF NOT EXISTS dungeon_difficulty (
     id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
     name_ru VARCHAR(32) NOT NULL,
     name_en VARCHAR(32) NOT NULL,
-    level_min TINYINT UNSIGNED NOT NULL DEFAULT 1,
-    level_max TINYINT UNSIGNED NOT NULL DEFAULT 60,
-    reward_multiplier FLOAT NOT NULL DEFAULT 1.0,
-    comment VARCHAR(128)
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS dungeon_difficulty (
-    id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
-    name_ru VARCHAR(32) NOT NULL,
-    name_en VARCHAR(32) NOT NULL,
     hp_multiplier FLOAT NOT NULL DEFAULT 1.0,
     dmg_multiplier FLOAT NOT NULL DEFAULT 1.0,
     loot_multiplier FLOAT NOT NULL DEFAULT 1.0,
