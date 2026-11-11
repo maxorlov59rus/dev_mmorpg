@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace DM.Client
         private ListView loreList;
         private Label selectedMusicLabel;
         private Label selectedLoreLabel;
-        private Button playMusicButton;
+        private UnityEngine.UIElements.Button playMusicButton;
 
         private void OnEnable()
         {
@@ -25,7 +26,7 @@ namespace DM.Client
             loreList = root.Q<ListView>("lore-list");
             selectedMusicLabel = root.Q<Label>("selected-music");
             selectedLoreLabel = root.Q<Label>("selected-lore");
-            playMusicButton = root.Q<Button>("play-music-button");
+            playMusicButton = root.Q<UnityEngine.UIElements.Button>("play-music-button");
 
             if (playMusicButton != null) playMusicButton.clicked += OnPlayMusicClicked;
 

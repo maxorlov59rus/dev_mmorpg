@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using UnityEngine.UI;
 public class GossipManager50_60 : MonoBehaviour
 {
     public Text gossipText;

@@ -25,4 +25,49 @@ namespace BlackMateria.UI.Weather
 
         /// <summary>
         /// Update the weather display with new data
-        ///
+        /// </summary>
+        public void UpdateWeatherDisplay()
+        {
+            bool hasWeather = weatherContainer != null && weatherContainer.activeSelf;
+
+            if (noWeatherContainer != null)
+                noWeatherContainer.SetActive(!hasWeather);
+
+            if (!hasWeather)
+                return;
+
+            if (weatherTypeText != null && string.IsNullOrEmpty(weatherTypeText.text))
+                weatherTypeText.text = "Ясно";
+
+            if (intensityText != null && string.IsNullOrEmpty(intensityText.text))
+                intensityText.text = "-";
+
+            if (temperatureText != null && string.IsNullOrEmpty(temperatureText.text))
+                temperatureText.text = "0°C";
+
+            if (humidityText != null && string.IsNullOrEmpty(humidityText.text))
+                humidityText.text = "-";
+
+            if (windText != null && string.IsNullOrEmpty(windText.text))
+                windText.text = "-";
+        }
+
+        public void SetWeather(string type, string intensity, float temperature, float humidity, float wind)
+        {
+            if (weatherContainer != null) weatherContainer.SetActive(true);
+            if (noWeatherContainer != null) noWeatherContainer.SetActive(false);
+
+            if (weatherTypeText != null) weatherTypeText.text = type;
+            if (intensityText != null) intensityText.text = intensity;
+            if (temperatureText != null) temperatureText.text = Mathf.RoundToInt(temperature) + "°C";
+            if (humidityText != null) humidityText.text = Mathf.RoundToInt(humidity) + "%";
+            if (windText != null) windText.text = wind.ToString("0.0");
+        }
+
+        public void ClearWeather()
+        {
+            if (weatherContainer != null) weatherContainer.SetActive(false);
+            if (noWeatherContainer != null) noWeatherContainer.SetActive(true);
+        }
+    }
+}

@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using DarkMatter.Network;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,8 @@ namespace DM.Client
         private Label queueCountLabel;
         private Label timerLabel;
         private Label scheduleLabel;
-        private Button joinQueueButton;
-        private Button leaveQueueButton;
+        private UnityEngine.UIElements.Button joinQueueButton;
+        private UnityEngine.UIElements.Button leaveQueueButton;
         private ListView participantList;
 
         private uint playerGuid = 0;
@@ -39,8 +40,8 @@ namespace DM.Client
             queueCountLabel = root.Q<Label>("queue-count");
             timerLabel = root.Q<Label>("timer-label");
             scheduleLabel = root.Q<Label>("schedule-label");
-            joinQueueButton = root.Q<Button>("join-queue-button");
-            leaveQueueButton = root.Q<Button>("leave-queue-button");
+            joinQueueButton = root.Q<UnityEngine.UIElements.Button>("join-queue-button");
+            leaveQueueButton = root.Q<UnityEngine.UIElements.Button>("leave-queue-button");
             participantList = root.Q<ListView>("participant-list");
 
             if (joinQueueButton != null) joinQueueButton.clicked += OnJoinQueueClicked;
@@ -79,7 +80,7 @@ namespace DM.Client
                 timerLabel.text = $"Время: {seconds / 60}:{seconds % 60:D2}";
         }
 
-        public void UpdateScheduleInfo(uint8_t day, uint8_t hour, uint8_t minute)
+        public void UpdateScheduleInfo(byte day, byte hour, byte minute)
         {
             if (scheduleLabel != null)
             {
@@ -94,7 +95,7 @@ namespace DM.Client
                     6 => "Сб",
                     _ => "?"
                 };
-                scheduleLabel.text = $\"{dayName} {hour:D2}:{minute:D2}\"";
+                scheduleLabel.text = $"{dayName} {hour:D2}:{minute:D2}";
             }
         }
 

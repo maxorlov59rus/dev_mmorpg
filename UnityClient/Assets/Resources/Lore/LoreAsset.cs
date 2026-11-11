@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "LoreEntry", menu = "Lore/Entry")]
+[CreateAssetMenu(fileName = "LoreEntry", menuName = "Lore/Entry")]
 public class LoreEntry : ScriptableObject
 {
     public int id;

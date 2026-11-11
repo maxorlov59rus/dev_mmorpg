@@ -1,6 +1,7 @@
 // ResurrectionClient.cs — Клиентская система воскрешения (Unity UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DM.Client
 {
@@ -10,9 +11,9 @@ namespace DM.Client
         private VisualElement _deathScreen;
         private VisualElement _ghostScreen;
         private Label _deathTimer;
-        private Button _resurrectButton;
-        private Button _releaseSpiritButton;
-        private Button _returnToBodyButton;
+        private UnityEngine.UIElements.Button _resurrectButton;
+        private UnityEngine.UIElements.Button _releaseSpiritButton;
+        private UnityEngine.UIElements.Button _returnToBodyButton;
         private Label _resurrectInfo;
 
         public float resurrectWindowSeconds = 60f;
@@ -31,9 +32,9 @@ namespace DM.Client
                 _deathScreen = root.Q<VisualElement>("DeathScreen");
                 _ghostScreen = root.Q<VisualElement>("GhostScreen");
                 _deathTimer = root.Q<Label>("DeathTimer");
-                _resurrectButton = root.Q<Button>("ResurrectButton");
-                _releaseSpiritButton = root.Q<Button>("ReleaseSpiritButton");
-                _returnToBodyButton = root.Q<Button>("ReturnToBodyButton");
+                _resurrectButton = root.Q<UnityEngine.UIElements.Button>("ResurrectButton");
+                _releaseSpiritButton = root.Q<UnityEngine.UIElements.Button>("ReleaseSpiritButton");
+                _returnToBodyButton = root.Q<UnityEngine.UIElements.Button>("ReturnToBodyButton");
                 _resurrectInfo = root.Q<Label>("ResurrectInfo");
 
                 if (_resurrectButton != null)

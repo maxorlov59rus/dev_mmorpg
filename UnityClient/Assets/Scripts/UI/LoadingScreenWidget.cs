@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System;
 using System.Collections;
 
@@ -16,8 +17,8 @@ namespace DM.Client
         private Label versionLabel;
         private Label statusLabel;
         private ProgressBar progressBar;
-        private Button googleAuthButton;
-        private Button playButton;
+        private UnityEngine.UIElements.Button googleAuthButton;
+        private UnityEngine.UIElements.Button playButton;
         private VisualElement authPanel;
 
         private bool isAuthenticating = false;
@@ -34,8 +35,8 @@ namespace DM.Client
             versionLabel = root.Q<Label>("version-label");
             statusLabel = root.Q<Label>("status-label");
             progressBar = root.Q<ProgressBar>("progress-bar");
-            googleAuthButton = root.Q<Button>("google-auth-button");
-            playButton = root.Q<Button>("play-button");
+            googleAuthButton = root.Q<UnityEngine.UIElements.Button>("google-auth-button");
+            playButton = root.Q<UnityEngine.UIElements.Button>("play-button");
             authPanel = root.Q<VisualElement>("auth-panel");
 
             if (googleAuthButton != null) googleAuthButton.clicked += OnGoogleAuthClicked;

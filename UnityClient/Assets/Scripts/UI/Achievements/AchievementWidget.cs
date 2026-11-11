@@ -23,10 +23,10 @@ public class AchievementWidget : MonoBehaviour
     public Button closeButton;
     public Button claimAllButton;
 
-    private uint64 playerGuid;
+    private ulong playerGuid;
     private AchievementManager achievementManager;
     private List<AchievementData> displayedAchievements = new List<AchievementData>();
-    private Dictionary<uint32, ShopItemData> shopItems = new Dictionary<uint32, ShopItemData>();
+    private Dictionary<uint, ShopItemData> shopItems = new Dictionary<uint, ShopItemData>();
 
     void Awake()
     {
@@ -81,32 +81,33 @@ public class AchievementWidget : MonoBehaviour
         }
 
         // Create achievement entries
-        foreach (var def in allAchievements)
+        foreach (var achievement in allAchievements)
         {
-            var progress = GetPlayerProgressForAchievement(playerProgress, def.id);
+            var def = achievement.def;
+            var progress = GetPlayerProgressForAchievement(playerProgress, achievement.id);
             var go = Instantiate(achievementTemplate, achievementsContent);
             go.SetActive(true);
-            
+
             var data = go.AddComponent<AchievementEntry>();
             data.Initialize(def, progress);
-            displayedAchievements.Add(data);
+            displayedAchievements.Add(new AchievementData { id = achievement.id, def = def, progress = progress });
         }
 
         // Update points
         UpdatePointsDisplay();
     }
 
-    AchievementProgress GetPlayerProgressForAchievement(List<AchievementProgress> progressList, uint32 achievementId)
+    AchievementProgress GetPlayerProgressForAchievement(Dictionary<int, AchievementProgress> progressList, int achievementId)
     {
-        foreach (var p in progressList)
+        foreach (var kv in progressList)
         {
-            if (p.achievementId == achievementId)
-                return p;
+            if (kv.Key == achievementId)
+                return kv.Value;
         }
         return new AchievementProgress { progress = 0, completed = false };
     }
 
-    void LoadShopItems()
+    public void LoadShopItems()
     {
         if (shopTitle != null)
             shopTitle.text = "Магазин достижений";
@@ -126,10 +127,13 @@ public class AchievementWidget : MonoBehaviour
         {
             var go = Instantiate(shopTemplate, shopContent);
             go.SetActive(true);
-            
-            var data = go.AddComponent<ShopItem>();
-            data.Initialize(shopItem);
-            shopItems[shopItem.id] = data;
+
+            var itemView = go.GetComponent<ShopItem>();
+            if (itemView == null)
+                itemView = go.AddComponent<ShopItem>();
+
+            itemView.Initialize(shopItem);
+            shopItems[shopItem.id] = shopItem;
         }
     }
 
@@ -145,7 +149,7 @@ public class AchievementWidget : MonoBehaviour
         }
     }
 
-    public void OpenWindow(uint64 guid)
+    public void OpenWindow(ulong guid)
     {
         playerGuid = guid;
         gameObject.SetActive(true);
@@ -158,7 +162,7 @@ public class AchievementWidget : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void OnAchievementClaimed(uint32 achievementId)
+    public void OnAchievementClaimed(uint achievementId)
     {
         // Refresh the UI
         LoadAchievements();

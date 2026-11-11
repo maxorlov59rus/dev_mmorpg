@@ -1,6 +1,7 @@
 // PlayerPhysics.cs - Player movement and physics controller for Unity
 using UnityEngine;
 
+using UnityEngine.UI;
 namespace DM.Client
 {
     /// <summary>

@@ -1,6 +1,7 @@
 // SeasonalEventClient.cs — Клиентская система сезонных эвентов (UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System.Collections.Generic;
 
 namespace DM.Client
@@ -14,9 +15,9 @@ namespace DM.Client
         private Label _currencyLabel;
         private ListView _questList;
         private ListView _shopList;
-        private Button _joinButton;
-        private Button _shopButton;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _joinButton;
+        private UnityEngine.UIElements.Button _shopButton;
+        private UnityEngine.UIElements.Button _closeButton;
 
         private int _playerCurrency = 0;
 
@@ -58,9 +59,9 @@ namespace DM.Client
                 _currencyLabel = _root.Q<Label>("CurrencyLabel");
                 _questList = _root.Q<ListView>("QuestList");
                 _shopList = _root.Q<ListView>("ShopList");
-                _joinButton = _root.Q<Button>("JoinButton");
-                _shopButton = _root.Q<Button>("ShopButton");
-                _closeButton = _root.Q<Button>("CloseButton");
+                _joinButton = _root.Q<UnityEngine.UIElements.Button>("JoinButton");
+                _shopButton = _root.Q<UnityEngine.UIElements.Button>("ShopButton");
+                _closeButton = _root.Q<UnityEngine.UIElements.Button>("CloseButton");
 
                 if (_joinButton != null)
                     _joinButton.clicked += OnJoinClicked;

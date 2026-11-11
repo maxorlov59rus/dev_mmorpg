@@ -1,6 +1,7 @@
 // VendorWidget.cs — UI вендора
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using DarkMatter.Network;
 
 namespace DarkMatter.UI

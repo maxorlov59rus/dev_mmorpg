@@ -1,6 +1,7 @@
 // TradeWidget.cs — UI обмена между игроками
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DarkMatter.UI
 {

@@ -9,7 +9,7 @@ public class ContaminationEntry : MonoBehaviour
     [Header("UI References")]
     public Text zoneName;
     public Text zoneLevel;
-    public ProgressBar contaminationBar;
+    public UnityEngine.UIElements.ProgressBar contaminationBar;
     public Button cureEntryButton;
     public GameObject curedIcon;
     

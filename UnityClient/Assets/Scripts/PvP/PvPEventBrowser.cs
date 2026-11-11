@@ -1,5 +1,6 @@
 // PvPEventBrowser.cs — Браузер PvP событий (UI Toolkit)
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
 
@@ -14,8 +15,8 @@ namespace DM.Client
         private Label _eventDescription;
         private Label _eventSchedule;
         private Label _eventRewards;
-        private Button _joinButton;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _joinButton;
+        private UnityEngine.UIElements.Button _closeButton;
 
         private int _selectedEventId = 0;
 
@@ -51,8 +52,8 @@ namespace DM.Client
                 _eventDescription = _root.Q<Label>("EventDescription");
                 _eventSchedule = _root.Q<Label>("EventSchedule");
                 _eventRewards = _root.Q<Label>("EventRewards");
-                _joinButton = _root.Q<Button>("JoinButton");
-                _closeButton = _root.Q<Button>("CloseButton");
+                _joinButton = _root.Q<UnityEngine.UIElements.Button>("JoinButton");
+                _closeButton = _root.Q<UnityEngine.UIElements.Button>("CloseButton");
 
                 if (_joinButton != null)
                     _joinButton.clicked += OnJoinClicked;

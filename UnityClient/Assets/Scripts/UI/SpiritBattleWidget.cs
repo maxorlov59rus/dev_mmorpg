@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using DarkMatter.Network;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,8 @@ namespace DM.Client
         private Label statusLabel;
         private Label queueCountLabel;
         private Label timerLabel;
-        private Button joinQueueButton;
-        private Button leaveQueueButton;
+        private UnityEngine.UIElements.Button joinQueueButton;
+        private UnityEngine.UIElements.Button leaveQueueButton;
         private ListView participantList;
 
         private uint playerGuid = 0;
@@ -35,8 +36,8 @@ namespace DM.Client
             statusLabel = root.Q<Label>("status-label");
             queueCountLabel = root.Q<Label>("queue-count");
             timerLabel = root.Q<Label>("timer-label");
-            joinQueueButton = root.Q<Button>("join-queue-button");
-            leaveQueueButton = root.Q<Button>("leave-queue-button");
+            joinQueueButton = root.Q<UnityEngine.UIElements.Button>("join-queue-button");
+            leaveQueueButton = root.Q<UnityEngine.UIElements.Button>("leave-queue-button");
             participantList = root.Q<ListView>("participant-list");
 
             if (joinQueueButton != null) joinQueueButton.clicked += OnJoinQueueClicked;

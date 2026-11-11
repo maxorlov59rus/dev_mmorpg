@@ -1,6 +1,7 @@
 // QuestNPC.cs - NPC controller for quest givers in Unity
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DM.Client
 {
@@ -30,9 +31,9 @@ namespace DM.Client
         private Label _npcNameLabel;
         private Label _npcTitleLabel;
         private Label _dialogueText;
-        private Button _acceptButton;
-        private Button _declineButton;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _acceptButton;
+        private UnityEngine.UIElements.Button _declineButton;
+        private UnityEngine.UIElements.Button _closeButton;
         private UIDocument _uiDocument;
 
         void Start()
@@ -49,9 +50,9 @@ namespace DM.Client
                 _npcNameLabel = root.Q<Label>("NpcName");
                 _npcTitleLabel = root.Q<Label>("NpcTitle");
                 _dialogueText = root.Q<Label>("DialogueText");
-                _acceptButton = root.Q<Button>("AcceptButton");
-                _declineButton = root.Q<Button>("DeclineButton");
-                _closeButton = root.Q<Button>("CloseButton");
+                _acceptButton = root.Q<UnityEngine.UIElements.Button>("AcceptButton");
+                _declineButton = root.Q<UnityEngine.UIElements.Button>("DeclineButton");
+                _closeButton = root.Q<UnityEngine.UIElements.Button>("CloseButton");
 
                 if (_acceptButton != null)
                     _acceptButton.clicked += OnAcceptClicked;

@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using DarkMatter.Network;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,9 @@ namespace DM.Client
         private Label spiritLevelLabel;
         private Label spiritExpLabel;
         private Label rollsRemainingLabel;
-        private Button rollButton;
-        private Button setActiveButton;
-        private Button removeButton;
+        private UnityEngine.UIElements.Button rollButton;
+        private UnityEngine.UIElements.Button setActiveButton;
+        private UnityEngine.UIElements.Button removeButton;
         private ListView skillList;
 
         private uint playerGuid = 0;
@@ -46,9 +47,9 @@ namespace DM.Client
             spiritLevelLabel = root.Q<Label>("spirit-level");
             spiritExpLabel = root.Q<Label>("spirit-exp");
             rollsRemainingLabel = root.Q<Label>("rolls-remaining");
-            rollButton = root.Q<Button>("roll-button");
-            setActiveButton = root.Q<Button>("set-active-button");
-            removeButton = root.Q<Button>("remove-button");
+            rollButton = root.Q<UnityEngine.UIElements.Button>("roll-button");
+            setActiveButton = root.Q<UnityEngine.UIElements.Button>("set-active-button");
+            removeButton = root.Q<UnityEngine.UIElements.Button>("remove-button");
             skillList = root.Q<ListView>("skill-list");
 
             if (rollButton != null) rollButton.clicked += OnRollClicked;

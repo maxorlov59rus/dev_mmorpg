@@ -1,6 +1,7 @@
 // QuestMapMarker.cs — Маркеры квестов на внутриигровой карте
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DM.Client
 {

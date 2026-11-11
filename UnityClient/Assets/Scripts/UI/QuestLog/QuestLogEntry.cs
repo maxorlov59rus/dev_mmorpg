@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// QuestLogEntry - элемент квеста в журнале
+/// QuestLogEntry - СЌР»РµРјРµРЅС‚ РєРІРµСЃС‚Р° РІ Р¶СѓСЂРЅР°Р»Рµ
 /// </summary>
 public class QuestLogEntry : MonoBehaviour
 {
@@ -13,9 +13,9 @@ public class QuestLogEntry : MonoBehaviour
     public Button acceptButton;
     public GameObject completedMark;
     
-    private QuestData questData;
+    private DM.Client.QuestProgress questData;
 
-    public void Initialize(QuestData data)
+    public void Initialize(DM.Client.QuestProgress data)
     {
         questData = data;
         
@@ -26,7 +26,7 @@ public class QuestLogEntry : MonoBehaviour
             questDescription.text = data.questDescription;
         
         if (questProgress != null)
-            questProgress.text = $"Прогресс: {questData.currentProgress}/{questData.targetProgress}";
+            questProgress.text = $"РџСЂРѕРіСЂРµСЃСЃ: {questData.currentProgress}/{questData.targetProgress}";
         
         if (acceptButton != null)
         {

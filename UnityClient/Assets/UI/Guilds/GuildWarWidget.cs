@@ -75,4 +75,17 @@ namespace BlackMateria.UI.Guilds
             // GuildWarMgr.Instance.DissolveAlliance(guildAId, guildBId);
         }
     }
+
+    /// <summary>
+    /// Placeholder guild war manager (server-driven later).
+    /// </summary>
+    public class GuildWarMgr
+    {
+        public static GuildWarMgr Instance { get; } = new GuildWarMgr();
+
+        public System.Collections.Generic.List<object> GetActiveWars()
+        {
+            return new System.Collections.Generic.List<object>();
+        }
+    }
 }

@@ -1,6 +1,7 @@
 // BossDialogueUI.cs — UI диалогов боссов (UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DM.Client
 {
@@ -10,7 +11,7 @@ namespace DM.Client
         private VisualElement _dialoguePanel;
         private Label _bossNameLabel;
         private Label _dialogueText;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _closeButton;
 
         void OnEnable()
         {
@@ -21,7 +22,7 @@ namespace DM.Client
                 _dialoguePanel = root.Q<VisualElement>("BossDialoguePanel");
                 _bossNameLabel = root.Q<Label>("BossName");
                 _dialogueText = root.Q<Label>("BossDialogueText");
-                _closeButton = root.Q<Button>("CloseButton");
+                _closeButton = root.Q<UnityEngine.UIElements.Button>("CloseButton");
 
                 if (_closeButton != null)
                     _closeButton.clicked += OnCloseClicked;

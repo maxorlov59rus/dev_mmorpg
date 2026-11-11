@@ -30,7 +30,7 @@ public class PlayerProfileWidget : MonoBehaviour
     public Dropdown hairColorDropdown;
     public Dropdown skinColorDropdown;
     
-    private uint64 playerGuid;
+    private ulong playerGuid;
     private PlayerProfile currentProfile;
     
     void Awake()
@@ -58,7 +58,15 @@ public class PlayerProfileWidget : MonoBehaviour
     
     void CreateDefaultProfile()
     {
-        housingMgr.CreatePlayerProfile(playerGuid);
+        var housingMgr = GameManager.Instance?.HousingManager;
+        if (housingMgr == null)
+        {
+            currentProfile = new PlayerProfile { guid = playerGuid };
+            UpdateProfileUI();
+            return;
+        }
+
+        currentProfile = housingMgr.CreatePlayerProfile(playerGuid);
         housingMgr.GetPlayerProfile(playerGuid, out currentProfile);
         UpdateProfileUI();
     }
@@ -161,7 +169,7 @@ public class PlayerProfileWidget : MonoBehaviour
     {
         if (currentProfile != null)
         {
-            housingMgr.UpdatePlayerProfile(playerGuid, currentProfile);
+            GameManager.Instance.HousingManager.UpdatePlayerProfile(playerGuid, currentProfile);
             Debug.Log("Player profile saved!");
         }
     }

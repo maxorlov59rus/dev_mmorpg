@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 /// <summary>
-/// QuestLogWidget - квестовый журнал
+/// QuestLogWidget - РєРІРµСЃС‚РѕРІС‹Р№ Р¶СѓСЂРЅР°Р»
 /// </summary>
 public class QuestLogWidget : MonoBehaviour
 {
@@ -14,14 +14,14 @@ public class QuestLogWidget : MonoBehaviour
     public Button closeButton;
     public Text emptyStateText;
     
-    private uint64 playerGuid;
-    private QuestManager questManager;
+    private ulong playerGuid;
+    private DM.Client.QuestManager questManager;
     private List<QuestLogEntry> displayedQuests = new List<QuestLogEntry>();
     
     void Awake()
     {
         playerGuid = GameManager.Instance?.PlayerGuid ?? 0;
-        questManager = GameManager.Instance?.QuestManager;
+        questManager = DM.Client.QuestManager.Instance;
         
         if (questManager == null)
         {
@@ -53,10 +53,10 @@ public class QuestLogWidget : MonoBehaviour
     {
         if (questManager == null) return;
         
-        var quests = questManager.GetAllQuests();
+        var quests = questManager.GetActiveQuestList();
         
         if (questLogTitle != null)
-            questLogTitle.text = "Квестовый журнал";
+            questLogTitle.text = "РљРІРµСЃС‚РѕРІС‹Р№ Р¶СѓСЂРЅР°Р»";
         
         if (questContent != null)
         {
@@ -76,10 +76,10 @@ public class QuestLogWidget : MonoBehaviour
         
         // Show/hide empty state
         if (emptyStateText != null)
-            emptyStateText.SetActive(displayedQuests.Count == 0);
+            emptyStateText.gameObject.SetActive(displayedQuests.Count == 0);
     }
     
-    public void OpenWindow(uint64 guid)
+    public void OpenWindow(ulong guid)
     {
         playerGuid = guid;
         gameObject.SetActive(true);

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "RaceDatabase", menu = "Races/RaceDatabase")]
+[CreateAssetMenu(fileName = "RaceDatabase", menuName = "Races/RaceDatabase")]
 public class RaceDatabase : ScriptableObject
 {
     public List<RaceData> races;

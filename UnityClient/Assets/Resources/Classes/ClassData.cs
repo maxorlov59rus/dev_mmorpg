@@ -1,6 +1,7 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "ClassData", menu = "Classes/ClassData")]
+[CreateAssetMenu(fileName = "ClassData", menuName = "Classes/ClassData")]
 public class ClassData : ScriptableObject
 {
     public int id;

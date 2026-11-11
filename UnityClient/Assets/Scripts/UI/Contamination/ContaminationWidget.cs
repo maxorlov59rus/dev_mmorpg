@@ -18,7 +18,7 @@ public class ContaminationWidget : MonoBehaviour
     public GameObject contaminationEntryTemplate;
     
     private ContaminationManager contaminationManager;
-    private uint64 playerGuid;
+    private ulong playerGuid;
     private List<ContaminationEntry> displayedZones = new List<ContaminationEntry>();
     
     void Awake()
@@ -41,7 +41,7 @@ public class ContaminationWidget : MonoBehaviour
     void InitializeUI()
     {
         contaminationSlider.onValueChanged.AddListener(OnContaminationSliderChanged);
-        cureButton.onClick.AddListener(OnCureClicked);
+        cureButton.GetComponent<Button>().onClick.AddListener(OnCureClicked);
         
         // Clear existing content
         if (contaminationContent != null)
@@ -70,7 +70,7 @@ public class ContaminationWidget : MonoBehaviour
             debuffValueText.text = "--";
         
         if (cureButton != null)
-            cureButton.SetActive(false);
+            cureButton.gameObject.SetActive(false);
         
         // Create zone entries
         if (contaminationContent != null && zones != null)
@@ -94,19 +94,19 @@ public class ContaminationWidget : MonoBehaviour
     {
         if (contaminationManager == null) return;
         
-        var playerState = contaminationManager.GetPlayerContamination(playerGuid);
-        if (playerState != null)
+        float playerState = contaminationManager.GetPlayerContamination(playerGuid);
+        if (playerState > 0f)
         {
             if (contaminationLevelText != null)
-                contaminationLevelText.text = $"Уровень заразы: {playerState.infection_level}";
+                contaminationLevelText.text = $"Уровень заразы: {playerState}";
             
             if (contaminationSlider != null)
-                contaminationSlider.value = playerState.infection_level;
+                contaminationSlider.value = playerState;
             
             if (debuffTypeText != null && debuffValueText != null)
             {
                 // Find appropriate debuff based on infection level
-                float level = playerState.infection_level;
+                float level = playerState;
                 string debuffType = "";
                 float debuffValue = 0;
                 
@@ -136,7 +136,7 @@ public class ContaminationWidget : MonoBehaviour
             }
             
             if (cureButton != null)
-                cureButton.SetActive(true);
+                cureButton.gameObject.SetActive(true);
             
             if (cureCostText != null)
                 cureCostText.text = $"Антидот: {contaminationManager.GetCureCost()} золота";
@@ -155,7 +155,7 @@ public class ContaminationWidget : MonoBehaviour
                 debuffValueText.text = "--";
             
             if (cureButton != null)
-                cureButton.SetActive(false);
+                cureButton.gameObject.SetActive(false);
         }
     }
     

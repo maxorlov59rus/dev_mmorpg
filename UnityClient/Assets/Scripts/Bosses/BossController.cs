@@ -1,6 +1,7 @@
 // BossController.cs — Контроллер боссов в Unity (визуализация, механики, фазы)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DM.Client
 {

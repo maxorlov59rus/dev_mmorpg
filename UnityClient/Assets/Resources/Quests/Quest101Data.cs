@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Quest101Data", menu = "Quests/Quest101")]
+[CreateAssetMenu(fileName = "Quest101Data", menuName = "Quests/Quest101")]
 public class Quest101Data : Quest50_60Data
 {
     public Quest101Data()

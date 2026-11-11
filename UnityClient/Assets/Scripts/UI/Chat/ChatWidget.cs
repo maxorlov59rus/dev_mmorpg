@@ -24,10 +24,10 @@ public class ChatWidget : MonoBehaviour
     public Text channelDisplay;
     public Button closeButton;
     
-    private uint64 playerGuid;
+    private ulong playerGuid;
     private ChatManager chatManager;
     private string currentChannelType = "global";
-    private uint64 currentChannelId = 0;
+    private ulong currentChannelId = 0;
     private bool isWhisperTargetSet = false;
 
     void Awake()
@@ -56,18 +56,24 @@ public class ChatWidget : MonoBehaviour
         closeButton.onClick.AddListener(CloseWindow);
 
         // Setup toggles
-        globalToggle.onClick.AddListener(() => SetChannelType("global"));
-        regionToggle.onClick.AddListener(() => SetChannelType("region"));
-        factionToggle.onClick.AddListener(() => SetChannelType("faction"));
-        partyToggle.onClick.AddListener(() => SetChannelType("party"));
-        whisperToggle.onClick.AddListener(() => SetChannelType("whisper"));
+        globalToggle.onValueChanged.AddListener((_) => SetChannelType("global"));
+        regionToggle.onValueChanged.AddListener((_) => SetChannelType("region"));
+        factionToggle.onValueChanged.AddListener((_) => SetChannelType("faction"));
+        partyToggle.onValueChanged.AddListener((_) => SetChannelType("party"));
+        whisperToggle.onValueChanged.AddListener((_) => SetChannelType("whisper"));
 
         // Initially select global
         SetChannelType("global");
 
         // Hide whisper target input initially
         whisperTargetInput.gameObject.SetActive(false);
+    }    void UpdateChannelDisplay()
+    {
+        if (channelDisplay != null)
+            channelDisplay.text = $"Чат: {currentChannelType.ToUpper()}";
     }
+
+
 
     void SetChannelType(string type)
     {
@@ -95,7 +101,7 @@ public class ChatWidget : MonoBehaviour
         string text = messageInput.text;
         messageInput.text = "";
 
-        uint64 targetGuid = 0;
+        ulong targetGuid = 0;
         if (currentChannelType == "whisper" && !string.IsNullOrWhiteSpace(whisperTargetInput.text))
         {
             // Would look up player GUID from name
@@ -136,7 +142,7 @@ public class ChatWidget : MonoBehaviour
         }
     }
 
-    void AddMessageToUI(uint64 playerGuid, string text, string channelType, bool isWhisper)
+    void AddMessageToUI(ulong playerGuid, string text, string channelType, bool isWhisper)
     {
         var go = Instantiate(messageTemplate, chatContent);
         go.SetActive(true);
@@ -147,7 +153,7 @@ public class ChatWidget : MonoBehaviour
         entry.Initialize(playerGuid, text, channelType, isWhisper);
     }
 
-    public void OpenWindow(uint64 guid)
+    public void OpenWindow(ulong guid)
     {
         playerGuid = guid;
         gameObject.SetActive(true);
@@ -171,7 +177,7 @@ public class ChatMessageEntry : MonoBehaviour
     public Text channelType;
     public GameObject whisperIcon;
 
-    public void Initialize(uint64 playerGuid, string text, string channelType, bool isWhisper)
+    public void Initialize(ulong playerGuid, string text, string channelType, bool isWhisper)
     {
         // Would look up player name from GUID
         if (playerName != null)

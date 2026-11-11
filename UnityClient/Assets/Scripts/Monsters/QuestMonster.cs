@@ -1,6 +1,7 @@
 // QuestMonster.cs - Monster controller for quest mobs in Unity
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DM.Client
 {

@@ -1,6 +1,7 @@
 using UnityEngine.UIElements;
 using UnityEngine;
-using DarkMatter.Network;
+
+using UnityEngine.UI;using DarkMatter.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,8 @@ namespace DM.Client
         private Label selectedRecipeLabel;
         private Label craftTimeLabel;
         private Label skillLevelLabel;
-        private Button craftButton;
-        private Button learnProfessionButton;
+        private UnityEngine.UIElements.Button craftButton;
+        private UnityEngine.UIElements.Button learnProfessionButton;
 
         private int selectedProfessionId = 0;
         private int selectedRecipeId = 0;
@@ -49,8 +50,8 @@ namespace DM.Client
             selectedRecipeLabel = root.Q<Label>("selected-recipe");
             craftTimeLabel = root.Q<Label>("craft-time");
             skillLevelLabel = root.Q<Label>("skill-level");
-            craftButton = root.Q<Button>("craft-button");
-            learnProfessionButton = root.Q<Button>("learn-profession-button");
+            craftButton = root.Q<UnityEngine.UIElements.Button>("craft-button");
+            learnProfessionButton = root.Q<UnityEngine.UIElements.Button>("learn-profession-button");
 
             if (craftButton != null) craftButton.clicked += OnCraftClicked;
             if (learnProfessionButton != null) learnProfessionButton.clicked += OnLearnProfessionClicked;

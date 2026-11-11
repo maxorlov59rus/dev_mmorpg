@@ -1,6 +1,7 @@
 // QuestDialogueUI.cs — UI диалогов квестов (UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 
 namespace DarkMatter.UI
 {
@@ -11,10 +12,10 @@ namespace DarkMatter.UI
         private Label _npcNameLabel;
         private Label _npcTitleLabel;
         private Label _dialogueText;
-        private Button _acceptButton;
-        private Button _declineButton;
-        private Button _completeButton;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _acceptButton;
+        private UnityEngine.UIElements.Button _declineButton;
+        private UnityEngine.UIElements.Button _completeButton;
+        private UnityEngine.UIElements.Button _closeButton;
         private VisualElement _rewardPanel;
         private Label _rewardText;
 
@@ -31,10 +32,10 @@ namespace DarkMatter.UI
                 _npcNameLabel = root.Q<Label>("NpcName");
                 _npcTitleLabel = root.Q<Label>("NpcTitle");
                 _dialogueText = root.Q<Label>("DialogueText");
-                _acceptButton = root.Q<Button>("AcceptButton");
-                _declineButton = root.Q<Button>("DeclineButton");
-                _completeButton = root.Q<Button>("CompleteButton");
-                _closeButton = root.Q<Button>("CloseButton");
+                _acceptButton = root.Q<UnityEngine.UIElements.Button>("AcceptButton");
+                _declineButton = root.Q<UnityEngine.UIElements.Button>("DeclineButton");
+                _completeButton = root.Q<UnityEngine.UIElements.Button>("CompleteButton");
+                _closeButton = root.Q<UnityEngine.UIElements.Button>("CloseButton");
                 _rewardPanel = root.Q<VisualElement>("RewardPanel");
                 _rewardText = root.Q<Label>("RewardText");
 

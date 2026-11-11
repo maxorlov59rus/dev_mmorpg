@@ -1,7 +1,8 @@
 // CharacterCreationWidget.cs
 // Handles character creation with template selection and server communication using UI Toolkit.
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System.Collections.Generic;
 using DarkMatter.Network;
 
@@ -22,8 +23,8 @@ namespace DM.Client
         private DropdownField _templateDropdown;
         private DropdownField _genderDropdown;
         private TextField _nameInputField;
-        private Button _createButton;
-        private Button _cancelButton;
+        private UnityEngine.UIElements.Button _createButton;
+        private UnityEngine.UIElements.Button _cancelButton;
         private Label _statusLabel;
 
         private int _selectedTemplateIndex = 0;
@@ -49,8 +50,8 @@ namespace DM.Client
                 _templateDropdown = root.Q<DropdownField>("TemplateDropdown");
                 _genderDropdown = root.Q<DropdownField>("GenderDropdown");
                 _nameInputField = root.Q<TextField>("NameInputField");
-                _createButton = root.Q<Button>("CreateButton");
-                _cancelButton = root.Q<Button>("CancelButton");
+                _createButton = root.Q<UnityEngine.UIElements.Button>("CreateButton");
+                _cancelButton = root.Q<UnityEngine.UIElements.Button>("CancelButton");
                 if (_templateDropdown != null)
                 {
                     _templateDropdown.choices.Clear();

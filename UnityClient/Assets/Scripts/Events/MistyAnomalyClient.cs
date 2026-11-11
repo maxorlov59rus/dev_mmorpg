@@ -1,6 +1,7 @@
 // MistyAnomalyClient.cs — Клиентская система эвента "Туманная Аномалия" (UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System.Collections.Generic;
 
 namespace DM.Client
@@ -14,9 +15,9 @@ namespace DM.Client
         private Label _playerScore;
         private Label _leaderboard;
         private Label _fogDensity;
-        private Button _joinButton;
-        private Button _leaveButton;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _joinButton;
+        private UnityEngine.UIElements.Button _leaveButton;
+        private UnityEngine.UIElements.Button _closeButton;
 
         private bool _isInEvent = false;
         private float _eventTimer = 0f;
@@ -43,9 +44,9 @@ namespace DM.Client
                 _playerScore = _root.Q<Label>("PlayerScore");
                 _leaderboard = _root.Q<Label>("Leaderboard");
                 _fogDensity = _root.Q<Label>("FogDensity");
-                _joinButton = _root.Q<Button>("JoinButton");
-                _leaveButton = _root.Q<Button>("LeaveButton");
-                _closeButton = _root.Q<Button>("CloseButton");
+                _joinButton = _root.Q<UnityEngine.UIElements.Button>("JoinButton");
+                _leaveButton = _root.Q<UnityEngine.UIElements.Button>("LeaveButton");
+                _closeButton = _root.Q<UnityEngine.UIElements.Button>("CloseButton");
 
                 if (_joinButton != null)
                     _joinButton.clicked += OnJoinClicked;

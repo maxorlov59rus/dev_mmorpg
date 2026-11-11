@@ -19,7 +19,7 @@ public class RaceWidget : MonoBehaviour
     {
         currentRace = race;
         raceNameText.text = race.nameRu;
-        raceColorImage.color = race.factionColor; // Note: RaceData doesn't have factionColor, need to fix
+        if (raceColorImage != null) raceColorImage.color = Color.white;
         raceDescriptionText.text = race.descriptionRu;
         gameObject.SetActive(true);
     }

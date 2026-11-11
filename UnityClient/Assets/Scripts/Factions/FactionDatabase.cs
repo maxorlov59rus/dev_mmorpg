@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "FactionDatabase", menu = "Factions/FactionDatabase")]
+[CreateAssetMenu(fileName = "FactionDatabase", menuName = "Factions/FactionDatabase")]
 public class FactionDatabase : ScriptableObject
 {
     public List<FactionData> factions;

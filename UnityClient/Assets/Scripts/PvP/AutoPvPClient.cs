@@ -1,6 +1,7 @@
 // AutoPvPClient.cs — Клиентская система авто-PvP (UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System.Collections.Generic;
 
 namespace DM.Client
@@ -15,9 +16,9 @@ namespace DM.Client
         private Label _cloneInfo;
         private Label _faithPoints;
         private Label _matchHistory;
-        private Button _startMatchButton;
-        private Button _shopButton;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _startMatchButton;
+        private UnityEngine.UIElements.Button _shopButton;
+        private UnityEngine.UIElements.Button _closeButton;
 
         private int _selectedDifficulty = 1;
 
@@ -64,9 +65,9 @@ namespace DM.Client
                 _cloneInfo = _root.Q<Label>("CloneInfo");
                 _faithPoints = _root.Q<Label>("FaithPoints");
                 _matchHistory = _root.Q<Label>("MatchHistory");
-                _startMatchButton = _root.Q<Button>("StartMatchButton");
-                _shopButton = _root.Q<Button>("ShopButton");
-                _closeButton = _root.Q<Button>("CloseButton");
+                _startMatchButton = _root.Q<UnityEngine.UIElements.Button>("StartMatchButton");
+                _shopButton = _root.Q<UnityEngine.UIElements.Button>("ShopButton");
+                _closeButton = _root.Q<UnityEngine.UIElements.Button>("CloseButton");
 
                 if (_difficultyList != null)
                 {

@@ -1,6 +1,7 @@
 // LFGClient.cs — Клиентская система подбора в данжи (UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System.Collections.Generic;
 
 namespace DM.Client
@@ -15,9 +16,9 @@ namespace DM.Client
         private Label _dungeonDescription;
         private Label _dungeonInfo;
         private Label _queueStatus;
-        private Button _joinQueueButton;
-        private Button _leaveQueueButton;
-        private Button _closeButton;
+        private UnityEngine.UIElements.Button _joinQueueButton;
+        private UnityEngine.UIElements.Button _leaveQueueButton;
+        private UnityEngine.UIElements.Button _closeButton;
 
         private int _selectedDungeonId = 0;
         private int _selectedDifficulty = 0;
@@ -65,9 +66,9 @@ namespace DM.Client
                 _dungeonDescription = _root.Q<Label>("DungeonDescription");
                 _dungeonInfo = _root.Q<Label>("DungeonInfo");
                 _queueStatus = _root.Q<Label>("QueueStatus");
-                _joinQueueButton = _root.Q<Button>("JoinQueueButton");
-                _leaveQueueButton = _root.Q<Button>("LeaveQueueButton");
-                _closeButton = _root.Q<Button>("CloseButton");
+                _joinQueueButton = _root.Q<UnityEngine.UIElements.Button>("JoinQueueButton");
+                _leaveQueueButton = _root.Q<UnityEngine.UIElements.Button>("LeaveQueueButton");
+                _closeButton = _root.Q<UnityEngine.UIElements.Button>("CloseButton");
 
                 if (_joinQueueButton != null)
                     _joinQueueButton.clicked += OnJoinQueueClicked;

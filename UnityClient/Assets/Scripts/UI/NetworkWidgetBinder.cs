@@ -35,8 +35,7 @@ namespace DM.Client
                 guildWidget.SetNetworkClient(networkClient);
             if (characterCreationWidget != null)
                 characterCreationWidget.SetNetworkClient(networkClient);
-            if (questLogWidget != null)
-                questLogWidget.SetNetworkClient(networkClient);
+
             if (auctionWidget != null)
                 auctionWidget.SetNetworkClient(networkClient);
             if (craftWidget != null)

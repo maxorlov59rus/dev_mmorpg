@@ -1,6 +1,7 @@
 // QuestLogWidget.cs — UI журнала квестов (UI Toolkit)
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System.Collections.Generic;
 using DarkMatter.Network;
 using DarkMatter.UI;
@@ -16,9 +17,9 @@ namespace DarkMatter.UI
         private Label _questTitle;
         private Label _questDescription;
         private Label _objectiveText;
-        private Button _trackButton;
-        private Button _abandonButton;
-        private Button _specChoiceButton;
+        private UnityEngine.UIElements.Button _trackButton;
+        private UnityEngine.UIElements.Button _abandonButton;
+        private UnityEngine.UIElements.Button _specChoiceButton;
 
         private int _selectedQuestId = 0;
         private Dictionary<int, QuestData> _quests = new Dictionary<int, QuestData>();
@@ -50,9 +51,9 @@ namespace DarkMatter.UI
             _questTitle = root.Q<Label>("QuestTitle");
             _questDescription = root.Q<Label>("QuestDescription");
             _objectiveText = root.Q<Label>("ObjectiveText");
-            _trackButton = root.Q<Button>("TrackButton");
-            _abandonButton = root.Q<Button>("AbandonButton");
-            _specChoiceButton = root.Q<Button>("SpecChoiceButton");
+            _trackButton = root.Q<UnityEngine.UIElements.Button>("TrackButton");
+            _abandonButton = root.Q<UnityEngine.UIElements.Button>("AbandonButton");
+            _specChoiceButton = root.Q<UnityEngine.UIElements.Button>("SpecChoiceButton");
 
             if (_trackButton != null)
                 _trackButton.clicked += OnTrackClicked;

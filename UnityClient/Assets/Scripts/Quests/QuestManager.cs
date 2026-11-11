@@ -99,7 +99,15 @@ namespace DM.Client
         public bool IsQuestCompleted(int questId)
         {
             return _completedQuests.Contains(questId);
+        }        /// <summary>
+        /// Snapshot of active quests for UI lists.
+        /// </summary>
+        public System.Collections.Generic.List<QuestProgress> GetActiveQuestList()
+        {
+            return new System.Collections.Generic.List<QuestProgress>(_activeQuests.Values);
         }
+
+
 
         /// <summary>
         /// Get quest progress.
@@ -118,5 +126,10 @@ namespace DM.Client
         public int questId;
         public int progress;
         public int[] objectiveProgress;
+        public string questName;
+        public string questDescription;
+        public int currentProgress;
+        public int targetProgress;
+        public bool isCompleted;
     }
 }

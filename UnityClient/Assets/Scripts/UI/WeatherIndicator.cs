@@ -1,7 +1,8 @@
 // WeatherIndicator.cs
 // Displays current weather conditions with visual indicators on the HUD using UI Toolkit.
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using DarkMatter.Network;
 
 namespace DM.Client

@@ -23,7 +23,7 @@ public class MainHUD : MonoBehaviour
     public RectTransform miniMap;
     public Transform playerMarker;
     
-    private uint64 playerGuid;
+    private ulong playerGuid;
     private PlayerProfile currentProfile;
     
     void Awake()

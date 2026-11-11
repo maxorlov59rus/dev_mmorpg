@@ -15,7 +15,7 @@ public class ShopItem : MonoBehaviour
 
     private ShopItemData itemData;
     private AchievementManager achievementManager;
-    private uint64 playerGuid;
+    private ulong playerGuid;
 
     public void Initialize(ShopItemData data)
     {
@@ -59,7 +59,8 @@ public class ShopItem : MonoBehaviour
         {
             // Purchase successful - remove or disable the button
             buyButton.interactable = false;
-            buyButton.transform.parent.parent.Find("bought-mark")?.SetActive(true);
+            var mark = buyButton.transform.parent.parent.Find("bought-mark");
+            if (mark != null) mark.gameObject.SetActive(true);
             
             // Refresh shop items
             var widget = GetComponentInParent<AchievementWidget>();

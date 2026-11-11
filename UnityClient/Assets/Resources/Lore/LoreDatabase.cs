@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "LoreDatabase", menu = "Lore/Database")]
+[CreateAssetMenu(fileName = "LoreDatabase", menuName = "Lore/Database")]
 public class LoreDatabase : ScriptableObject
 {
     public List<LoreEntry> entries;

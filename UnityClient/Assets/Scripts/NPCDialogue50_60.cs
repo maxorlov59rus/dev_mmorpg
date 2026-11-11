@@ -1,5 +1,6 @@
 using UnityEngine;
 
+using UnityEngine.UI;
 public class NPCDialogue50_60 : MonoBehaviour
 {
     public Text dialogueText;

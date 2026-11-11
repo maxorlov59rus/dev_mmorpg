@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RaceData", menu = "Races/RaceData")]
+[CreateAssetMenu(fileName = "RaceData", menuName = "Races/RaceData")]
 public class RaceData : ScriptableObject
 {
     public int id;

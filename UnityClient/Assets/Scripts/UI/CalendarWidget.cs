@@ -1,5 +1,6 @@
 using UnityEngine;
-using UnityEngine.UIElements;
+
+using UnityEngine.UI;using UnityEngine.UIElements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,8 @@ namespace DM.Client
         private Label currentTimeLabel;
         private VisualElement calendarGrid;
         private ListView eventList;
-        private Button prevMonthButton;
-        private Button nextMonthButton;
+        private UnityEngine.UIElements.Button prevMonthButton;
+        private UnityEngine.UIElements.Button nextMonthButton;
 
         private DateTime currentMonth;
         private List<CalendarEventData> events = new List<CalendarEventData>();
@@ -32,8 +33,8 @@ namespace DM.Client
             currentTimeLabel = root.Q<Label>("current-time-label");
             calendarGrid = root.Q<VisualElement>("calendar-grid");
             eventList = root.Q<ListView>("event-list");
-            prevMonthButton = root.Q<Button>("prev-month-button");
-            nextMonthButton = root.Q<Button>("next-month-button");
+            prevMonthButton = root.Q<UnityEngine.UIElements.Button>("prev-month-button");
+            nextMonthButton = root.Q<UnityEngine.UIElements.Button>("next-month-button");
 
             if (prevMonthButton != null) prevMonthButton.clicked += OnPrevMonthClicked;
             if (nextMonthButton != null) nextMonthButton.clicked += OnNextMonthClicked;

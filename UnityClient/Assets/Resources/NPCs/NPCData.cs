@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NPCData", menu = "NPCs/NPCData")]
+[CreateAssetMenu(fileName = "NPCData", menuName = "NPCs/NPCData")]
 public class NPCData : ScriptableObject
 {
     public int id;

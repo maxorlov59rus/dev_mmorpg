@@ -15,7 +15,7 @@ public class CampaignsWidget : MonoBehaviour
     public Text requirementsText;
     public Text rewardText;
     
-    private uint64 playerGuid;
+    private ulong playerGuid;
     private CampaignManager campaignManager;
     private List<CampaignData> displayedCampaigns = new List<CampaignData>();
 
@@ -67,12 +67,12 @@ public class CampaignsWidget : MonoBehaviour
             go.SetActive(true);
             
             var data = go.AddComponent<CampaignEntry>();
-            data.Initialize(campaign);
-            displayedCampaigns.Add(data);
+            data.Initialize(campaign.ToDef());
+            displayedCampaigns.Add(campaign);
         }
     }
 
-    void OnCampaignSelected(uint32 campaignId)
+    void OnCampaignSelected(uint campaignId)
     {
         // Open campaign details or start campaign
         Debug.Log($"Starting campaign: {campaignId}");
