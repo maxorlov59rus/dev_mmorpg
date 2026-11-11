@@ -45,6 +45,19 @@ CREATE TABLE IF NOT EXISTS dungeon_difficulty (
     reward_multiplier FLOAT NOT NULL DEFAULT 1.0,
     comment VARCHAR(128)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS dungeon_difficulty (
+    id TINYINT UNSIGNED NOT NULL PRIMARY KEY,
+    name_ru VARCHAR(32) NOT NULL,
+    name_en VARCHAR(32) NOT NULL,
+    hp_multiplier FLOAT NOT NULL DEFAULT 1.0,
+    dmg_multiplier FLOAT NOT NULL DEFAULT 1.0,
+    loot_multiplier FLOAT NOT NULL DEFAULT 1.0,
+    xp_multiplier FLOAT NOT NULL DEFAULT 1.0,
+    min_item_level TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    is_active TINYINT UNSIGNED NOT NULL DEFAULT 1
+);
+-- ---------------------------------------------------------------------------
 -- 4. LFG_QUEUE — Очередь поиска группы
 -- ---------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS lfg_queue (
