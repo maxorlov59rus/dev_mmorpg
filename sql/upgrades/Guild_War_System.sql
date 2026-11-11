@@ -112,8 +112,8 @@ INSERT IGNORE INTO guild_wars (guild_a, guild_b, war_state, declared_at, reason,
 (1, 3, 0, UNIX_TIMESTAMP(), 'Конфликт интересов между фракциями', 0),
 (2, 3, 0, UNIX_TIMESTAMP(), 'Борьба за ресурсы и территорию', 0);
 
--- Инициализация盟约 между некоторыми гильдиями
+-- Инициализациясоюзов между некоторыми гильдиями
 INSERT IGNORE INTO guild_alliances (guild_a, guild_b, alliance_type, created_at, expires_at) VALUES
 (1, 3, 'alliance', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + 86400 * 30), -- Альанс на 30 дней
 (2, 3, 'neutral', UNIX_TIMESTAMP(), 0); -- Нейтральные отношения
-"
+
