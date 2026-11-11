@@ -86,7 +86,7 @@ INSERT IGNORE INTO npc_quest_giver (npc_entry, quest_id, quest_direction) VALUES
 (90013, 2015, 1),
 (90014, 3011, 1), (90014, 3012, 1), (90014, 3013, 1), (90014, 3014, 1),
 (90015, 3015, 1);
-INSERT IGNORE INTO quest_template (ID, Title, LevelMin, LevelMax, ZoneID, NextQuestId, PrevQuestId, QuestType, SpecialFlags, RewardReputationFaction1, RewardReputationAmount1, RewardMoney, RequiredClass) VALUES
+INSERT IGNORE INTO quest_template (ID, Title, QuestType, SpecialFlags, RewRepFaction1, RewRepValue1, Reward) VALUES
 (3011, 'Первые шаги (Воин/Порог)', 1, 0, 3, 50, 20),
 (3012, 'Обучение владению оружием (Воин/Порог)', 1, 0, 3, 50, 30),
 (3013, 'Первая кровь (Воин/Порог)', 1, 0, 3, 75, 40),
@@ -121,7 +121,7 @@ INSERT IGNORE INTO quest_template (ID, Title, LevelMin, LevelMax, ZoneID, NextQu
 -- ---------------------------------------------------------------------------
 -- 2. ПЕРЕХОДНЫЕ КВЕСТЫ К 6 УРОВНЮ (3 фракции x 6 классов = 18 квестов)
 -- ---------------------------------------------------------------------------
-INSERT IGNORE INTO quest_template (ID, Title, LevelMin, LevelMax, ZoneID, NextQuestId, PrevQuestId, QuestType, SpecialFlags, RewardReputationFaction1, RewardReputationAmount1, RewardMoney, RequiredClass) VALUES
+INSERT IGNORE INTO quest_template (ID, Title, QuestType, SpecialFlags, RewRepFaction1, RewRepValue1, Reward) VALUES
 (5011, 'Путь к 6 уровню (Воин/Рассвет)', 1, 0, 1, 200, 100),
 (5021, 'Путь к 6 уровню (Жрец/Рассвет)', 1, 0, 1, 200, 100),
 (5031, 'Путь к 6 уровню (Маг/Рассвет)', 1, 0, 1, 200, 100),
@@ -140,7 +140,7 @@ INSERT IGNORE INTO quest_template (ID, Title, LevelMin, LevelMax, ZoneID, NextQu
 (5043, 'Путь к 6 уровню (Разбойник/Порог)', 1, 0, 3, 200, 100),
 (5053, 'Путь к 6 уровню (Охотник/Порог)', 1, 0, 3, 200, 100),
 (5063, 'Путь к 6 уровню (Чернокнижник/Порог)', 1, 0, 3, 200, 100);
-INSERT IGNORE INTO quest_template (ID, Title, LevelMin, LevelMax, ZoneID, NextQuestId, PrevQuestId, QuestType, SpecialFlags, RewardReputationFaction1, RewardReputationAmount1, RewardMoney, RequiredClass) VALUES
+INSERT IGNORE INTO quest_template (ID, Title, QuestType, SpecialFlags, RewRepFaction1, RewRepValue1, Reward) VALUES
 (2011, 'Первые шаги (Воин/Круг)', 1, 0, 2, 50, 20),
 (2012, 'Обучение владению оружием (Воин/Круг)', 1, 0, 2, 50, 30),
 (2013, 'Первая кровь (Воин/Круг)', 1, 0, 2, 75, 40),
