@@ -237,3 +237,11 @@ CREATE TABLE IF NOT EXISTS instance_template (
     note         VARCHAR(255) NULL,
     PRIMARY KEY (mapid, difficulty)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS quest_difficulty (
+    quest_id          MEDIUMINT UNSIGNED NOT NULL,
+    difficulty        TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    min_level         TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    max_level         TINYINT UNSIGNED NOT NULL DEFAULT 95,
+    reward_multiplier FLOAT NOT NULL DEFAULT 1.0,
+    PRIMARY KEY (quest_id, difficulty)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
